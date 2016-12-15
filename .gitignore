@@ -1,5 +1,5 @@
-/data
-/data_backup
-/.gradle/
+data/
+data_backup/
+.gradle/
 *.gradle
 *.DS_Store
