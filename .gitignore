@@ -5,3 +5,4 @@ data_backup/
 *.DS_Store
 kafka-0.8.2.1-src/
 *build/
+Consumer/log.out
