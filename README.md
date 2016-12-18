@@ -1,6 +1,8 @@
 # MDP-Cloud-Fall-2016
 
-This is part of the Secure Cloud Manufacturing Research Group at the University of Michigan. The intention of thiscode is to be able to move data from a test bed computer into various databases hosted by ARC-TS. Data files are added to a working directory on a test bed computer approximately every second (this could increase to every 10ms).With the Producer class running, it will be alerted of each new file added and then it will send the data to a Kafka server hosted by ARC-TS. With the Consumer class running, it will notice a new message on the Kafka server queue and then either insert the data into InlfuxDB instantly, however for Hadoop, it will append the data to a new file and write the data into HDFS once a day. Once data is in InlfuxDB, it can be visualized in real time using Grafana (instructions to install are below). 
+This is part of the Secure Cloud Manufacturing Research Group at the University of Michigan. 
+
+The intention of this code is to be able to move data from a test bed computer into various databases hosted by ARC-TS. Data files are added to a working directory on a test bed computer approximately every second (this could increase to every 10ms).With the Producer class running, it will be alerted of each new file added and then it will send the data to a Kafka server hosted by ARC-TS. With the Consumer class running, it will notice a new message on the Kafka server queue and then either insert the data into InlfuxDB instantly, however for Hadoop, it will append the data to a new file and write the data into HDFS once a day. Once data is in InlfuxDB, it can be visualized in real time using Grafana (instructions to install are below). 
 
 There are two main portions to this code base. The first is the Consumer and the second is the Producer. Each is broken into their own subdirectory.
 
