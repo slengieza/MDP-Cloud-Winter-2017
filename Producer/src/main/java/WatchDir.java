@@ -23,6 +23,7 @@ import scala.collection.JavaConversions;
 
 //Kafka
 import com.mdp.producer.JsonToString;
+import com.mdp.producer.ExtractCSV;
 
 public class WatchDir {
 
@@ -75,8 +76,8 @@ public class WatchDir {
         this.props.put("metadata.broker.list", "localhost:9092");
         this.props.put("serializer.class", "kafka.serializer.StringEncoder");
         this.props.put("request.required.acks", "1");
-        this.config = new ProducerConfig(props);
-        this.producer = new Producer<String, String>(config);
+        //this.config = new ProducerConfig(props);
+        //this.producer = new Producer<String, String>(config);
     }
 
     void processEvents() {
@@ -150,7 +151,7 @@ public class WatchDir {
 
         // register directory and process its events
         //Path is the directory you want to listen to
-        Path dir = Paths.get("/Users/stevenlengieza/Research/MDP-Cloud-Fall-2016/data");
+        Path dir = Paths.get("/Users/stevenlengieza/Documents/college/Research/MDP-Cloud-Winter-2017/data");
         new WatchDir(dir).processEvents();
     }
 
@@ -164,15 +165,15 @@ public class WatchDir {
         public void run(){
             if(file.toString().toLowerCase().endsWith(".dat")){
                 // Kafka 
-                System.out.println("Getting kafkaMessages");
+                //System.out.println("Getting kafkaMessages");
                 HashMap<Long, List<Long>> kafkaMessages = JsonToString.GetKafkaMessage(file);
                 Set set = kafkaMessages.entrySet();
                 Iterator iterator = set.iterator();
                 while(iterator.hasNext()) {
                     Map.Entry mentry = (Map.Entry)iterator.next();
-                    System.out.println("Sending data for Timestamp " + mentry.getKey());
+                   // System.out.println("Sending data for Timestamp " + mentry.getKey());
                     //System.out.println("Timestamp: " + mentry.getKey() + " data " + (Arrays.toString(((List)mentry.getValue()).toArray())));
-                    String dataList = "";
+                    String dataList = "TestBed\t";
                     Iterator it = ((List)mentry.getValue()).iterator();
                     while(it.hasNext()){
                         dataList += it.next().toString() + "\t";
@@ -181,6 +182,28 @@ public class WatchDir {
                     producer.send(data);
                 }
                 file.delete();
+                return;
+            }
+            else if(file.toString().toLowerCase().endsWith(".csv")){
+                
+                try{
+                    FileInputStream fis = new FileInputStream(file);
+                    ExtractCSV eofcsv = new ExtractCSV(fis);
+                    String[][] data = eofcsv.extract();
+                    for(int i = 0; i < data.length; ++i){
+                        String message_data = "Simulation\t";
+                        for(int j = 0; j < data[0].length; ++j){
+                            message_data += data[i][j] + "\t";
+                        }
+                        KeyedMessage<String, String> message = new KeyedMessage<String, String>("test1", message_data);
+                        System.out.println(message_data);
+                        //producer.send(message);
+                    }
+                    file.delete();
+                }
+                catch (FileNotFoundException e) {
+                    System.out.println("Something broke");
+                }
                 return;
             }
             else{

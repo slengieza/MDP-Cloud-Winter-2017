@@ -2,10 +2,8 @@ package com.mdp.consumer;
 
 import java.io.*;
 import java.lang.*;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.Scanner;
-import java.util.Date;
+import java.util.*;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -16,8 +14,6 @@ import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDB.ConsistencyLevel;
 import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.BatchPoints;
-
-import java.util.*;
 
 import org.influxdb.dto.Point;
 import org.influxdb.dto.Pong;
@@ -35,6 +31,8 @@ public class InfluxConsumer implements ConsumerListener {
     private BatchPoints batchPoints;
     private String measurementName;
     private Logger logger;
+    private Long cycleStartTimeStamp;
+    private boolean cycleState;
 
     public InfluxConsumer(InfluxDB influxdb, String dbName, String measurementName) {
         this.influxDB = influxdb;
@@ -56,14 +54,41 @@ public class InfluxConsumer implements ConsumerListener {
         System.out.println("Received message for InfluxConsumer " + message);
 
         String parts[] = message.split("\t");
-        System.out.println("Parts " + parts);
-        Long timeStamp= Long.parseLong(parts[0]);
-        Long fanucFreq = Long.parseLong(parts[1]);
-        Long fanucCurrent = Long.parseLong(parts[2]);
-        Long fanucVoltage = Long.parseLong(parts[3]);
-        Long abbFreq = Long.parseLong(parts[4]);
-        Long abbCurrent = Long.parseLong(parts[5]);
-        Long abbVoltage = Long.parseLong(parts[6]);
+
+        if (parts[0] == "TestBed") {
+            addTestBedData(parts);
+        }
+        else if(parts[0] == "Simulation"){
+            addSimulationData(parts);
+        }
+    }
+
+    public void addTestBedData(String[] parts){
+        Long timeStamp= Long.parseLong(parts[1]);
+        Long fanucFreq = Long.parseLong(parts[2]);
+        Long fanucCurrent = Long.parseLong(parts[3]);
+        Long fanucVoltage = Long.parseLong(parts[4]);
+        Long abbFreq = Long.parseLong(parts[5]);
+        Long abbCurrent = Long.parseLong(parts[6]);
+        Long abbVoltage = Long.parseLong(parts[7]);
+        //int state = Integer.parseInt(parts[8])
+
+        if (cycleState == 0 and state == 1){
+            cycleStartTimeStamp = timeStamp
+            cycleState = 1
+        }
+        else if(cycleState == 1 and state == 0){
+            cycleTime = int((timeStamp - cycleStartTimeStamp)/1000)
+            cycleState = 0
+            // Point point2 = Point.measurement("measurementName")//TODO decide on measurement name
+            // .time(cycleStartTimeStamp, TimeUnit.MILLISECONDS)
+            // .addField("cycle", )
+            // .addField("CylceTime", cycleTime)
+            // .build();
+            // this.batchPoints.point(point2);
+            // influxDB.write(this.batchPoints);
+            // print("Cycle time", cycleTime)
+        }
 
         Point point1=Point.measurement(measurementName)
         .time(timeStamp, TimeUnit.MILLISECONDS)
@@ -77,6 +102,9 @@ public class InfluxConsumer implements ConsumerListener {
         this.batchPoints.point(point1);
         logger.info("Received Message " + message);
         influxDB.write(this.batchPoints);
-        System.out.println("Received Message " + message);
+    }
+
+    public void addSimulationData(String[] parts){
+
     }
 }
