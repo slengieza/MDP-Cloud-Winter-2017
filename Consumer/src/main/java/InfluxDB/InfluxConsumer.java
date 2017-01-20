@@ -3,6 +3,7 @@ package com.mdp.consumer;
 import java.io.*;
 import java.lang.*;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -71,15 +72,15 @@ public class InfluxConsumer implements ConsumerListener {
         Long abbFreq = Long.parseLong(parts[5]);
         Long abbCurrent = Long.parseLong(parts[6]);
         Long abbVoltage = Long.parseLong(parts[7]);
-        //int state = Integer.parseInt(parts[8])
+        int state = Integer.parseInt(parts[8]);
 
-        if (cycleState == 0 and state == 1){
-            cycleStartTimeStamp = timeStamp
-            cycleState = 1
+        if (cycleState == false && state == 1){
+            cycleStartTimeStamp = timeStamp;
+            cycleState = true;
         }
-        else if(cycleState == 1 and state == 0){
-            cycleTime = int((timeStamp - cycleStartTimeStamp)/1000)
-            cycleState = 0
+        else if(cycleState == true && state == 0){
+            Long cycleTime = timeStamp - cycleStartTimeStamp/1000;
+            cycleState = false;
             // Point point2 = Point.measurement("measurementName")//TODO decide on measurement name
             // .time(cycleStartTimeStamp, TimeUnit.MILLISECONDS)
             // .addField("cycle", )
@@ -100,7 +101,7 @@ public class InfluxConsumer implements ConsumerListener {
         .addField("ABBVoltage", abbVoltage)
         .build();
         this.batchPoints.point(point1);
-        logger.info("Received Message " + message);
+        logger.info("Received Message " + parts.toString());
         influxDB.write(this.batchPoints);
     }
 

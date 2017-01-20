@@ -167,7 +167,11 @@ public class KafkaConsumer {
 	}
 
 	public static void main(String[] args) {
-		String zookeeper = "localhost:2181"; //PRODUCTION CHANGE
+        //PRODUCTION
+        //String zookeeper = "migsae-kafka.aura.arc-ts.umich.edu:2181/kafka";
+
+        //LOCAL
+		String zookeeper = "localhost:2181";
         String groupId = "1";
         String topic = "test1";
         String username = "cloud_data";

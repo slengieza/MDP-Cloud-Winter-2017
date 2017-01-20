@@ -71,6 +71,15 @@ public class WatchDir {
 
         // Kafka 
         this.props = new Properties();
+
+        //PRODUCTION 
+        // this.props.put("bootstrap.servers", "migsae-kafka.aura.arc-ts.umich.edu:9092");
+        // this.props.put("acks", "all");
+        // this.props.put("metadata.broker.list", "migsae-kafka.aura.arc-ts.umich.edu:9092");
+        // this.props.put("serializer.class", "kafka.serializer.StringEncoder");
+        // this.props.put("request.required.acks", "1");
+
+        //LOCAL
         this.props.put("bootstrap.servers", "localhost:9092");
         this.props.put("acks", "all");
         this.props.put("metadata.broker.list", "localhost:9092");
@@ -132,7 +141,10 @@ public class WatchDir {
     public static void  new_topic(String topic){
         try{
             //used to create topic
+            //PRODUCTION
             //ZkClient zkClient = new ZkClient("migsae-kafka.aura.arc-ts.umich.edu:2181/kafka", 10000, 10000, ZKStringSerializer$.MODULE$);
+            
+            //LOCAL
             ZkClient zkClient = new ZkClient("localhost:2181", 10000, 10000, ZKStringSerializer$.MODULE$);
             // topic name, replication factor, replication factor, config properties
             System.out.println(ZkUtils.getSortedBrokerList(zkClient));
