@@ -1,7 +1,6 @@
 data/
 data_backup/
 .gradle/
-*.gradle
 *.DS_Store
 kafka-0.8.2.1-src/
 *build/
