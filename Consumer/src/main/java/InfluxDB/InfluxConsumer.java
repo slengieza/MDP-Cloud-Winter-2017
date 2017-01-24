@@ -34,6 +34,8 @@ public class InfluxConsumer implements ConsumerListener {
     private Logger logger;
     private Long cycleStartTimeStamp;
     private boolean cycleState;
+    private boolean ON = true;
+    private boolean OFF = false;
 
     public InfluxConsumer(InfluxDB influxdb, String dbName, String measurementName) {
         this.influxDB = influxdb;
@@ -74,16 +76,16 @@ public class InfluxConsumer implements ConsumerListener {
         Long abbVoltage = Long.parseLong(parts[7]);
         int state = Integer.parseInt(parts[8]);
 
-        if (cycleState == false && state == 1){
+        if (cycleState == OFF && state == 1){
             cycleStartTimeStamp = timeStamp;
             cycleState = true;
         }
-        else if(cycleState == true && state == 0){
+        else if(cycleState == ON && state == 0){
             Long cycleTime = timeStamp - cycleStartTimeStamp/1000;
             cycleState = false;
             // Point point2 = Point.measurement("measurementName")//TODO decide on measurement name
             // .time(cycleStartTimeStamp, TimeUnit.MILLISECONDS)
-            // .addField("cycle", )
+            // .addField("cycle", ) //TODO find name of cycle
             // .addField("CylceTime", cycleTime)
             // .build();
             // this.batchPoints.point(point2);

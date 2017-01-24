@@ -85,8 +85,9 @@ public class WatchDir {
         this.props.put("metadata.broker.list", "localhost:9092");
         this.props.put("serializer.class", "kafka.serializer.StringEncoder");
         this.props.put("request.required.acks", "1");
-        //this.config = new ProducerConfig(props);
-        //this.producer = new Producer<String, String>(config);
+        
+        this.config = new ProducerConfig(props);
+        this.producer = new Producer<String, String>(config);
     }
 
     void processEvents() {
@@ -141,11 +142,13 @@ public class WatchDir {
     public static void  new_topic(String topic){
         try{
             //used to create topic
+
             //PRODUCTION
             //ZkClient zkClient = new ZkClient("migsae-kafka.aura.arc-ts.umich.edu:2181/kafka", 10000, 10000, ZKStringSerializer$.MODULE$);
             
             //LOCAL
             ZkClient zkClient = new ZkClient("localhost:2181", 10000, 10000, ZKStringSerializer$.MODULE$);
+
             // topic name, replication factor, replication factor, config properties
             System.out.println(ZkUtils.getSortedBrokerList(zkClient));
             AdminUtils.createTopic(zkClient, topic, 3, 1, new Properties());
@@ -219,7 +222,7 @@ public class WatchDir {
                 return;
             }
             else{
-                System.out.println("File " + this.file.getName() + " does not end with .dat");
+                System.out.println("File " + this.file.getName() + " does not end with .dat or .csv");
                 return;
             }
         }
