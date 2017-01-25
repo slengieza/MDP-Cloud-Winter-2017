@@ -37,7 +37,13 @@ public class HadoopConsumer implements ConsumerListener {
         // this.conf = new SparkConf().setAppName(appName).setMaster(master);
         // this.sparkContext = new JavaSparkContext(conf);
         try{
-            this.writer = new RollingFileWriter("/Users/stevenlengieza/Research/MDP-Cloud-Fall-2016/Consumer/src/main/java/Hadoop/data/data${n}.dat", null, 1048576, 0); //max file size is 1 MB
+            //PRODUCTION   
+            String path = "C:\\Rockwell Automation\\WorkingDirectory\\Hadoop_data\\data${n}.dat";
+            String javaPath = path.replace("\\", "/");
+            //LOCAL
+            // String path = "/Users/stevenlengieza/Research/MDP-Cloud-Fall-2016/Consumer/src/main/java/Hadoop/data/data${n}.dat";
+            // String javaPath = path;
+            this.writer = new RollingFileWriter(javaPath, null, 1048576, 0); //max file size is 1 MB
         }
         catch(Exception e){
             System.out.println("Exception " + e.getMessage());

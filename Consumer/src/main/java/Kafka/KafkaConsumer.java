@@ -168,10 +168,10 @@ public class KafkaConsumer {
 
 	public static void main(String[] args) {
         //PRODUCTION
-        //String zookeeper = "migsae-kafka.aura.arc-ts.umich.edu:2181/kafka";
+        String zookeeper = "migsae-kafka.aura.arc-ts.umich.edu:2181/kafka";
 
         //LOCAL
-		String zookeeper = "localhost:2181";
+		// String zookeeper = "localhost:2181";
         String groupId = "1";
         String topic = "test1";
         String username = "cloud_data";

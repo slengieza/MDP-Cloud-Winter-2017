@@ -44,7 +44,7 @@ public class JsonToString {
 	]
 
 	*/
-	public static HashMap<Long, List<Long>> GetKafkaMessage(File jsonfile) {
+	public static HashMap<Long, List<String>> GetKafkaMessage(File jsonfile) {
 		// Initialize this array to check later
 		JsonArray array = null;
 
@@ -67,12 +67,13 @@ public class JsonToString {
 
 		// Get data from JSON array
 		  int total_values= array.size();
-		  HashMap<Long, List<Long>> kafkaMessages = new HashMap<Long, List<Long>>();
+		  HashMap<Long, List<String>> kafkaMessages = new HashMap<Long, List<String>>();
 		  int x=0;
 		  while(x<total_values){
 		 	JsonObject object = array.getJsonObject(x);
 			String tagName = object.getString("TagName");
-			Long tagValue = Long.parseLong(object.getString("TagValue"));
+			String tagValue = object.getString("TagValue");
+			
 			Long timeStamp = Long.parseLong(object.getString("TimeStamp").substring(6,19));
 			//Long time = Long.parseLong(timestamp.substring(6,19));
 			if (kafkaMessages.get(timeStamp) != null) { //timestamp already exists
@@ -80,9 +81,9 @@ public class JsonToString {
 				(kafkaMessages.get(timeStamp)).add(tagValue);
 			}
 			else{ //new timestamp
-				kafkaMessages.put(timeStamp, new ArrayList<Long>());
+				kafkaMessages.put(timeStamp, new ArrayList<String>());
 				//addValue(kafkaMessages, tagName, tagValue, timeStamp);
-				(kafkaMessages.get(timeStamp)).add(timeStamp);
+				(kafkaMessages.get(timeStamp)).add(timeStamp.toString());
 				(kafkaMessages.get(timeStamp)).add(tagValue);
 			}
 			x++;
@@ -91,4 +92,3 @@ public class JsonToString {
 	  	return kafkaMessages;
    }
 }
-

@@ -34,7 +34,7 @@ public class WatchDir {
     // Kafka 
     private Properties props;
     private ProducerConfig config;
-    private Producer<String, String> producer;
+    private static Producer<String, String> producer;
 
     @SuppressWarnings("unchecked")
     static <T> WatchEvent<T> cast(WatchEvent<?> event) {
@@ -73,18 +73,18 @@ public class WatchDir {
         this.props = new Properties();
 
         //PRODUCTION 
-        // this.props.put("bootstrap.servers", "migsae-kafka.aura.arc-ts.umich.edu:9092");
-        // this.props.put("acks", "all");
-        // this.props.put("metadata.broker.list", "migsae-kafka.aura.arc-ts.umich.edu:9092");
-        // this.props.put("serializer.class", "kafka.serializer.StringEncoder");
-        // this.props.put("request.required.acks", "1");
-
-        //LOCAL
-        this.props.put("bootstrap.servers", "localhost:9092");
+        this.props.put("bootstrap.servers", "migsae-kafka.aura.arc-ts.umich.edu:9092");
         this.props.put("acks", "all");
-        this.props.put("metadata.broker.list", "localhost:9092");
+        this.props.put("metadata.broker.list", "migsae-kafka.aura.arc-ts.umich.edu:9092");
         this.props.put("serializer.class", "kafka.serializer.StringEncoder");
         this.props.put("request.required.acks", "1");
+
+        //LOCAL
+        // this.props.put("bootstrap.servers", "localhost:9092");
+        // this.props.put("acks", "all");
+        // this.props.put("metadata.broker.list", "localhost:9092");
+        // this.props.put("serializer.class", "kafka.serializer.StringEncoder");
+        // this.props.put("request.required.acks", "1");
         
         this.config = new ProducerConfig(props);
         this.producer = new Producer<String, String>(config);
@@ -144,10 +144,10 @@ public class WatchDir {
             //used to create topic
 
             //PRODUCTION
-            //ZkClient zkClient = new ZkClient("migsae-kafka.aura.arc-ts.umich.edu:2181/kafka", 10000, 10000, ZKStringSerializer$.MODULE$);
+            ZkClient zkClient = new ZkClient("migsae-kafka.aura.arc-ts.umich.edu:2181/kafka", 10000, 10000, ZKStringSerializer$.MODULE$);
             
             //LOCAL
-            ZkClient zkClient = new ZkClient("localhost:2181", 10000, 10000, ZKStringSerializer$.MODULE$);
+            // ZkClient zkClient = new ZkClient("localhost:2181", 10000, 10000, ZKStringSerializer$.MODULE$);
 
             // topic name, replication factor, replication factor, config properties
             System.out.println(ZkUtils.getSortedBrokerList(zkClient));
@@ -162,12 +162,37 @@ public class WatchDir {
         // Kafka 
         String topic = "test1";
         String group_id = "report";
-        //new_topic(topic);
+        new_topic(topic);
+        //PRODUCTION
+        String path = "C:\\Rockwell Automation\\WorkingDirectory";
+        Path dir = Paths.get(path.replace("\\", "/"));
+        //LOCAL
+        // Path dir = Paths.get("/Users/stevenlengieza/Documents/college/Research/MDP-Cloud-Winter-2017/data");
+        WatchDir watchDir = new WatchDir(dir);
+        //send files that are already there
+        File folder = new File(dir.toString()); 
+        File[] listOfFiles = folder.listFiles();
+        for (File file : listOfFiles) {
+            if(file.toString().toLowerCase().endsWith(".dat")){
+                // Kafka 
+                HashMap<Long, List<String>> kafkaMessages = JsonToString.GetKafkaMessage(file);
+                Set set = kafkaMessages.entrySet();
+                Iterator iterator = set.iterator();
+                while(iterator.hasNext()){
+                    Map.Entry mentry = (Map.Entry)iterator.next();
+                    String dataList= "";
+                    Iterator it = ((List)mentry.getValue()).iterator();
+                    while(it.hasNext()){
+                        dataList += it.next() + "\t";
+                    }
+                    KeyedMessage<String, String> data = new KeyedMessage<String, String>("test1", dataList);
+                    producer.send(data);
+                }
+                file.delete();
+            }
+        }
 
-        // register directory and process its events
-        //Path is the directory you want to listen to
-        Path dir = Paths.get("/Users/stevenlengieza/Documents/college/Research/MDP-Cloud-Winter-2017/data");
-        new WatchDir(dir).processEvents();
+        watchDir.processEvents();
     }
 
     public class HandleEvent implements Runnable {
@@ -181,12 +206,13 @@ public class WatchDir {
             if(file.toString().toLowerCase().endsWith(".dat")){
                 // Kafka 
                 //System.out.println("Getting kafkaMessages");
-                HashMap<Long, List<Long>> kafkaMessages = JsonToString.GetKafkaMessage(file);
+                HashMap<Long, List<String>> kafkaMessages = JsonToString.GetKafkaMessage(file);
                 Set set = kafkaMessages.entrySet();
+                System.out.println("Kafka Message: " + set.toString());
                 Iterator iterator = set.iterator();
                 while(iterator.hasNext()) {
                     Map.Entry mentry = (Map.Entry)iterator.next();
-                   // System.out.println("Sending data for Timestamp " + mentry.getKey());
+                    // System.out.println("Sending data for Timestamp " + mentry.getKey());
                     //System.out.println("Timestamp: " + mentry.getKey() + " data " + (Arrays.toString(((List)mentry.getValue()).toArray())));
                     String dataList = "TestBed\t";
                     Iterator it = ((List)mentry.getValue()).iterator();

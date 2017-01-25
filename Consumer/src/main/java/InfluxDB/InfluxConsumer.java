@@ -74,24 +74,27 @@ public class InfluxConsumer implements ConsumerListener {
         Long abbFreq = Long.parseLong(parts[5]);
         Long abbCurrent = Long.parseLong(parts[6]);
         Long abbVoltage = Long.parseLong(parts[7]);
-        int state = Integer.parseInt(parts[8]);
+        boolean rfid56 = stringToBoolean(parts[8]);
+        boolean rfid57 = stringToBoolean(parts[9]);
+        boolean rfid54 = stringToBoolean(parts[10]);
+        boolean rfid55 = stringToBoolean(parts[11]);
 
-        if (cycleState == OFF && state == 1){
-            cycleStartTimeStamp = timeStamp;
-            cycleState = true;
-        }
-        else if(cycleState == ON && state == 0){
-            Long cycleTime = timeStamp - cycleStartTimeStamp/1000;
-            cycleState = false;
-            // Point point2 = Point.measurement("measurementName")//TODO decide on measurement name
-            // .time(cycleStartTimeStamp, TimeUnit.MILLISECONDS)
-            // .addField("cycle", ) //TODO find name of cycle
-            // .addField("CylceTime", cycleTime)
-            // .build();
-            // this.batchPoints.point(point2);
-            // influxDB.write(this.batchPoints);
-            // print("Cycle time", cycleTime)
-        }
+        // if (cycleState == OFF && state == 1){
+        //     cycleStartTimeStamp = timeStamp;
+        //     cycleState = true;
+        // }
+        // else if(cycleState == ON && state == 0){
+        //     Long cycleTime = timeStamp - cycleStartTimeStamp/1000;
+        //     cycleState = false;
+        //     Point point2 = Point.measurement("measurementName")//TODO decide on measurement name
+        //     .time(cycleStartTimeStamp, TimeUnit.MILLISECONDS)
+        //     .addField("cycle", ) //TODO find name of cycle
+        //     .addField("CylceTime", cycleTime)
+        //     .build();
+        //     this.batchPoints.point(point2);
+        //     influxDB.write(this.batchPoints);
+        //     print("Cycle time", cycleTime)
+        // }
 
         Point point1=Point.measurement(measurementName)
         .time(timeStamp, TimeUnit.MILLISECONDS)
@@ -101,6 +104,10 @@ public class InfluxConsumer implements ConsumerListener {
         .addField("ABBFrequency", abbFreq)
         .addField("ABBCurrent", abbCurrent)
         .addField("ABBVoltage", abbVoltage)
+        .addField("RFID54", rfid54)
+        .addField("RFID55", rfid55)
+        .addField("RFID56", rfid56)
+        .addField("RFID57", rfid57)
         .build();
         this.batchPoints.point(point1);
         logger.info("Received Message " + parts.toString());
@@ -109,5 +116,14 @@ public class InfluxConsumer implements ConsumerListener {
 
     public void addSimulationData(String[] parts){
 
+    }
+
+    public boolean stringToBoolean(String in){
+        if (in == "True") {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }
