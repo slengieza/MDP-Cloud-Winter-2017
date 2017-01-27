@@ -174,21 +174,10 @@ public class WatchDir {
         File[] listOfFiles = folder.listFiles();
         for (File file : listOfFiles) {
             if(file.toString().toLowerCase().endsWith(".dat")){
-                // Kafka 
-                HashMap<Long, List<String>> kafkaMessages = JsonToString.GetKafkaMessage(file);
-                Set set = kafkaMessages.entrySet();
-                Iterator iterator = set.iterator();
-                while(iterator.hasNext()){
-                    Map.Entry mentry = (Map.Entry)iterator.next();
-                    String dataList= "";
-                    Iterator it = ((List)mentry.getValue()).iterator();
-                    while(it.hasNext()){
-                        dataList += it.next() + "\t";
-                    }
-                    KeyedMessage<String, String> data = new KeyedMessage<String, String>("test1", dataList);
-                    producer.send(data);
-                }
-                file.delete();
+                sendTestBedData(file);
+            }
+            else if (file.toString().toLowerCase().endsWith(".csv")){
+                sendSimulationData(file);
             }
         }
 
@@ -251,6 +240,44 @@ public class WatchDir {
                 System.out.println("File " + this.file.getName() + " does not end with .dat or .csv");
                 return;
             }
+        }
+    }
+
+    public static void sendTestBedData(File file){
+        HashMap<Long, List<String>> kafkaMessages = JsonToString.GetKafkaMessage(file);
+        Set set = kafkaMessages.entrySet();
+        Iterator iterator = set.iterator();
+        while(iterator.hasNext()){
+            Map.Entry mentry = (Map.Entry)iterator.next();
+            String dataList= "TestBed\t";
+            Iterator it = ((List)mentry.getValue()).iterator();
+            while(it.hasNext()){
+                dataList += it.next() + "\t";
+            }
+            KeyedMessage<String, String> data = new KeyedMessage<String, String>("test1", dataList);
+            producer.send(data);
+        }
+        file.delete();
+    }
+
+    public static void sendSimulationData(File file) {
+        try{
+            FileInputStream fis = new FileInputStream(file);
+            ExtractCSV eofcsv = new ExtractCSV(fis);
+            String[][] data = eofcsv.extract();
+            for(int i = 0; i < data.length; ++i){
+                String message_data = "Simulation\t";
+                for(int j = 0; j < data[0].length; ++j){
+                    message_data += data[i][j] + "\t";
+                }
+                KeyedMessage<String, String> message = new KeyedMessage<String, String>("test1", message_data);
+                System.out.println(message_data);
+                //producer.send(message);
+            }
+            file.delete();
+        }
+        catch (FileNotFoundException e) {
+            System.out.println("Something broke");
         }
     }
 }
