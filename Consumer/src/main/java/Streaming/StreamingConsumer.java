@@ -4,6 +4,7 @@ import java.io.*;
 import java.lang.*;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.Date;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -46,6 +47,8 @@ public class StreamingConsumer implements ConsumerListener {
     private boolean[] inTransit;
     private boolean[] rfidState;
 
+    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+
     public StreamingConsumer(InfluxDB influxdb, String dbName, String measurementName) {
         this.influxDB = influxdb;
         this.logger = LoggerFactory.getLogger(StreamingConsumer.class.getName());
@@ -65,8 +68,6 @@ public class StreamingConsumer implements ConsumerListener {
 
     //TODO add logging file to show each message getting received
     public void onReceiveMessage(String message){
-        System.out.println("Received message for StreamingConsumer " + message);
-
         String parts[] = message.split("\t");
         String typeOfData = parts[0];
         Long timeStamp= Long.parseLong(parts[1]);
@@ -100,15 +101,27 @@ public class StreamingConsumer implements ConsumerListener {
             Long cycleTime = timeStamp - cycleStartTimeStamp[cycleID]/1000; //end of RFID54 to beginning of RFID55
             Point point = Point.measurement(measurementName)
             .time(cycleStartTimeStamp[cycleID], TimeUnit.MILLISECONDS)
-            .addField("cycle", cycleName[cycleID]) //TODO find name of cycle
+            .addField("CycleName", cycleName[cycleID]) //TODO find name of cycle
             .addField("CylceTime", cycleTime)
             .build();
             this.batchPoints.point(point);
             influxDB.write(this.batchPoints);
+            logger.error(format.format(new Date(timeStamp)) + " Adding Cycle Time for cycle " + cycleName[cycleID]);
         }
     }
 
     public void init(){
+
+        Long cycleTime = Long.parseLong("10"); //end of RFID54 to beginning of RFID55
+        Point point = Point.measurement(measurementName)
+        .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+        .addField("CycleName", "Test") //TODO find name of cycle
+        .addField("CycleTime", cycleTime)
+        .build();
+        this.batchPoints.point(point);
+        influxDB.write(this.batchPoints);
+        logger.error(format.format(new Date()) + " Adding Cycle Time for cycle Test");
+
         cycleStartTimeStamp = new Long[numCycles];
         cycleName = new String[numCycles];
         cycleIDs = new int[numCycles];
@@ -116,10 +129,13 @@ public class StreamingConsumer implements ConsumerListener {
         cycleState = new boolean[numCycles];
         rfidState = new boolean[numRFID];
 
+        cycleName[0] = "RFID54 to RFID55";
+        cycleName[1] = "RFID55 to RFID56";
+        cycleName[2] = "RFID56 to RFID57";
+
         for (int i = 0; i < numCycles; ++i) {
             cycleStartTimeStamp[i] = java.lang.Long.MIN_VALUE;
             cycleIDs[i] = i;
-            cycleName[i] = "";
             inTransit[i] = false;
             cycleState[i] = OFF;
         }

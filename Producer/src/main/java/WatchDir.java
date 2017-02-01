@@ -209,7 +209,7 @@ public class WatchDir {
                         dataList += it.next().toString() + "\t";
                     }
                     KeyedMessage<String, String> data = new KeyedMessage<String, String>("test1", dataList);
-                    System.out.println("Sending Message: " + dataList);
+                    // System.out.println("Sending Message: " + dataList);
                     producer.send(data);
                 }
                 file.delete();
@@ -257,7 +257,7 @@ public class WatchDir {
             }
             KeyedMessage<String, String> data = new KeyedMessage<String, String>("test1", dataList);
             try {
-                System.out.println("Sending Message: " + dataList);
+                // System.out.println("Sending Message: " + dataList);
                 producer.send(data);
             }
             catch (Exception e){

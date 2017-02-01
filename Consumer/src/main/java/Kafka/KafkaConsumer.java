@@ -19,6 +19,7 @@ import java.util.concurrent.Executors;
 
 import com.mdp.consumer.ConsumerListener;
 import com.mdp.consumer.InfluxClient;
+import com.mdp.consumer.StreamingClient;
 import com.mdp.consumer.HadoopClient;
 
 /***
@@ -173,14 +174,17 @@ public class KafkaConsumer {
         String password = "2016SummerProj";
         String database = "https://migsae-influx.arc-ts.umich.edu:8086";
         String dbName = "test";
-        String table = "OldValues";
+        String continuousDataTable = "OldValues";
+        String cycleTimeTable = "CycleTimes";
         int threads = 1;
     
-        InfluxClient influx_client = new InfluxClient(username, password, database, dbName, table);
+        InfluxClient influx_client = new InfluxClient(username, password, database, dbName, continuousDataTable);
+        StreamingClient streaming_client = new StreamingClient(username, password, database, dbName, cycleTimeTable);
         // HadoopClient hadoop_client = new HadoopClient();
 
         List<ConsumerListener> listeners = new ArrayList<ConsumerListener>();
         listeners.add((ConsumerListener)influx_client.listener);
+        listeners.add((ConsumerListener)streaming_client.listener);
         // listeners.add((ConsumerListener)hadoop_client.listener);
 
         KafkaConsumer consumer = new KafkaConsumer(zookeeper, groupId, topic, threads, listeners);

@@ -4,10 +4,10 @@ import java.io.*;
 import java.lang.*;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.Date;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,10 +32,8 @@ public class InfluxConsumer implements ConsumerListener {
     private BatchPoints batchPoints;
     private String measurementName;
     private Logger logger;
-    private Long cycleStartTimeStamp;
-    private boolean cycleState;
-    private boolean ON = true;
-    private boolean OFF = false;
+  
+    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
     public InfluxConsumer(InfluxDB influxdb, String dbName, String measurementName) {
         this.influxDB = influxdb;
@@ -55,18 +53,15 @@ public class InfluxConsumer implements ConsumerListener {
     //TODO add logging file to show each message getting received
     public void onReceiveMessage(String message){
         String parts[] = message.split("\t");
-        System.out.println("Received message for InfluxConsumer " + message);
-        addTestBedData(parts);
-        // if (parts[0] == "TestBed") {
-        //     addTestBedData(parts);
-        // }
-        // else if(parts[0] == "Simulation"){
-        //     addSimulationData(parts);
-        // }
+        if (parts[0].equals("TestBed")) {
+            addTestBedData(parts);
+        }
+        else if(parts[0].equals("Simulation")){
+            addSimulationData(parts);
+        }
     }
 
     public void addTestBedData(String[] parts){
-        System.out.println("Adding TestBed data");
         Long timeStamp= Long.parseLong(parts[1]);
         Long fanucFreq = Long.parseLong(parts[2]);
         Long fanucCurrent = Long.parseLong(parts[3]);
@@ -81,9 +76,6 @@ public class InfluxConsumer implements ConsumerListener {
 
         Point point1=Point.measurement(measurementName)
         .time(timeStamp, TimeUnit.MILLISECONDS)
-        .addField("timeStamp", parts[1])
-        .addField("tagName", parts[2])
-        .addField("tagValue", Integer.parseInt(parts[2]))
         .addField("fanucFreq", fanucFreq)
         .addField("fanucCurrent", fanucCurrent)
         .addField("fanucVoltage", fanucVoltage)
@@ -96,9 +88,11 @@ public class InfluxConsumer implements ConsumerListener {
         .addField("RFID57", rfid57)
         .build();
         this.batchPoints.point(point1);
-        logger.info("Received Message " + parts.toString());
+        logger.error(format.format(new Date(timeStamp)) + " Received TestBed Message: " +
+                                    "TimeStamp: " + parts[1] + " fanucFreq: " + parts[2] +
+                                    " fanucCurrent: " + parts[3] + " fanucVoltage: " + parts[4] + 
+                                    " abbFreq: " + parts[5] + " abbCurrent: " + parts[6] + " abbVoltage: " + parts[7]);
         influxDB.write(this.batchPoints);
-        System.out.println("Wrote TestBed data");
     }
 
     public void addSimulationData(String[] parts){
