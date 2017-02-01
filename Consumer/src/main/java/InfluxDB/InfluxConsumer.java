@@ -54,19 +54,19 @@ public class InfluxConsumer implements ConsumerListener {
 
     //TODO add logging file to show each message getting received
     public void onReceiveMessage(String message){
-        System.out.println("Received message for InfluxConsumer " + message);
-
         String parts[] = message.split("\t");
-
-        if (parts[0] == "TestBed") {
-            addTestBedData(parts);
-        }
-        else if(parts[0] == "Simulation"){
-            addSimulationData(parts);
-        }
+        System.out.println("Received message for InfluxConsumer " + message);
+        addTestBedData(parts);
+        // if (parts[0] == "TestBed") {
+        //     addTestBedData(parts);
+        // }
+        // else if(parts[0] == "Simulation"){
+        //     addSimulationData(parts);
+        // }
     }
 
     public void addTestBedData(String[] parts){
+        System.out.println("Adding TestBed data");
         Long timeStamp= Long.parseLong(parts[1]);
         Long fanucFreq = Long.parseLong(parts[2]);
         Long fanucCurrent = Long.parseLong(parts[3]);
@@ -74,36 +74,22 @@ public class InfluxConsumer implements ConsumerListener {
         Long abbFreq = Long.parseLong(parts[5]);
         Long abbCurrent = Long.parseLong(parts[6]);
         Long abbVoltage = Long.parseLong(parts[7]);
-        boolean rfid56 = stringToBoolean(parts[8]);
-        boolean rfid57 = stringToBoolean(parts[9]);
-        boolean rfid54 = stringToBoolean(parts[10]);
-        boolean rfid55 = stringToBoolean(parts[11]);
-
-        // if (cycleState == OFF && state == 1){
-        //     cycleStartTimeStamp = timeStamp;
-        //     cycleState = true;
-        // }
-        // else if(cycleState == ON && state == 0){
-        //     Long cycleTime = timeStamp - cycleStartTimeStamp/1000;
-        //     cycleState = false;
-        //     Point point2 = Point.measurement("measurementName")//TODO decide on measurement name
-        //     .time(cycleStartTimeStamp, TimeUnit.MILLISECONDS)
-        //     .addField("cycle", ) //TODO find name of cycle
-        //     .addField("CylceTime", cycleTime)
-        //     .build();
-        //     this.batchPoints.point(point2);
-        //     influxDB.write(this.batchPoints);
-        //     print("Cycle time", cycleTime)
-        // }
+        boolean rfid56 = Boolean.valueOf(parts[8]);
+        boolean rfid57 = Boolean.valueOf(parts[9]);
+        boolean rfid54 = Boolean.valueOf(parts[10]);
+        boolean rfid55 = Boolean.valueOf(parts[11]);
 
         Point point1=Point.measurement(measurementName)
         .time(timeStamp, TimeUnit.MILLISECONDS)
-        .addField("FanucFrequency", fanucFreq)
-        .addField("FanucCurrent", fanucCurrent)
-        .addField("FanucVoltage", fanucVoltage)
-        .addField("ABBFrequency", abbFreq)
-        .addField("ABBCurrent", abbCurrent)
-        .addField("ABBVoltage", abbVoltage)
+        .addField("timeStamp", parts[1])
+        .addField("tagName", parts[2])
+        .addField("tagValue", Integer.parseInt(parts[2]))
+        .addField("fanucFreq", fanucFreq)
+        .addField("fanucCurrent", fanucCurrent)
+        .addField("fanucVoltage", fanucVoltage)
+        .addField("abbFreq", abbFreq)
+        .addField("abbCurrent", abbCurrent)
+        .addField("abbVoltage", abbVoltage)
         .addField("RFID54", rfid54)
         .addField("RFID55", rfid55)
         .addField("RFID56", rfid56)
@@ -112,18 +98,10 @@ public class InfluxConsumer implements ConsumerListener {
         this.batchPoints.point(point1);
         logger.info("Received Message " + parts.toString());
         influxDB.write(this.batchPoints);
+        System.out.println("Wrote TestBed data");
     }
 
     public void addSimulationData(String[] parts){
 
-    }
-
-    public boolean stringToBoolean(String in){
-        if (in == "True") {
-            return true;
-        }
-        else {
-            return false;
-        }
     }
 }
