@@ -197,7 +197,7 @@ public class WatchDir {
                 //System.out.println("Getting kafkaMessages");
                 HashMap<Long, List<String>> kafkaMessages = JsonToString.GetKafkaMessage(file);
                 Set set = kafkaMessages.entrySet();
-                System.out.println("Kafka Message: " + set.toString());
+                // System.out.println("Kafka Message: " + set.toString());
                 Iterator iterator = set.iterator();
                 while(iterator.hasNext()) {
                     Map.Entry mentry = (Map.Entry)iterator.next();
@@ -209,6 +209,7 @@ public class WatchDir {
                         dataList += it.next().toString() + "\t";
                     }
                     KeyedMessage<String, String> data = new KeyedMessage<String, String>("test1", dataList);
+                    System.out.println("Sending Message: " + dataList);
                     producer.send(data);
                 }
                 file.delete();
@@ -255,7 +256,14 @@ public class WatchDir {
                 dataList += it.next() + "\t";
             }
             KeyedMessage<String, String> data = new KeyedMessage<String, String>("test1", dataList);
-            producer.send(data);
+            try {
+                System.out.println("Sending Message: " + dataList);
+                producer.send(data);
+            }
+            catch (Exception e){
+                System.out.println("Sending message failed with error message: " + e.getMessage());
+                return;
+            }
         }
         file.delete();
     }
