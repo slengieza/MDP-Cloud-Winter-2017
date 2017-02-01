@@ -1,4 +1,4 @@
-# MDP-Cloud-Fall-2016
+# MDP-Cloud-Winter-2017
 
 This is part of the Secure Cloud Manufacturing Research Group at the University of Michigan. 
 
