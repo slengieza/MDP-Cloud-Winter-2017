@@ -19,6 +19,11 @@ import org.influxdb.dto.QueryResult;
 import org.influxdb.dto.QueryResult.Result;
 import org.influxdb.dto.QueryResult.Series;
 
+//changes
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 
 public class InfluxReader {
 
@@ -36,13 +41,24 @@ public class InfluxReader {
         this.influxDB = InfluxDBFactory.connect(database, username, password);
     }
 
-    public void execute(String queryString){        
+    public void execute(String queryString){    
+        try {    
+            File file = new File("example.txt");
+            FileWriter output = new FileWriter(file);
 
-        Query query = new Query(queryString, dbName);
-        QueryResult result = influxDB.query(query);
-        List<List<Object>> values = result.getResults().get(0).getSeries().get(0).getValues();
-        for (Object value : values) {
-            System.out.println(value.toString());
+            Query query = new Query(queryString, dbName);
+            QueryResult result = influxDB.query(query);
+            List<List<Object>> values = result.getResults().get(0).getSeries().get(0).getValues();
+            for (Object value : values) {
+                String tmp = value.toString();
+                output.write(tmp);
+                output.write("\n");
+
+                //System.out.println(value.toString());
+            }
+            output.close();
+        }catch (IOException e){
+            e.printStackTrace();
         }
     }
 }
