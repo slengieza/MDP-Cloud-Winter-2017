@@ -91,7 +91,8 @@ public class InfluxConsumer implements ConsumerListener {
         logger.error(format.format(new Date(timeStamp)) + " Received TestBed Message: " +
                                     "TimeStamp: " + parts[1] + " fanucFreq: " + parts[2] +
                                     " fanucCurrent: " + parts[3] + " fanucVoltage: " + parts[4] + 
-                                    " abbFreq: " + parts[5] + " abbCurrent: " + parts[6] + " abbVoltage: " + parts[7]);
+                                    " abbFreq: " + parts[5] + " abbCurrent: " + parts[6] + " abbVoltage: " + parts[7] +
+                                    " RFID54: " + parts[10] + " RFID55: " + parts[11] + " RFID56: " + parts[8] + " RFID57: " + parts[9]);
         influxDB.write(this.batchPoints);
     }
 

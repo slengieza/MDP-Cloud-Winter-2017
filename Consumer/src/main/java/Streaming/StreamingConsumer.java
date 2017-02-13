@@ -82,46 +82,48 @@ public class StreamingConsumer implements ConsumerListener {
         rfidState[2] = Boolean.valueOf(parts[8]);  //RFID 56
         rfidState[3] = Boolean.valueOf(parts[9]);  //RFID 57
 
-        for (int i = 0; i < numCycles; ++i) {
-            monitorCycle(cycleIDs[i], timeStamp, rfidState[i], rfidState[i+1]);   
-        }
+        monitorCycle(1, timeStamp, rfidState[0], rfidState[1]);   
     }
 
     public void monitorCycle(int cycleID, Long timeStamp, boolean rfid1, boolean rfid2){
+        // System.out.println("cycleState: " + cycleState[cycleID]);
+        // System.out.println("inTransit: " + inTransit[cycleID]);
+        // System.out.println("RFID54: " + rfid1);
+        // System.out.println("RFID55: " + rfid1);
         if (cycleState[cycleID] == OFF && rfid1 == true){ //pallet enters rfid 54
+            System.out.println("Pallet entered RFID54");
             cycleState[cycleID] = ON;
         }
         else if(!inTransit[cycleID] && cycleState[cycleID] == ON && rfid1 == false){ //pallet leaves rfid54 and is on its way to rfid55
+            System.out.println("Pallet left RFID54");
             inTransit[cycleID] = true;
             cycleStartTimeStamp[cycleID] = timeStamp;
         }
         else if(inTransit[cycleID] == true && cycleState[cycleID] == ON && rfid2 == true){ // pallet enters rfid55 (end of cycle)
+            System.out.println("Pallet entered RFID55. Cycle is over");
             inTransit[cycleID] = false;
             cycleState[cycleID] = OFF;
-            Long cycleTime = timeStamp - cycleStartTimeStamp[cycleID]/1000; //end of RFID54 to beginning of RFID55
+            Long cycleTime = (timeStamp - cycleStartTimeStamp[cycleID])/1000; //end of RFID54 to beginning of RFID55
+            // System.out.println("cycle start time " + cycleStartTimeStamp[cycleID]);
+            // System.out.println("cycle end time " + timeStamp);
+            // System.out.println("CycleTime " + cycleTime);
             Point point = Point.measurement(measurementName)
             .time(cycleStartTimeStamp[cycleID], TimeUnit.MILLISECONDS)
             .addField("CycleName", cycleName[cycleID]) //TODO find name of cycle
-            .addField("CylceTime", cycleTime)
+            .addField("CycleTime", cycleTime)
             .build();
             this.batchPoints.point(point);
             influxDB.write(this.batchPoints);
             logger.error(format.format(new Date(timeStamp)) + " Adding Cycle Time for cycle " + cycleName[cycleID]);
         }
+        if (rfid2 == true) { //fail safe (resets values)
+            System.out.println("Resetting inTransit and cycleState");
+            inTransit[cycleID] = false;
+            cycleState[cycleID] = OFF;
+        }
     }
 
     public void init(){
-
-        Long cycleTime = Long.parseLong("10"); //end of RFID54 to beginning of RFID55
-        Point point = Point.measurement(measurementName)
-        .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
-        .addField("CycleName", "Test") //TODO find name of cycle
-        .addField("CycleTime", cycleTime)
-        .build();
-        this.batchPoints.point(point);
-        influxDB.write(this.batchPoints);
-        logger.error(format.format(new Date()) + " Adding Cycle Time for cycle Test");
-
         cycleStartTimeStamp = new Long[numCycles];
         cycleName = new String[numCycles];
         cycleIDs = new int[numCycles];
