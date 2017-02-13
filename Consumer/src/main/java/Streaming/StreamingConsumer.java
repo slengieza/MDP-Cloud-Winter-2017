@@ -41,6 +41,9 @@ public class StreamingConsumer implements ConsumerListener {
     private boolean OFF = false;
 
     private Long[] cycleStartTimeStamp;
+    private ArrayDeque[] prevCycleTimes;
+    private Long[] average;
+    private Long[] stddev;
     private String[] cycleName;
     private int[] cycleIDs;
     private boolean[] cycleState;
@@ -103,18 +106,19 @@ public class StreamingConsumer implements ConsumerListener {
             System.out.println("Pallet entered RFID55. Cycle is over");
             inTransit[cycleID] = false;
             cycleState[cycleID] = OFF;
-            Long cycleTime = (timeStamp - cycleStartTimeStamp[cycleID])/1000; //end of RFID54 to beginning of RFID55
-            // System.out.println("cycle start time " + cycleStartTimeStamp[cycleID]);
-            // System.out.println("cycle end time " + timeStamp);
-            // System.out.println("CycleTime " + cycleTime);
+            Long cycleTime = timeStamp - cycleStartTimeStamp[cycleID]/1000; //end of RFID54 to beginning of RFID55
+            //add cycle time to prev cycle times
+            updateStats(cycleTime, cycleID);
             Point point = Point.measurement(measurementName)
             .time(cycleStartTimeStamp[cycleID], TimeUnit.MILLISECONDS)
             .addField("CycleName", cycleName[cycleID]) //TODO find name of cycle
-            .addField("CycleTime", cycleTime)
+            .addField("CylceTime", cycleTime)
+            .addField("MeanCycleTime", average[cycleID])
+            .addField("StddevCycleTime", stddev[cycleID])
             .build();
             this.batchPoints.point(point);
             influxDB.write(this.batchPoints);
-            logger.error(format.format(new Date(timeStamp)) + " Adding Cycle Time for cycle " + cycleName[cycleID]);
+            logger.error(format.format(new Date(timeStamp)) + " Adding Cycle Time for cycle " + cycleName[cycleID]);            
         }
         if (rfid2 == true) { //fail safe (resets values)
             System.out.println("Resetting inTransit and cycleState");
@@ -123,8 +127,30 @@ public class StreamingConsumer implements ConsumerListener {
         }
     }
 
+    public void updateStats(Long cycleTime, int cycleID){
+        int n = prevCycleTimes[cycleID].size();
+        Long diff = cycleTime - average[cycleID];
+        average[cycleID] += diff / n;
+        stddev[cycleID] += diff * (cycleTime - average[cycleID]);
+
+        if (n >= 100){ // update stats for removing old value
+            Long lastVal = (Long)prevCycleTimes[cycleID].peekLast();
+            prevCycleTimes[cycleID].removeLast();
+            Long oldM = (n * average[cycleID] - lastVal)/(n - 1);
+            stddev[cycleID] -= (lastVal - average[cycleID]) * (lastVal - oldM);
+            average[cycleID] = oldM;
+        }
+
+        prevCycleTimes[cycleID].addFirst(cycleTime);
+    }
+
     public void init(){
         cycleStartTimeStamp = new Long[numCycles];
+
+        prevCycleTimes = new ArrayDeque[numCycles];
+        average = new Long[numCycles];
+        stddev = new Long[numCycles];
+
         cycleName = new String[numCycles];
         cycleIDs = new int[numCycles];
         inTransit = new boolean[numCycles];
@@ -137,9 +163,13 @@ public class StreamingConsumer implements ConsumerListener {
 
         for (int i = 0; i < numCycles; ++i) {
             cycleStartTimeStamp[i] = java.lang.Long.MIN_VALUE;
+            prevCycleTimes[i] = new ArrayDeque(100);
+            average[i] = Long.parseLong("0");
+            stddev[i] = Long.parseLong("0");
             cycleIDs[i] = i;
             inTransit[i] = false;
             cycleState[i] = OFF;
         }
+
     }
 }
