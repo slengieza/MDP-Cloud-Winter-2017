@@ -246,6 +246,7 @@ public class WatchDir {
 
     public static void sendTestBedData(File file){
         HashMap<Long, List<String>> kafkaMessages = JsonToString.GetKafkaMessage(file);
+        //TODO: Create CSV file from file
         Set set = kafkaMessages.entrySet();
         Iterator iterator = set.iterator();
         while(iterator.hasNext()){
