@@ -123,6 +123,7 @@ public class WatchDir {
                 // print out event
                 //System.out.format("%s: %s\n", event.kind().name(), child);
                 (new Thread(new HandleEvent(child))).start();
+                // (new HandleEvent(child)).run();
             }
 
             // reset key and remove from set if directory no longer accessible
@@ -245,27 +246,35 @@ public class WatchDir {
     }
 
     public static void sendTestBedData(File file){
-        HashMap<Long, List<String>> kafkaMessages = JsonToString.GetKafkaMessage(file);
-        Set set = kafkaMessages.entrySet();
-        Iterator iterator = set.iterator();
-        while(iterator.hasNext()){
-            Map.Entry mentry = (Map.Entry)iterator.next();
-            String dataList= "TestBed\t";
-            Iterator it = ((List)mentry.getValue()).iterator();
-            while(it.hasNext()){
-                dataList += it.next() + "\t";
+        try{
+            HashMap<Long, List<String>> kafkaMessages = JsonToString.GetKafkaMessage(file);
+            Set set = kafkaMessages.entrySet();
+            Iterator iterator = set.iterator();
+            while(iterator.hasNext()){
+                Map.Entry mentry = (Map.Entry)iterator.next();
+                String dataList= "TestBed\t";
+                Iterator it = ((List)mentry.getValue()).iterator();
+                while(it.hasNext()){
+                    dataList += it.next() + "\t";
+                }
+                KeyedMessage<String, String> data = new KeyedMessage<String, String>("test1", dataList);
+                try {
+                    // System.out.println("Sending Message: " + dataList);
+                    producer.send(data);
+                }
+                catch (Exception e){
+                    System.out.println("Sending message failed with error message: " + e.getMessage());
+                    e.printStackTrace(System.out);
+                    return;
+                }
             }
-            KeyedMessage<String, String> data = new KeyedMessage<String, String>("test1", dataList);
-            try {
-                // System.out.println("Sending Message: " + dataList);
-                producer.send(data);
-            }
-            catch (Exception e){
-                System.out.println("Sending message failed with error message: " + e.getMessage());
-                return;
-            }
+            file.delete();
         }
-        file.delete();
+        catch (Exception e){
+            System.out.println("Getting kafkaMessage failed with error message: " + e.getMessage());
+            e.printStackTrace(System.out);
+        }
+        return;
     }
 
     public static void sendSimulationData(File file) {
