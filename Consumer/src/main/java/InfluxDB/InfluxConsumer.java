@@ -73,6 +73,12 @@ public class InfluxConsumer implements ConsumerListener {
         boolean rfid57 = Boolean.valueOf(parts[9]);
         boolean rfid54 = Boolean.valueOf(parts[10]);
         boolean rfid55 = Boolean.valueOf(parts[11]);
+        boolean rfid1 = Boolean.valueOf(parts[12]);
+        boolean rfid2 = Boolean.valueOf(parts[13]);
+        boolean rfid3 = Boolean.valueOf(parts[14]);
+        boolean rfid4 = Boolean.valueOf(parts[15]);
+        boolean rfid5 = Boolean.valueOf(parts[16]);
+        boolean rfid6 = Boolean.valueOf(parts[17]);
 
         Point point1=Point.measurement(measurementName)
         .time(timeStamp, TimeUnit.MILLISECONDS)
@@ -82,10 +88,12 @@ public class InfluxConsumer implements ConsumerListener {
         .addField("abbFreq", abbFreq)
         .addField("abbCurrent", abbCurrent)
         .addField("abbVoltage", abbVoltage)
-        .addField("RFID54", rfid54)
-        .addField("RFID55", rfid55)
-        .addField("RFID56", rfid56)
-        .addField("RFID57", rfid57)
+        .addField("RFID1", rfid1)
+        .addField("RFID2", rfid2)
+        .addField("RFID3", rfid3)
+        .addField("RFID4", rfid4)
+        .addField("RFID5", rfid5)
+        .addField("RFID6", rfid6)
         .build();
         this.batchPoints.point(point1);
         logger.error(format.format(new Date(timeStamp)) + " Received TestBed Message: " +
