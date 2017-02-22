@@ -58,8 +58,8 @@ public class InfluxClient{
     public static void main(String[] args) throws Exception{
         String groupId = "1";
         String topic = "test1";
-        String username = "cloud_data";
-        String password = "2016SummerProj";
+        String username = "graphana_acc";
+        String password = "testBed_read16";
         String database = "https://migsae-influx.arc-ts.umich.edu:8086";
         String dbName = "test";
         int threads = 1;
@@ -69,7 +69,7 @@ public class InfluxClient{
         while(true){ 
             //  prompt for the method and get input
             Scanner scanner = new Scanner(System.in);
-            System.out.print("Enter your method (read/delete/quit): ");
+            System.out.print("Enter your method (query/quit): ");
             String method = scanner.next();
             if(method.equals("quit") || method.equals("q")){
                 break;
@@ -83,6 +83,7 @@ public class InfluxClient{
             }
             query += word + " ";
             
+            System.out.println("Executing " + query);
             client.reader.execute(query);
         }
     }
