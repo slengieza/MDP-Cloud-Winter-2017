@@ -1,0 +1,222 @@
+for (i in 1:4){#
+	print(i)#
+}
+print(m3)
+m = matrix(1:10,nrow=2)#
+print(m)#
+for (i in 1:5){#
+	m3[i,] = m[,i]#
+}#
+print(m3)
+m3 = m+4
+m = matrix(1:10,nrow=2)#
+m3 = m+4#
+print(m)#
+for (i in 1:5){#
+	m3[i,] = m[,i]#
+}#
+print(m3)
+m = matrix(1:10,nrow=2)#
+m3 = m+4#
+print(m)#
+for (i in 1:5){#
+	m3[,i] = m[,i]#
+}#
+print(m3)
+while(sum(m) > 5){#
+	print(m)#
+}
+x11()
+v1 =1:3
+v2=3:5
+plot(v1,v2)
+help(par)
+lines(v1,v2)
+aline(v1,v2)
+abline(v1,v2)
+q()
+？？arma
+??arma
+??parcorr
+parcorr(array(1:10))
+VarCor(array(1:10))
+VarCorr(array(1:10))
+VarCorr()
+a = array(1:20)
+a
+ARIMA(2,0,2)
+Arima
+??Arima
+arima(2,0,2)
+data = array([1.1 0.2 1.2 -0.3 3.1 0.9 3.8 1.6 4.4 1.3 5.9 2.3])
+data = array(1.1 0.2 1.2 -0.3 3.1 0.9 3.8 1.6 4.4 1.3 5.9 2.3)
+data = matrix([1.1 0.2 1.2 -0.3 3.1 0.9 3.8 1.6 4.4 1.3 5.9 2.3])
+sample_data = c(1.1, 0.2, 1.2, -0.3, 3.1, 0.9, 3.8, 1.6, 4.4, 1.3, 5.9, 2.3)
+sample_data
+time = seq(0, 2, length = 12)#
+time
+auto.arima
+? auto.arima
+?? auto.arima
+?? auto
+?? ariam
+?? arima
+arima(sample_data)
+predict = arima
+predict = arima(sample_data)
+plot(predict)
+predict
+predict(13)
+?? AR
+install.packages('forecast',dependecies = TRUE)
+#install.packages("devtools")
+install.packages("devtools")
+devtools::install_github("robjhyndman/forecast")
+auto.arima
+auto.arima(sample_Data)
+auto.arima(sample_data)
+install.packages('forecast', dependencies = TRUE)
+auto.arima(sample_data)
+install.packages('forecast', dependencies = TRUE)
+auto.arima
+source("/Users/Chandrin/Downloads/forecast/R/forecast")
+library(forecast)
+auto.arima(sample_data)
+plot(forecast(fit, h = 20))
+fit <- auto.arima(Data)
+fit <- auto.arima(sample_data)
+plot(forecast(fit, h = 20))
+library(forecast)#
+library(MASS)#
+#
+#LOAD DATA#
+data <- read.table("fanucCurr_output.txt")#
+time.year <- data[,1]#
+time.month <- data[,2]#
+time.day <- data[,3]#
+time.hour <- data[,4]#
+time.minutes <- data[,5]#
+time.sec <- data[,6]#
+curr <- data[,7]*0.01#
+rm(data);#
+data <- read.table("fanucVol_output.txt")#
+vol <- data[,7]*0.1#
+rm(data);#
+data <- read.table("fanucFreq_output.txt")#
+freq <-data[,7]/10#
+rm(data);#
+data.freq = freq#
+data.vol = vol#
+data.curr = curr#
+rm(freq);#
+rm(curr);#
+rm(vol);#
+#
+# ASSIGN DATA ATTRIBUTES#
+data.freq.mean = mean(data.freq)#
+data.freq.min = min(data.freq)#
+data.freq.max = max(data.freq)#
+data.freq.std = sd(data.freq)#
+data.freq.max_idx = which(data.freq %in% data.freq.max)#
+data.vol.mean = mean(data.vol)#
+data.vol.min = min(data.vol)#
+data.vol.max = max(data.vol)#
+data.vol.std = sd(data.vol)#
+data.vol.max_idx = which(data.vol %in% data.vol.max)#
+data.vol.idx = which(data.vol > data.vol.min)#
+data.curr.mean = mean(data.curr)#
+data.curr.min = min(data.curr)#
+data.curr.max = max(data.curr)#
+data.curr.std = sd(data.curr)#
+data.curr.max_idx = which(data.curr %in% data.curr.max)#
+data.curr.idx = which(data.curr > data.curr.min)#
+#
+#PRINT STATS#
+print(c("mean volatge is:",data.vol.mean))#
+print(c("max voltage is:",data.vol.max))#
+print(c("voltage std is:",data.vol.std))#
+print(c("mean current is:",data.curr.mean))#
+print(c("max current is:",data.curr.max))#
+print(c("current std is:",data.curr.std))
+dec.cur = data.curr[which(data.curr[dec] > 0)]#
+dec.vol = data.vol[which(data.vol[dec] > 0)]
+setwd("/Users/Chandrin/Google Drive/2017WN/MDP/data processing/")
+library(forecast)#
+library(MASS)#
+#
+#LOAD DATA#
+data <- read.table("fanucCurr_output.txt")#
+time.year <- data[,1]#
+time.month <- data[,2]#
+time.day <- data[,3]#
+time.hour <- data[,4]#
+time.minutes <- data[,5]#
+time.sec <- data[,6]#
+curr <- data[,7]*0.01#
+rm(data);#
+data <- read.table("fanucVol_output.txt")#
+vol <- data[,7]*0.1#
+rm(data);#
+data <- read.table("fanucFreq_output.txt")#
+freq <-data[,7]/10#
+rm(data);#
+data.freq = freq#
+data.vol = vol#
+data.curr = curr#
+rm(freq);#
+rm(curr);#
+rm(vol);#
+#
+# ASSIGN DATA ATTRIBUTES#
+data.freq.mean = mean(data.freq)#
+data.freq.min = min(data.freq)#
+data.freq.max = max(data.freq)#
+data.freq.std = sd(data.freq)#
+data.freq.max_idx = which(data.freq %in% data.freq.max)#
+data.vol.mean = mean(data.vol)#
+data.vol.min = min(data.vol)#
+data.vol.max = max(data.vol)#
+data.vol.std = sd(data.vol)#
+data.vol.max_idx = which(data.vol %in% data.vol.max)#
+data.vol.idx = which(data.vol > data.vol.min)#
+data.curr.mean = mean(data.curr)#
+data.curr.min = min(data.curr)#
+data.curr.max = max(data.curr)#
+data.curr.std = sd(data.curr)#
+data.curr.max_idx = which(data.curr %in% data.curr.max)#
+data.curr.idx = which(data.curr > data.curr.min)#
+#
+#PRINT STATS#
+print(c("mean volatge is:",data.vol.mean))#
+print(c("max voltage is:",data.vol.max))#
+print(c("voltage std is:",data.vol.std))#
+print(c("mean current is:",data.curr.mean))#
+print(c("max current is:",data.curr.max))#
+print(c("current std is:",data.curr.std))
+dec.cur = data.curr[which(data.curr[dec] > 0)]#
+dec.vol = data.vol[which(data.vol[dec] > 0)]
+dec = which(time.month == 12)#
+dec.cur = data.curr[which(data.curr[dec] > 0)]#
+dec.vol = data.vol[which(data.vol[dec] > 0)]
+par(mfrow = c(2,1))
+plot(dec.cur)
+plot(dec.vol)
+# Deal with data#
+dec = which(time.month == 12)#
+decidx = which(data.freq[dec] < data.freq.max)#
+dec.cur = data.curr[which(data.curr[decidx] > 0)]#
+dec.vol = data.vol[which(data.vol[decidx] > 0)]
+par(mfrow = c(2,1))
+par(mfrow = c(2,1))
+plot(dec.vol,type = "l")
+plot(dec.cur,type = "l")
+dec = which(time.month == 12)#
+decidx = which(data.freq[dec] < 200)#
+dec.cur = data.curr[which(data.curr[decidx] > 0)]#
+dec.vol = data.vol[which(data.vol[decidx] > 0)]
+par(mfrow = c(2,1))
+par(mfrow = c(2,1))
+plot(dec.vol,type = "l")
+plot(dec.cur,type = "l")
+plot(data.freq)
+plot(data.freq[decidx])
