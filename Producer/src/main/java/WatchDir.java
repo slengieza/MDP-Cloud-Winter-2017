@@ -8,18 +8,34 @@ import static java.nio.file.StandardWatchEventKinds.*;
 import static java.nio.file.LinkOption.*;
 
 //topic
+// import kafka.admin.AdminUtils;
+// import kafka.utils.ZKStringSerializer$;
+// import kafka.utils.ZkUtils;
+// import org.I0Itec.zkclient.ZkClient;
+// import org.I0Itec.zkclient.ZkConnection;
+// import kafka.common.TopicExistsException;
+
+// //producer
+// import kafka.javaapi.producer.Producer;
+// import kafka.producer.ProducerConfig;
+// import kafka.producer.KeyedMessage;
+// import scala.collection.JavaConversions;
+
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.common.security.JaasUtils;
+import org.apache.kafka.common.utils.Utils;
+
+import org.apache.kafka.common.serialization.StringSerializer;
+
+
+import org.I0Itec.zkclient.ZkClient;
+import org.I0Itec.zkclient.ZkConnection;
+
 import kafka.admin.AdminUtils;
 import kafka.utils.ZKStringSerializer$;
 import kafka.utils.ZkUtils;
-import org.I0Itec.zkclient.ZkClient;
-import org.I0Itec.zkclient.ZkConnection;
-import kafka.common.TopicExistsException;
-
-//producer
-import kafka.javaapi.producer.Producer;
-import kafka.producer.ProducerConfig;
-import kafka.producer.KeyedMessage;
-import scala.collection.JavaConversions;
 
 //Kafka
 import com.mdp.producer.JsonToString;
@@ -34,7 +50,7 @@ public class WatchDir {
     // Kafka 
     private Properties props;
     private ProducerConfig config;
-    private static Producer<String, String> producer;
+    private static KafkaProducer<String, String> producer;
 
     @SuppressWarnings("unchecked")
     static <T> WatchEvent<T> cast(WatchEvent<?> event) {
@@ -60,7 +76,7 @@ public class WatchDir {
         keys.put(key, dir);
     }
 
-    WatchDir(Path dir) throws IOException {
+    public WatchDir(Path dir) throws IOException {
         this.watcher = FileSystems.getDefault().newWatchService();
         this.keys = new HashMap<WatchKey,Path>();
 
@@ -78,16 +94,17 @@ public class WatchDir {
         this.props.put("metadata.broker.list", "migsae-kafka.aura.arc-ts.umich.edu:9092");
         this.props.put("serializer.class", "kafka.serializer.StringEncoder");
         this.props.put("request.required.acks", "1");
-
+        this.props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,StringSerializer.class.getName());
+        this.props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,StringSerializer.class.getName());
         //LOCAL
         // this.props.put("bootstrap.servers", "localhost:9092");
         // this.props.put("acks", "all");
-        // this.props.put("metadata.broker.list", "localhost:9092");
+        // this.props.put("metadata.broker.list", "localhost:9092");    
         // this.props.put("serializer.class", "kafka.serializer.StringEncoder");
         // this.props.put("request.required.acks", "1");
         
-        this.config = new ProducerConfig(props);
-        this.producer = new Producer<String, String>(config);
+        // this.config = new ProducerConfig(props);
+        this.producer = new KafkaProducer<String, String>(props);
     }
 
     void processEvents() {
@@ -145,23 +162,36 @@ public class WatchDir {
             //used to create topic
 
             //PRODUCTION
-            ZkClient zkClient = new ZkClient("migsae-kafka.aura.arc-ts.umich.edu:2181/kafka", 10000, 10000, ZKStringSerializer$.MODULE$);
-            
+            // ZkClient zkClient = new ZkClient("migsae-kafka.aura.arc-ts.umich.edu:2181/kafka", 10000, 10000, ZKStringSerializer$.MODULE$);
+
             //LOCAL
             // ZkClient zkClient = new ZkClient("localhost:2181", 10000, 10000, ZKStringSerializer$.MODULE$);
 
-            // topic name, replication factor, replication factor, config properties
-            System.out.println(ZkUtils.getSortedBrokerList(zkClient));
-            AdminUtils.createTopic(zkClient, topic, 3, 1, new Properties());
+            String zookeeperConnect = "migsae-kafka.aura.arc-ts.umich.edu:2181/kafka";
+            int sessionTimeoutMs = 10000;
+            int connectionTimeoutMs = 10000;
+
+            ZkClient zkClient = new ZkClient(zookeeperConnect,sessionTimeoutMs,connectionTimeoutMs,ZKStringSerializer$.MODULE$);
+
+            boolean isSecureKafkaCluster = false;
+            ZkUtils zkUtils = new ZkUtils(zkClient, new ZkConnection(zookeeperConnect), isSecureKafkaCluster);
+
+            int partitions = 3;
+            int replication = 1;
+
+            // Add topic configuration here
+            Properties topicConfig = new Properties();
+
+            AdminUtils.createTopic(zkUtils, topic, partitions, replication, topicConfig);
         }
-        catch (TopicExistsException e){
+        catch (Exception e){
             System.out.println("Topic exists");
         }
     }
 
     public static void main(String[] args) throws IOException {
         // Kafka 
-        String topic = "test1";
+        String topic = "test2";
         String group_id = "report";
         new_topic(topic);
         //PRODUCTION
@@ -209,7 +239,7 @@ public class WatchDir {
                     while(it.hasNext()){
                         dataList += it.next().toString() + "\t";
                     }
-                    KeyedMessage<String, String> data = new KeyedMessage<String, String>("test1", dataList);
+                    ProducerRecord<String, String> data = new ProducerRecord<String, String>("test1", dataList);
                     System.out.println("Sending Message: " + dataList);
                     producer.send(data);
                 }
@@ -218,7 +248,7 @@ public class WatchDir {
             }
             else if(file.toString().toLowerCase().endsWith(".csv")){
                 
-                try{
+                try{ //TODO move to simulation folder
                     FileInputStream fis = new FileInputStream(file);
                     ExtractCSV eofcsv = new ExtractCSV(fis);
                     String[][] data = eofcsv.extract();
@@ -227,7 +257,7 @@ public class WatchDir {
                         for(int j = 0; j < data[0].length; ++j){
                             message_data += data[i][j] + "\t";
                         }
-                        KeyedMessage<String, String> message = new KeyedMessage<String, String>("test1", message_data);
+                        ProducerRecord<String, String> message = new ProducerRecord<String, String>("test1", message_data);
                         System.out.println(message_data);
                         //producer.send(message);
                     }
@@ -257,9 +287,9 @@ public class WatchDir {
                 while(it.hasNext()){
                     dataList += it.next() + "\t";
                 }
-                KeyedMessage<String, String> data = new KeyedMessage<String, String>("test1", dataList);
+                ProducerRecord<String, String> data = new ProducerRecord<String, String>("test1", dataList);
                 try {
-                    // System.out.println("Sending Message: " + dataList);
+                    System.out.println("Sending Message: " + dataList);
                     producer.send(data);
                 }
                 catch (Exception e){
@@ -277,7 +307,7 @@ public class WatchDir {
         return;
     }
 
-    public static void sendSimulationData(File file) {
+    public static void sendSimulationData(File file) {//TODO move to simulation folder
         try{
             FileInputStream fis = new FileInputStream(file);
             ExtractCSV eofcsv = new ExtractCSV(fis);
@@ -287,7 +317,7 @@ public class WatchDir {
                 for(int j = 0; j < data[0].length; ++j){
                     message_data += data[i][j] + "\t";
                 }
-                KeyedMessage<String, String> message = new KeyedMessage<String, String>("test1", message_data);
+                ProducerRecord<String, String> message = new ProducerRecord<String, String>("test1", message_data);
                 System.out.println(message_data);
                 //producer.send(message);
             }

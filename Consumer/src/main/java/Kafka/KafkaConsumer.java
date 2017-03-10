@@ -4,10 +4,11 @@ import java.io.*;
 import java.lang.*;
 import java.util.concurrent.TimeUnit;
 
-import kafka.consumer.ConsumerConfig;
-import kafka.consumer.KafkaStream;
-import kafka.javaapi.consumer.ConsumerConnector;
-import kafka.consumer.ConsumerIterator;
+// import kafka.consumer.ConsumerConfig;
+// import kafka.consumer.KafkaStream;
+// import kafka.javaapi.consumer.ConsumerConnector;
+// import kafka.consumer.ConsumerIterator;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -122,8 +123,8 @@ public class KafkaConsumer {
                 a Config parameter, it'll be better than passing tons of
                 parameters to the Consumer constructor
         ***/
-        props.put("zookeeper.session.timeout.ms", "400");
-        props.put("zookeeper.sync.time.ms", "200");
+        props.put("zookeeper.session.timeout.ms", "10000");//400
+        props.put("zookeeper.sync.time.ms", "10000");//200
         props.put("auto.commit.interval.ms", "1000");
 
         return new ConsumerConfig(props);
@@ -135,66 +136,151 @@ public class KafkaConsumer {
             and the Executor will run it
     ***/
     private class MessageConsumer implements Runnable {
-        private KafkaStream stream;
-        private int threadNumber;
-        private List<ConsumerListener> listeners;
+        // private KafkaStream stream;
+        // private int threadNumber;
+        // private List<ConsumerListener> listeners;
 
-        public MessageConsumer(KafkaStream stream, int threadNumber, List<ConsumerListener> listeners) {
-            this.stream = stream;
-            this.threadNumber = threadNumber;
-            this.listeners = listeners;
+        // public MessageConsumer(KafkaStream stream, int threadNumber, List<ConsumerListener> listeners) {
+        //     this.stream = stream;
+        //     this.threadNumber = threadNumber;
+        //     this.listeners = listeners;
+        // }
+
+        // public void run() {
+        //     ConsumerIterator<byte[], byte[]> it = this.stream.iterator();
+
+        //     // Todo still now sure how to handle interruption
+        //     while (!Thread.currentThread().isInterrupted()) {
+        //         if (it.hasNext()) {
+        //             String message = new String(it.next().message());
+        //             // This println is here for debugging purpose, feel free to comment out
+        //             //System.out.println("Thread " + this.threadNumber + ": " + message);
+        //             System.out.println("KafkaConsumer received " + message);
+        //             for (ConsumerListener listener : this.listeners) {
+        //                 listener.onReceiveMessage(message);   
+        //             }
+        //         }
+        //     }
+        //     for (ConsumerListener listener : this.listeners) {
+        //         listener.onShutdown();   
+        //     }
+        // }
+        private final KafkaConsumer<String, String> consumer;
+        private final List<String> topics;
+        private final int id;
+        private String zookeeper = "migsae-kafka.aura.arc-ts.umich.edu:2181/kafka";
+        private String groupId = "1";
+        private String topic = "test2";
+        private String username = "cloud_data";
+        private String password = "2016SummerProj";
+        private String database = "https://migsae-influx.arc-ts.umich.edu:8086";
+        private String dbName = "test";
+        private String continuousDataTable = "TrainingData_3_6_2017";
+        private String cycleTimeTable = "CycleTimes";
+        int threads = 1;
+
+        public void ConsumerLoop(int id,String groupId, List<String> topics) {
+            this.id = id;
+            this.topics = topics;
+            Properties props = new Properties();
+            props.put("group.id", groupId);
+            props.put("key.deserializer", StringDeserializer.class.getName());
+            props.put("value.deserializer", StringDeserializer.class.getName());
+            this.consumer = new KafkaConsumer<>(props);
+            InfluxClient influx_client = new InfluxClient(username, password, database, dbName, continuousDataTable);
+            StreamingClient streaming_client = new StreamingClient(username, password, database, dbName, cycleTimeTable);
+
+            List<ConsumerListener> listeners = new ArrayList<ConsumerListener>();
+            listeners.add((ConsumerListener)influx_client.listener);
+            listeners.add((ConsumerListener)streaming_client.listener);
         }
 
+        @Override
         public void run() {
-            ConsumerIterator<byte[], byte[]> it = this.stream.iterator();
+            try {
+                consumer.subscribe(topics);
 
-            // Todo still now sure how to handle interruption
-            while (!Thread.currentThread().isInterrupted()) {
-                if (it.hasNext()) {
-                    String message = new String(it.next().message());
-                    // This println is here for debugging purpose, feel free to comment out
-                    //System.out.println("Thread " + this.threadNumber + ": " + message);
-                    // System.out.println("KafkaConsumer received " + message);
-                    for (ConsumerListener listener : this.listeners) {
-                        listener.onReceiveMessage(message);   
+                while (true) {
+                    ConsumerRecords<String, String> records = consumer.poll(Long.MAX_VALUE);
+                    for (ConsumerRecord<String, String> record : records) {
+                        System.out.println("KafkaConsumer received " + record);
+                        for (ConsumerListener listener : this.listeners) {
+                            listener.onReceiveMessage(record.value());   
+                        }
                     }
                 }
+            } 
+            catch (WakeupException e) {
+                // ignore for shutdown 
+            } 
+            finally {
+                consumer.close();
             }
-            for (ConsumerListener listener : this.listeners) {
-                listener.onShutdown();   
-            }
+        }
+
+        public void shutdown() {
+            consumer.wakeup();
         }
     }
 
-    public static void main(String[] args) {
-        String zookeeper = "migsae-kafka.aura.arc-ts.umich.edu:2181/kafka";
+    public static void main(String[] args) { 
+        int numConsumers = 1;
         String groupId = "1";
-        String topic = "test1";
-        String username = "cloud_data";
-        String password = "2016SummerProj";
-        String database = "https://migsae-influx.arc-ts.umich.edu:8086";
-        String dbName = "test";
-        String continuousDataTable = "OldValues";
-        String cycleTimeTable = "CycleTimes";
-        int threads = 1;
-    
-        InfluxClient influx_client = new InfluxClient(username, password, database, dbName, continuousDataTable);
-        StreamingClient streaming_client = new StreamingClient(username, password, database, dbName, cycleTimeTable);
-        // HadoopClient hadoop_client = new HadoopClient();
+        List<String> topics = Arrays.asList("test1");
+        ExecutorService executor = Executors.newFixedThreadPool(numConsumers);
 
-        List<ConsumerListener> listeners = new ArrayList<ConsumerListener>();
-        listeners.add((ConsumerListener)influx_client.listener);
-        listeners.add((ConsumerListener)streaming_client.listener);
-        // listeners.add((ConsumerListener)hadoop_client.listener);
-
-        KafkaConsumer consumer = new KafkaConsumer(zookeeper, groupId, topic, threads, listeners);
-        consumer.run();
-    }
-
-    public void stop(){
-        for (ConsumerListener listener : this.listeners) {
-            listener.onShutdown();   
+        final List<ConsumerLoop> consumers = new ArrayList<>();
+        for (int i = 0; i < numConsumers; i++) {
+            ConsumerLoop consumer = new ConsumerLoop(i, groupId, topics);
+            consumers.add(consumer);
+            executor.submit(consumer);
         }
-        this.shutdown();
+
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                for (ConsumerLoop consumer : consumers) {
+                    consumer.shutdown();
+                } 
+                executor.shutdown();
+                try {
+                    executor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+                } 
+                catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
+    // public static void main(String[] args) {
+    //     String zookeeper = "migsae-kafka.aura.arc-ts.umich.edu:2181/kafka";
+    //     String groupId = "1";
+    //     String topic = "test2";
+    //     String username = "cloud_data";
+    //     String password = "2016SummerProj";
+    //     String database = "https://migsae-influx.arc-ts.umich.edu:8086";
+    //     String dbName = "test";
+    //     String continuousDataTable = "TrainingData_3_6_2017";
+    //     String cycleTimeTable = "CycleTimes";
+    //     int threads = 1;
+    
+    //     InfluxClient influx_client = new InfluxClient(username, password, database, dbName, continuousDataTable);
+    //     StreamingClient streaming_client = new StreamingClient(username, password, database, dbName, cycleTimeTable);
+    //     // HadoopClient hadoop_client = new HadoopClient();
+
+    //     List<ConsumerListener> listeners = new ArrayList<ConsumerListener>();
+    //     listeners.add((ConsumerListener)influx_client.listener);
+    //     listeners.add((ConsumerListener)streaming_client.listener);
+    //     // listeners.add((ConsumerListener)hadoop_client.listener);
+
+    //     KafkaConsumer consumer = new KafkaConsumer(zookeeper, groupId, topic, threads, listeners);
+    //     consumer.run();
+    // }
+
+    // public void stop(){
+    //     for (ConsumerListener listener : this.listeners) {
+    //         listener.onShutdown();   
+    //     }
+    //     this.shutdown();
+    // }
 }

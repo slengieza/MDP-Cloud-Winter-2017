@@ -62,6 +62,7 @@ public class InfluxConsumer implements ConsumerListener {
     }
 
     public void addTestBedData(String[] parts){
+        System.out.println("Got message");
         Long timeStamp= Long.parseLong(parts[1]);
         Long fanucFreq = Long.parseLong(parts[2]);
         Long fanucCurrent = Long.parseLong(parts[3]);
