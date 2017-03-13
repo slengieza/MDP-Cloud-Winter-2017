@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 import java.util.*;
 
-import com.mdp.consumer.KafkaConsumer;
+import com.mdp.consumer.KafkaMessageConsumer;
 import com.mdp.consumer.ConsumerListener;
 
 public class HadoopClient{

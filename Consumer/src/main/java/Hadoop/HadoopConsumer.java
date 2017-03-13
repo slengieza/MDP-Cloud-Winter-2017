@@ -20,7 +20,7 @@ import java.io.OutputStreamWriter;
 import java.io.FileOutputStream;
 import java.util.List;
 
-import com.mdp.consumer.KafkaConsumer;
+import com.mdp.consumer.KafkaMessageConsumer;
 import com.mdp.consumer.ConsumerListener;
 
 /*

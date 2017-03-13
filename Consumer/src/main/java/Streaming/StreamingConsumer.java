@@ -24,7 +24,7 @@ import org.influxdb.dto.QueryResult;
 import org.influxdb.dto.QueryResult.Result;
 import org.influxdb.dto.QueryResult.Series;
 
-import com.mdp.consumer.KafkaConsumer;
+import com.mdp.consumer.KafkaMessageConsumer;
 import com.mdp.consumer.ConsumerListener;
 
 public class StreamingConsumer implements ConsumerListener {

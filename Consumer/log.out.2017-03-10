@@ -1,0 +1,4 @@
+[1_ME-VRMILLING1-1489180649891-d11d0f59], error during syncedRebalance
+kafka.common.ConsumerRebalanceFailedException: 1_ME-VRMILLING1-1489180649891-d11d0f59 can't rebalance after 4 retries
+	at kafka.consumer.ZookeeperConsumerConnector$ZKRebalancerListener.syncedRebalance(ZookeeperConsumerConnector.scala:660)
+	at kafka.consumer.ZookeeperConsumerConnector$ZKRebalancerListener$$anon$1.run(ZookeeperConsumerConnector.scala:579)
