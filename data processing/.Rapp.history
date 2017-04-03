@@ -207,7 +207,6 @@ decidx = which(data.freq[dec] < data.freq.max)#
 dec.cur = data.curr[which(data.curr[decidx] > 0)]#
 dec.vol = data.vol[which(data.vol[decidx] > 0)]
 par(mfrow = c(2,1))
-par(mfrow = c(2,1))
 plot(dec.vol,type = "l")
 plot(dec.cur,type = "l")
 dec = which(time.month == 12)#
@@ -215,8 +214,431 @@ decidx = which(data.freq[dec] < 200)#
 dec.cur = data.curr[which(data.curr[decidx] > 0)]#
 dec.vol = data.vol[which(data.vol[decidx] > 0)]
 par(mfrow = c(2,1))
-par(mfrow = c(2,1))
 plot(dec.vol,type = "l")
 plot(dec.cur,type = "l")
 plot(data.freq)
 plot(data.freq[decidx])
+./pwd
+pwd
+library(marima)#
+library(forecast)#
+fanuc#
+fanuc.cur <- read.table("curr_output.txt")#
+fanuc.vol <- read.table("vol_output.txt")#
+fanuc.frq <- read.table("freq_output.txt")#
+cur = t(fanuc.cur[,7]*0.01)#
+cur = cur[which(fanuc.cur[,7] > 0)];#
+vol = t(fanuc.vol[,7]*0.1)#
+vol = vol[which(fanuc.vol[,7] > 0)];#
+frq = t(fanuc.frq[,7]/60)#
+frq = frq[which(fanuc.frq[,7] > 0)];#
+fanuc = data.frame(cur,vol,frq)
+fanuc.dif = define.dif(fanuc,difference = c(1,1 ,2,100 ,3,1))
+fanuc.dif.analysis = fanuc.dif$y.dif
+plot(frq)
+cur_20 = cur[which(frq[,7] = 20)];
+cur_20 = cur[which(frq[,7] == 20)];
+cur_20 = cur[which(frq== 20)];
+plot(cur_20)
+cur_20 = cur[which(frq== 20)];#
+cur_30 = cur[which(frq== 30)];#
+cur_45 = cur[which(frq== 45)];#
+cur_60 = cur[which(frq== 60)];#
+#
+vol_20 = vol[which(frq== 20)];#
+vol_30 = vol[which(frq== 30)];#
+vol_45 = vol[which(frq== 45)];#
+vol_60 = vol[which(frq== 60)];
+?arma.forecast
+?define.model
+library(marima)#
+library(forecast)#
+fanuc.cur <- read.table("curr_output.txt")#
+fanuc.vol <- read.table("vol_output.txt")#
+fanuc.frq <- read.table("freq_output.txt")#
+cur = t(fanuc.cur[,7]*0.01)#
+cur = cur[which(fanuc.cur[,7] > 0)];#
+vol = t(fanuc.vol[,7]*0.1)#
+vol = vol[which(fanuc.vol[,7] > 0)];#
+frq = t(fanuc.frq[,7]/60)#
+frq = frq[which(fanuc.frq[,7] > 0)];#
+fanuc = data.frame(cur,vol,frq)#
+#
+cur_20 = cur[which(frq== 20)];#
+cur_30 = cur[which(frq== 30)];#
+cur_45 = cur[which(frq== 45)];#
+cur_60 = cur[which(frq== 60)];#
+#
+vol_20 = vol[which(frq== 20)];#
+vol_30 = vol[which(frq== 30)];#
+vol_45 = vol[which(frq== 45)];#
+vol_60 = vol[which(frq== 60)];#
+#
+data_20 = data.frame(cur_20,vol_20)#
+data_30 = data.frame(cur_30,vol_30)#
+data_45 = data.frame(cur_45,vol_45)#
+data_60 = data.frame(cur_60,vol_60)#
+model = define.model(kvar=2, ar=c(1,2), ma=c(1,2))#
+marima1 = marima(ts(data_20[1:100, ]),model$ar.pattern, model$ma.pattern, penalty=1)#
+nstart = 100#
+nstep = 10#
+Forecasts = arma.forecast(series=ts(data_20), marima=model, nstart=nstart, nstep=nstep, dif.poly = dif.poly, check=FALSE)#
+Predict = Forecasts$forecasts[,(nstart+1):(nstart+nstep)]#
+plot((nstart+1):(nstart+nstep),Predict[2,], xlim = c(0,10000),ylim = c(30,130), type='l',col = "blue",xlab= "index",ylab = "data")#
+par(new = TRUE)#
+plot(vol[1:10000],type = 'l',col = "red",xlim = c(0,10000), ylim = c(30,130),xlab= "index",ylab = "data")
+Forecasts = arma.forecast(series=ts(data_20), marima=model, nstart=nstart, nstep=nstep, check=FALSE)#
+Predict = Forecasts$forecasts[,(nstart+1):(nstart+nstep)]#
+plot((nstart+1):(nstart+nstep),Predict[2,], xlim = c(0,10000),ylim = c(30,130), type='l',col = "blue",xlab= "index",ylab = "data")#
+par(new = TRUE)#
+plot(vol[1:10000],type = 'l',col = "red",xlim = c(0,10000), ylim = c(30,130),xlab= "index",ylab = "data")
+length(data_20)
+data_20
+marima1 = marima(ts(data_20[1:200, ]),model$ar.pattern, model$ma.pattern, penalty=1)#
+nstart = 200#
+nstep = 24#
+Forecasts = arma.forecast(series=ts(data_20), marima=model, nstart=nstart, nstep=nstep, check=FALSE)#
+Predict = Forecasts$forecasts[,(nstart+1):(nstart+nstep)]#
+plot((nstart+1):(nstart+nstep),Predict[2,], xlim = c(0,10000),ylim = c(30,130), type='l',col = "blue",xlab= "index",ylab = "data")#
+par(new = TRUE)#
+plot(vol[1:10000],type = 'l',col = "red",xlim = c(0,10000), ylim = c(30,130),xlab= "index",ylab = "data")
+data_20[1:nstart,]
+nstart = 200#
+nstep = 24#
+series = data_20[1:nstart,]#
+series[nstart+1:nstart+nstep,] = NA#
+model = define.model(kvar=2, ar=c(1,2), ma=c(1,2))#
+marima1 = marima(ts(series),model$ar.pattern, model$ma.pattern, penalty=1)#
+#
+Forecasts = arma.forecast(series=ts(series), marima=model, nstart=nstart, nstep=nstep, check=FALSE)#
+Predict = Forecasts$forecasts[,(nstart+1):(nstart+nstep)]#
+plot((nstart+1):(nstart+nstep),Predict[2,], xlim = c(0,10000),ylim = c(30,130), type='l',col = "blue",xlab= "index",ylab = "data")#
+par(new = TRUE)#
+plot(vol[1:10000],type = 'l',col = "red",xlim = c(0,10000), ylim = c(30,130),xlab= "index",ylab = "data")
+model = define.model(kvar=2, ar=c(1,2), ma=c(1,2))
+marima1 = marima(ts(series),model$ar.pattern, model$ma.pattern, penalty=1)
+Forecasts = arma.forecast(series=ts(series), marima=model, nstart=nstart, nstep=nstep, check=FALSE)
+Forecasts = arma.forecast(series=ts(t(series)), marima=model, nstart=nstart, nstep=nstep, check=FALSE)
+Forecasts = arma.forecast(series=ts(series[,1]), marima=model, nstart=nstart, nstep=nstep, check=FALSE)
+series[,1]
+data_20
+series[(nstart+1):(nstart+nstep),] = NA
+series
+nstart = 200#
+nstep = 24#
+rm(series)#
+series = data_20[1:nstart,]#
+series[(nstart+1):(nstart+nstep),] = NA
+series
+model = define.model(kvar=2, ar=c(1,2), ma=c(1,2))
+marima1 = marima(ts(series),model$ar.pattern, model$ma.pattern, penalty=1)
+Forecasts = arma.forecast(series=ts(series[,1]), marima=model, nstart=nstart, nstep=nstep, check=FALSE)
+series[,1]
+Forecasts = arma.forecast(series=ts(series), marima=model, nstart=nstart, nstep=nstep, check=FALSE)
+Forecasts = arma.forecast(series=ts(series), marima=model, nstart=nstart, nstep=nstep)
+Forecasts = arma.forecast(series=ts(series), marima=marima1, nstart=nstart, nstep=nstep)
+Forecasts = arma.forecast(series=ts(series), marima=marima1, nstart=nstart, nstep=nstep, check=F)
+Predict = Forecasts$forecasts[,(nstart+1):(nstart+nstep)]
+series[1,].min
+min(series[1,])
+Predict = Forecasts$forecasts[,(nstart+1):(nstart+nstep)]#
+plot((nstart+1):(nstart+nstep),Predict[1,], xlim = c(0,(nstart+nstep)),ylim = c(min(series[1,]),max(series[1,])), type='l',col = "blue",xlab= "index",ylab = "data")#
+par(new = TRUE)#
+plot(vol[1:(nstart+nstep)],type = 'l',col = "red",xlim = c(0,(nstart+nstep)), ylim = c(min(series[1,]),max(series[1,])),xlab= "index",ylab = "data")
+Forecasts = arma.forecast(series=ts(series[,1]), marima=marima1, nstart=nstart, nstep=nstep, check=F)
+marima1 = marima(ts(series[,1]),model$ar.pattern, model$ma.pattern, penalty=1)
+series[,1]
+marima1 = marima(ts(series),model$ar.pattern, model$ma.pattern, penalty=1)
+Forecasts = arma.forecast(series=ts(series), marima=marima1, nstart=nstart, nstep=nstep, check=F)
+Predict = Forecasts$forecasts[,(nstart+1):(nstart+nstep)]
+plot((nstart+1):(nstart+nstep),Predict[1,], xlim = c(0,(nstart+nstep)),ylim = c(min(series[1,]),max(series[1,])), type='l',col = "blue",xlab= "index",ylab = "data")
+par(new = TRUE)
+plot(cur_20[1:(nstart+nstep)],type = 'l',col = "red",xlim = c(0,(nstart+nstep)), ylim = c(min(series[1,]),max(series[1,])),xlab= "index",ylab = "data")
+max(series[1,])
+series[1,]
+nstart = 200#
+nstep = 24#
+rm(series)#
+series = data_20[1:nstart,]#
+series[(nstart+1):(nstart+nstep),] = NA#
+model = define.model(kvar=2, ar=c(1,2), ma=c(1,2))#
+marima1 = marima(ts(series),model$ar.pattern, model$ma.pattern, penalty=1)#
+Forecasts = arma.forecast(series=ts(series), marima=marima1, nstart=nstart, nstep=nstep, check=F)#
+Predict = Forecasts$forecasts[,(nstart+1):(nstart+nstep)]#
+plot((nstart+1):(nstart+nstep),Predict[1,], xlim = c(0,(nstart+nstep)),ylim = c(min(series[,1]),max(series[,1])), type='l',col = "blue",xlab= "index",ylab = "data")#
+par(new = TRUE)#
+plot(cur_20[1:(nstart+nstep)],type = 'l',col = "red",xlim = c(0,(nstart+nstep)), ylim = c(min(series[,1]),max(series[,1])),xlab= "index",ylab = "data")
+min(series[,1])
+plot((nstart+1):(nstart+nstep),Predict[1,], xlim = c(0,(nstart+nstep)),ylim = c(min(series[,1:nstart]),max(series[,1:nstart])), type='l',col = "blue",xlab= "index",ylab = "data")
+min(series[,1:nstart])
+plot((nstart+1):(nstart+nstep),Predict[1,], xlim = c(0,(nstart+nstep)),ylim = c(min(cur_20),max(cur_20), type='l',col = "blue",xlab= "index",ylab = "data")
+par(new = TRUE)
+plot((nstart+1):(nstart+nstep),Predict[1,], xlim = c(0,(nstart+nstep)),ylim = c(min(cur_20),max(cur_20)), type='l',col = "blue",xlab= "index",ylab = "data")
+par(new = TRUE)
+plot(cur_20[1:(nstart+nstep)],type = 'l',col = "red",xlim = c(0,(nstart+nstep)), c(min(cur_20),max(cur_20),xlab= "index",ylab = "data")
+plot(cur_20[1:(nstart+nstep)],type = 'l',col = "red",xlim = c(0,(nstart+nstep)), c(min(cur_20),max(cur_20)),xlab= "index",ylab = "data")
+plot(cur_20[1:(nstart+nstep)],type = 'l',col = "red",xlim = c(0,(nstart+nstep)), c(min(cur_20),max(cur_20)),xlab= "index",ylab = "data")
+plot(cur_20[1:(nstart+nstep)],type = 'l',col = "red",xlim = c(0,(nstart+nstep)), c(min(cur_20),max(cur_20)),xlab= "index",ylab = "data")
+cur_20[1:(nstart+nstep)]
+min(cur_20),max(cur_20)
+min(cur_20) max(cur_20)
+min(cur_20)
+max(cur_20)
+plot((nstart+1):(nstart+nstep),Predict[1,], xlim = c(0,(nstart+nstep)),ylim = c(min(cur_20),max(cur_20)), type='l',col = "blue",xlab= "index",ylab = "data")
+par(new = TRUE)
+plot(cur_20[1:(nstart+nstep)],type = 'l',col = "red",xlim = c(0,(nstart+nstep)), ylim=c(min(cur_20),max(cur_20)),xlab= "index",ylab = "data")
+nstart = 200#
+nstep = 20#
+rm(series)#
+series = data_20[1:nstart,]#
+series[(nstart+1):(nstart+nstep),] = NA#
+model = define.model(kvar=2, ar=c(1,2), ma=c(1,2))#
+marima1 = marima(ts(series),model$ar.pattern, model$ma.pattern, penalty=1)#
+Forecasts = arma.forecast(series=ts(series), marima=marima1, nstart=nstart, nstep=nstep, check=F)#
+Predict = Forecasts$forecasts[,(nstart+1):(nstart+nstep)]#
+plot((nstart+1):(nstart+nstep),Predict[1,], xlim = c(0,(nstart+nstep)),ylim = c(min(cur_20),max(cur_20)), type='l',col = "blue",xlab= "index",ylab = "data")#
+par(new = TRUE)#
+plot(cur_20[1:(nstart+nstep)],type = 'l',col = "red",xlim = c(0,(nstart+nstep)), ylim=c(min(cur_20),max(cur_20)),xlab= "index",ylab = "data")
+nstart = 100
+nstep = 100
+rm(series)#
+series = data_20[1:nstart,]#
+series[(nstart+1):(nstart+nstep),] = NA#
+model = define.model(kvar=2, ar=c(1,2), ma=c(1,2))#
+marima1 = marima(ts(series),model$ar.pattern, model$ma.pattern, penalty=1)#
+Forecasts = arma.forecast(series=ts(series), marima=marima1, nstart=nstart, nstep=nstep, check=F)#
+Predict = Forecasts$forecasts[,(nstart+1):(nstart+nstep)]#
+plot((nstart+1):(nstart+nstep),Predict[1,], xlim = c(0,(nstart+nstep)),ylim = c(min(cur_20),max(cur_20)), type='l',col = "blue",xlab= "index",ylab = "data")#
+par(new = TRUE)#
+plot(cur_20[1:(nstart+nstep)],type = 'l',col = "red",xlim = c(0,(nstart+nstep)), ylim=c(min(cur_20),max(cur_20)),xlab= "index",ylab = "data")
+plot((nstart+1):(nstart+nstep),Predict[1,], xlim = c(0,(nstart+nstep)),ylim = c(min(cur_20),max(cur_20)), type='l',col = "blue",xlab= "index",ylab = "data")
+plot(Predict)
+plot(Predict[1,])
+plot((nstart+1):(nstart+nstep),Predict[1,], xlim = c(0,(nstart+nstep)),ylim = c(min(cur_20),max(cur_20)), type='l',col = "blue",xlab= "index",ylab = "data")
+nstart = 200
+nstep = 10
+rm(series)
+series = data_20[1:nstart,]
+series[(nstart+1):(nstart+nstep),] = NA
+model = define.model(kvar=2, ar=c(1,2), ma=c(1,2))#
+marima1 = marima(ts(series),model$ar.pattern, model$ma.pattern, penalty=1)#
+Forecasts = arma.forecast(series=ts(series), marima=marima1, nstart=nstart, nstep=nstep, check=F)#
+Predict = Forecasts$forecasts[,(nstart+1):(nstart+nstep)]#
+plot((nstart+1):(nstart+nstep),Predict[1,], xlim = c(0,(nstart+nstep)),ylim = c(min(cur_20),max(cur_20)), type='l',col = "blue",xlab= "index",ylab = "data")#
+par(new = TRUE)#
+plot(cur_20[1:(nstart+nstep)],type = 'l',col = "red",xlim = c(0,(nstart+nstep)), ylim=c(min(cur_20),max(cur_20)),xlab= "index",ylab = "data")
+nstart = 150#
+nstep = 50#
+rm(series)#
+series = data_20[1:nstart,]#
+series[(nstart+1):(nstart+nstep),] = NA#
+model = define.model(kvar=2, ar=c(1,2), ma=c(1,2))#
+marima1 = marima(ts(series),model$ar.pattern, model$ma.pattern, penalty=1)#
+Forecasts = arma.forecast(series=ts(series), marima=marima1, nstart=nstart, nstep=nstep, check=F)#
+Predict = Forecasts$forecasts[,(nstart+1):(nstart+nstep)]#
+plot((nstart+1):(nstart+nstep),Predict[1,], xlim = c(0,(nstart+nstep)),ylim = c(min(cur_20),max(cur_20)), type='l',col = "blue",xlab= "index",ylab = "data")#
+par(new = TRUE)#
+plot(cur_20[1:(nstart+nstep)],type = 'l',col = "red",xlim = c(0,(nstart+nstep)), ylim=c(min(cur_20),max(cur_20)),xlab= "index",ylab = "data")
+nstart = 150#
+nstep = 50#
+rm(series)#
+series = data_20[1:nstart,]#
+series[(nstart+1):(nstart+nstep),] = NA#
+model = define.model(kvar=2, ar=c(1), ma=c(1,2))#
+marima1 = marima(ts(series),model$ar.pattern, model$ma.pattern, penalty=1)#
+Forecasts = arma.forecast(series=ts(series), marima=marima1, nstart=nstart, nstep=nstep, check=F)#
+Predict = Forecasts$forecasts[,(nstart+1):(nstart+nstep)]#
+plot((nstart+1):(nstart+nstep),Predict[1,], xlim = c(0,(nstart+nstep)),ylim = c(min(cur_20),max(cur_20)), type='l',col = "blue",xlab= "index",ylab = "data")#
+par(new = TRUE)#
+plot(cur_20[1:(nstart+nstep)],type = 'l',col = "red",xlim = c(0,(nstart+nstep)), ylim=c(min(cur_20),max(cur_20)),xlab= "index",ylab = "data")
+nstart = 150#
+nstep = 50#
+rm(series)#
+series = data_20[1:nstart,]#
+series[(nstart+1):(nstart+nstep),] = NA#
+model = define.model(kvar=2, ar=c(1,2,3), ma=c(1,2))#
+marima1 = marima(ts(series),model$ar.pattern, model$ma.pattern, penalty=1)#
+Forecasts = arma.forecast(series=ts(series), marima=marima1, nstart=nstart, nstep=nstep, check=F)#
+Predict = Forecasts$forecasts[,(nstart+1):(nstart+nstep)]#
+plot((nstart+1):(nstart+nstep),Predict[1,], xlim = c(0,(nstart+nstep)),ylim = c(min(cur_20),max(cur_20)), type='l',col = "blue",xlab= "index",ylab = "data")#
+par(new = TRUE)#
+plot(cur_20[1:(nstart+nstep)],type = 'l',col = "red",xlim = c(0,(nstart+nstep)), ylim=c(min(cur_20),max(cur_20)),xlab= "index",ylab = "data")
+model = define.model(kvar=2, ar=c(1,2), ma=c(1))
+marima1 = marima(ts(series),model$ar.pattern, model$ma.pattern, penalty=1)#
+Forecasts = arma.forecast(series=ts(series), marima=marima1, nstart=nstart, nstep=nstep, check=F)#
+Predict = Forecasts$forecasts[,(nstart+1):(nstart+nstep)]#
+plot((nstart+1):(nstart+nstep),Predict[1,], xlim = c(0,(nstart+nstep)),ylim = c(min(cur_20),max(cur_20)), type='l',col = "blue",xlab= "index",ylab = "data")#
+par(new = TRUE)#
+plot(cur_20[1:(nstart+nstep)],type = 'l',col = "red",xlim = c(0,(nstart+nstep)), ylim=c(min(cur_20),max(cur_20)),xlab= "index",ylab = "data")
+nstart = 500
+nstart = 500#
+nstep = 50#
+rm(series)#
+series = data_30[1:nstart,]#
+series[(nstart+1):(nstart+nstep),] = NA#
+model = define.model(kvar=2, ar=c(1,2), ma=c(1))#
+marima1 = marima(ts(series),model$ar.pattern, model$ma.pattern, penalty=1)#
+Forecasts = arma.forecast(series=ts(series), marima=marima1, nstart=nstart, nstep=nstep, check=F)#
+Predict = Forecasts$forecasts[,(nstart+1):(nstart+nstep)]#
+plot((nstart+1):(nstart+nstep),Predict[1,], xlim = c(0,(nstart+nstep)),ylim = c(min(cur_30),max(cur_30)), type='l',col = "blue",xlab= "index",ylab = "data")#
+par(new = TRUE)#
+plot(cur_30[1:(nstart+nstep)],type = 'l',col = "red",xlim = c(0,(nstart+nstep)), ylim=c(min(cur_30),max(cur_30)),xlab= "index",ylab = "data")
+model = define.model(kvar=2, ar=c(1,2), ma=c(1,2))
+marima1 = marima(ts(series),model$ar.pattern, model$ma.pattern, penalty=1)#
+Forecasts = arma.forecast(series=ts(series), marima=marima1, nstart=nstart, nstep=nstep, check=F)#
+Predict = Forecasts$forecasts[,(nstart+1):(nstart+nstep)]#
+plot((nstart+1):(nstart+nstep),Predict[1,], xlim = c(0,(nstart+nstep)),ylim = c(min(cur_30),max(cur_30)), type='l',col = "blue",xlab= "index",ylab = "data")#
+par(new = TRUE)#
+plot(cur_30[1:(nstart+nstep)],type = 'l',col = "red",xlim = c(0,(nstart+nstep)), ylim=c(min(cur_30),max(cur_30)),xlab= "index",ylab = "data")
+nstart = 500#
+nstep = 200#
+rm(series)#
+series = data_30[1:nstart,]#
+series[(nstart+1):(nstart+nstep),] = NA#
+model = define.model(kvar=2, ar=c(1,2), ma=c(1,2))#
+marima1 = marima(ts(series),model$ar.pattern, model$ma.pattern, penalty=1)#
+Forecasts = arma.forecast(series=ts(series), marima=marima1, nstart=nstart, nstep=nstep, check=F)#
+Predict = Forecasts$forecasts[,(nstart+1):(nstart+nstep)]#
+plot((nstart+1):(nstart+nstep),Predict[1,], xlim = c(0,(nstart+nstep)),ylim = c(min(cur_30),max(cur_30)), type='l',col = "blue",xlab= "index",ylab = "data")#
+par(new = TRUE)#
+plot(cur_30[1:(nstart+nstep)],type = 'l',col = "red",xlim = c(0,(nstart+nstep)), ylim=c(min(cur_30),max(cur_30)),xlab= "index",ylab = "data")
+nstart = 500#
+nstep = 300#
+rm(series)#
+series = data_30[1:nstart,]#
+series[(nstart+1):(nstart+nstep),] = NA#
+model = define.model(kvar=2, ar=c(1,2), ma=c(1,2))#
+marima1 = marima(ts(series),model$ar.pattern, model$ma.pattern, penalty=1)#
+Forecasts = arma.forecast(series=ts(series), marima=marima1, nstart=nstart, nstep=nstep, check=F)#
+Predict = Forecasts$forecasts[,(nstart+1):(nstart+nstep)]#
+plot((nstart+1):(nstart+nstep),Predict[1,], xlim = c(0,(nstart+nstep)),ylim = c(min(cur_30),max(cur_30)), type='l',col = "blue",xlab= "index",ylab = "data")#
+par(new = TRUE)#
+plot(cur_30[1:(nstart+nstep)],type = 'l',col = "red",xlim = c(0,(nstart+nstep)), ylim=c(min(cur_30),max(cur_30)),xlab= "index",ylab = "data")
+model = define.model(kvar=2, ar=c(1,2), ma=c(1))
+marima1 = marima(ts(series),model$ar.pattern, model$ma.pattern, penalty=1)#
+Forecasts = arma.forecast(series=ts(series), marima=marima1, nstart=nstart, nstep=nstep, check=F)#
+Predict = Forecasts$forecasts[,(nstart+1):(nstart+nstep)]#
+plot((nstart+1):(nstart+nstep),Predict[1,], xlim = c(0,(nstart+nstep)),ylim = c(min(cur_30),max(cur_30)), type='l',col = "blue",xlab= "index",ylab = "data")#
+par(new = TRUE)#
+plot(cur_30[1:(nstart+nstep)],type = 'l',col = "red",xlim = c(0,(nstart+nstep)), ylim=c(min(cur_30),max(cur_30)),xlab= "index",ylab = "data")
+model = define.model(kvar=2, ar=c(1,2), ma=c(1,2))
+marima1 = marima(ts(series),model$ar.pattern, model$ma.pattern, penalty=1)#
+Forecasts = arma.forecast(series=ts(series), marima=marima1, nstart=nstart, nstep=nstep, check=F)#
+Predict = Forecasts$forecasts[,(nstart+1):(nstart+nstep)]#
+plot((nstart+1):(nstart+nstep),Predict[1,], xlim = c(0,(nstart+nstep)),ylim = c(min(cur_30),max(cur_30)), type='l',col = "blue",xlab= "index",ylab = "data")#
+par(new = TRUE)#
+plot(cur_30[1:(nstart+nstep)],type = 'l',col = "red",xlim = c(0,(nstart+nstep)), ylim=c(min(cur_30),max(cur_30)),xlab= "index",ylab = "data")
+nstart = 500#
+nstep = 300#
+rm(series)#
+series = data_30[1:nstart,]#
+series[(nstart+1):(nstart+nstep),] = NA#
+model = define.model(kvar=2, ar=c(1,2), ma=c(1,2))#
+marima1 = marima(ts(series),model$ar.pattern, model$ma.pattern, penalty=1)#
+Forecasts = arma.forecast(series=ts(series), marima=marima1, nstart=nstart, nstep=nstep, check=F)#
+Predict = Forecasts$forecasts[,(nstart+1):(nstart+nstep)]#
+plot((nstart+1):(nstart+nstep),Predict[1,], xlim = c(0,(nstart+nstep)),ylim = c(min(cur_30),max(cur_30)), type='l',col = "blue",xlab= "index",ylab = "current data [Amps]")#
+par(new = TRUE)#
+plot(cur_30[1:(nstart+nstep)],type = 'l',col = "red",xlim = c(0,(nstart+nstep)), ylim=c(min(cur_30),max(cur_30)),xlab= "index",ylab = "current data [Amps]")
+legend(c('actual data','prediction'))
+legend('topright', legend = c('actual data','prediction'))
+legend('topright', col = c('blue','red'),legend = c('actual data','prediction'))
+legend('topright',legend = c('actual data','prediction'),lty = c(1,1),col=c("blue","red"))
+plot((nstart+1):(nstart+nstep),Predict[1,], xlim = c(0,(nstart+nstep)),ylim = c(min(cur_30),max(cur_30)), type='l',col = "blue",xlab= "index",ylab = "current data [Amps]")#
+par(new = TRUE)#
+plot(cur_30[1:(nstart+nstep)],type = 'l',col = "red",xlim = c(0,(nstart+nstep)), ylim=c(min(cur_30),max(cur_30)),xlab= "index",ylab = "current data [Amps]")#
+legend('topright',legend = c('actual data','prediction'),lty = c(1,1),col=c("blue","red"))
+plot((nstart+1):(nstart+nstep),Predict[1,], xlim = c(0,(nstart+nstep)),ylim = c(min(cur_30),max(cur_30)), type='l',col = "blue",xlab= "index",ylab = "current data [Amps]")#
+par(new = TRUE)#
+plot(cur_30[1:(nstart+nstep)],type = 'l',col = "red",xlim = c(0,(nstart+nstep)), ylim=c(min(cur_30),max(cur_30)),xlab= "index",ylab = "current data [Amps]")#
+legend('topright',legend = c('actual data','prediction'),lty = c(1,1),col=c("red","blue"))
+plot((nstart+1):(nstart+nstep),Predict[1,], xlim = c(0,(nstart+nstep)),ylim = c(min(cur_30),max(cur_30)), main = "current prediction at 30Hz",type='l',col = "blue",xlab= "index",ylab = "current data [Amps]")
+par(new = TRUE)
+plot(cur_30[1:(nstart+nstep)],type = 'l',col = "red",xlim = c(0,(nstart+nstep)), ylim=c(min(cur_30),max(cur_30)),xlab= "index",ylab = "current data [Amps]")
+legend('topright',legend = c('actual data','prediction'),lty = c(1,1),col=c("red","blue"))
+diff = Predict[1,] - series[(nstart+1):(nstart+nstep)]
+diff = Predict[1,] - series[(nstart+1):(nstart+nstep),1]
+plot(diff)
+Predict[1,]
+data_30[(nstart+1):(nstart+nstep),1]
+diff = Predict[1,] - data_30[(nstart+1):(nstart+nstep),1]
+plot(diff)
+sd(diff)
+ulc[1:length(diff)] = mean(diff) + 3*sd(diff)#
+llc[1:length(diff)] = mean(diff) - 3*sd(diff)#
+plot(diff,type = 'l',col ="blue")#
+par(new = TRUE)#
+plot(ulc,type = 'l',col = "red")#
+par(new = TRUE)#
+plot(llc,type = 'l',col = "red")
+ulc = NA#
+llc = NA#
+ulc[1:length(diff)] = mean(diff) + 3*sd(diff)#
+llc[1:length(diff)] = mean(diff) - 3*sd(diff)#
+plot(diff,type = 'l',col ="blue")#
+par(new = TRUE)#
+plot(ulc,type = 'l',col = "red")#
+par(new = TRUE)#
+plot(llc,type = 'l',col = "red")
+ulc = NA#
+llc = NA#
+ulc[1:length(diff)] = mean(diff) + 3*sd(diff)#
+llc[1:length(diff)] = mean(diff) - 3*sd(diff)#
+plot(diff,type = 'l',col ="blue",ylim = c(mean(diff) - 3*sd(diff),mean(diff) + 3*sd(diff)))#
+par(new = TRUE)#
+plot(ulc,type = 'l',col = "red",ylim = c(mean(diff) - 3*sd(diff),mean(diff) + 3*sd(diff)))#
+par(new = TRUE)#
+plot(llc,type = 'l',col = "red",ylim = c(mean(diff) - 3*sd(diff),mean(diff) + 3*sd(diff)))
+ulc[1:length(diff)] = mean(diff) + 3*sd(diff)#
+llc[1:length(diff)] = mean(diff) - 3*sd(diff)#
+plot(diff,type = 'l',col ="blue",ylim = c(min(diff) ,mean(diff) + 3*sd(diff)))#
+par(new = TRUE)#
+plot(ulc,type = 'l',col = "red",ylim = c(min(diff),mean(diff) + 3*sd(diff)))#
+par(new = TRUE)#
+plot(llc,type = 'l',col = "red",ylim = c(min(diff),mean(diff) + 3*sd(diff)))
+plot(diff,type = 'l',col ="blue",ylim = c(min(diff) ,mean(diff) + 3*sd(diff)),ylab = "residual error [Amps]")#
+par(new = TRUE)#
+plot(ulc,type = 'l',col = "red",ylim = c(min(diff),mean(diff) + 3*sd(diff)),ylab = "residual error [Amps]")#
+par(new = TRUE)#
+plot(llc,type = 'l',col = "red",ylim = c(min(diff),mean(diff) + 3*sd(diff)),ylab = "residual error [Amps]")
+plot(diff,type = 'l',col ="blue",ylim = c(min(diff) ,mean(diff) + 3*sd(diff)),ylab = "residual error [Amps]")#
+par(new = TRUE)#
+plot(ulc,type = 'l',col = "red",ylim = c(min(diff),mean(diff) + 3*sd(diff)),ylab = "residual error [Amps]")#
+par(new = TRUE)#
+plot(llc,type = 'l',col = "red",ylim = c(min(diff),mean(diff) + 3*sd(diff)),ylab = "residual error [Amps]")#
+legend('topright',legend = c('bound limit','residual'),lty = c(1,1),col=c("red","blue"))
+plot(diff,type = 'l',col ="blue",ylim = c(min(diff) ,mean(diff) + 4*sd(diff)),ylab = "residual error [Amps]")#
+par(new = TRUE)#
+plot(ulc,type = 'l',col = "red",ylim = c(min(diff),mean(diff) + 4*sd(diff)),ylab = "residual error [Amps]")#
+par(new = TRUE)#
+plot(llc,type = 'l',col = "red",ylim = c(min(diff),mean(diff) + 4*sd(diff)),ylab = "residual error [Amps]")#
+legend('topright',legend = c('bound limit','residual'),lty = c(1,1),col=c("red","blue"))
+ulc = NA#
+llc = NA#
+ulc[1:length(diff)] = mean(cur_30) + 3*sd(cur_30)#
+llc[1:length(diff)] = mean(cur_30) - 3*sd(cur_30)#
+plot(diff,type = 'l',col ="blue",ylim = c(min(diff) ,mean(diff) + 4*sd(diff)),ylab = "residual error [Amps]")#
+par(new = TRUE)#
+plot(ulc,type = 'l',col = "red",ylim = c(min(diff),mean(diff) + 4*sd(diff)),ylab = "residual error [Amps]")#
+par(new = TRUE)#
+plot(llc,type = 'l',col = "red",ylim = c(min(diff),mean(diff) + 4*sd(diff)),ylab = "residual error [Amps]")#
+legend('topright',legend = c('bound limit','residual'),lty = c(1,1),col=c("red","blue"))
+ulc
+plot(ulc,type = 'l',col = "red",ylim = c(min(diff),mean(diff) + 4*sd(diff)),ylab = "residual error [Amps]")
+plot(diff,type = 'l',col ="blue",ylim = c(llc[1],ulc[1]),ylab = "residual error [Amps]")
+plot(diff,type = 'l',col ="blue",ylim = c(llc[1],ulc[1]),ylab = "residual error [Amps]")
+plot(diff,type = 'l',col ="blue",ylim = c( -4*sd(diff), 4*sd(diff)),ylab = "residual error [Amps]")#
+par(new = TRUE)#
+plot(ulc,type = 'l',col = "red",ylim = c( -4*sd(diff), 4*sd(diff)),ylab = "residual error [Amps]")#
+par(new = TRUE)#
+plot(llc,type = 'l',col = "red",ylim = c( -4*sd(diff), 4*sd(diff)),ylab = "residual error [Amps]")#
+legend('topright',legend = c('bound limit','residual'),lty = c(1,1),col=c("red","blue"))
+3*sd(diff)
+ulc[1:length(diff)] =  3*sd(diff)#
+llc[1:length(diff)] =  - 3*sd(diff)#
+plot(diff,type = 'l',col ="blue",ylim = c( -5*sd(diff), 5*sd(diff)),ylab = "residual error [Amps]")#
+par(new = TRUE)#
+plot(ulc,type = 'l',col = "red",ylim = c( -5*sd(diff), 5*sd(diff)),ylab = "residual error [Amps]")#
+par(new = TRUE)#
+plot(llc,type = 'l',col = "red",ylim = c( -5*sd(diff), 5*sd(diff)),ylab = "residual error [Amps]")#
+legend('topright',legend = c('bound limit','residual'),lty = c(1,1),col=c("red","blue"))

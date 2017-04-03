@@ -1,9 +1,8 @@
 library(marima)
 library(forecast)
-fanuc
-fanuc.cur <- read.table("fanucCurr_output.txt")
-fanuc.vol <- read.table("fanucVol_output.txt")
-fanuc.frq <- read.table("fanucFreq_output.txt")
+fanuc.cur <- read.table("curr_output.txt")
+fanuc.vol <- read.table("vol_output.txt")
+fanuc.frq <- read.table("freq_output.txt")
 cur = t(fanuc.cur[,7]*0.01)
 cur = cur[which(fanuc.cur[,7] > 0)];
 vol = t(fanuc.vol[,7]*0.1)

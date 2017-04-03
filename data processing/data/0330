@@ -1,0 +1,954 @@
+State Name	Step Name	Result Name	Result Value	Result Unit	Result Type	
+State: 1. Read BOOL 0	Step #1: Ethernet/IP Adapter 1	BOOL 0	False		Boolean	
+State: 2. Write BOOL 8	Step #1: Set Variable 1	Step Status				
+State: 6. Read Bool 0	Step #1: Ethernet/IP Adapter 3	BOOL 0	False		Boolean	
+State: 3. Take Image	Step #1: Increment Images Taken	Step Status	Pass		Pass Fail	
+	Step #2: Acquire Image (Smart Camera) 1	Step Status	Pass		Pass Fail	
+		Frame Index	0		Numeric	
+		Timeout	False		Boolean	
+		Trigger Overrun	False		Boolean	
+		Warning Message			String	
+		Number of Images Missed	0		Numeric	
+		Number of Images Behind	0		Numeric	
+		Acquisition Error	False		Boolean	
+		Calibration Error	False		Boolean	
+		Temperature	42		Numeric	
+		Simulation Image Name			String	
+	Step #3: Calibrate Image 2	Step Status	Pass		Pass Fail	
+		Origin.X Position (Pixel)	288		X Position (Pix.)	
+		Origin.Y Position (Pixel)	352		Y Position (Pix.)	
+		Axis Angle (degrees)	359.67072		Angle	
+		Axis Reference	Indirect		String	
+		Creation Date	1/14/1970 12:25:44 PM		String	
+		Expiration Date	N/A		String	
+		Camera	NI Smart Camera (s/n 0x1AA565D)		String	
+	Step #4: Find Straight Edge 1	Step Status				
+		Point 1.X Position (Pixel)				
+		Point 1.Y Position (Pixel)				
+		Point 2.X Position (Pixel)				
+		Point 2.Y Position (Pixel)				
+		Point 1.X Position (Calibrated)				
+		Point 1.Y Position (Calibrated)				
+		Point 2.X Position (Calibrated)				
+		Point 2.Y Position (Calibrated)				
+		Angle				
+		Angle in Search Area				
+		Short Distance (Calibrated)				
+		Long Distance (Calibrated)				
+		Straightness (Calibrated)				
+		Strength				
+		Average SNR				
+	Step #5: Find Straight Edge 2	Step Status				
+		Point 1.X Position (Pixel)				
+		Point 1.Y Position (Pixel)				
+		Point 2.X Position (Pixel)				
+		Point 2.Y Position (Pixel)				
+		Point 1.X Position (Calibrated)				
+		Point 1.Y Position (Calibrated)				
+		Point 2.X Position (Calibrated)				
+		Point 2.Y Position (Calibrated)				
+		Angle				
+		Angle in Search Area				
+		Short Distance (Calibrated)				
+		Long Distance (Calibrated)				
+		Straightness (Calibrated)				
+		Strength				
+		Average SNR				
+	Step #6: Find Straight Edge 3	Step Status				
+		Point 1.X Position (Pixel)				
+		Point 1.Y Position (Pixel)				
+		Point 2.X Position (Pixel)				
+		Point 2.Y Position (Pixel)				
+		Point 1.X Position (Calibrated)				
+		Point 1.Y Position (Calibrated)				
+		Point 2.X Position (Calibrated)				
+		Point 2.Y Position (Calibrated)				
+		Angle				
+		Angle in Search Area				
+		Short Distance (Calibrated)				
+		Long Distance (Calibrated)				
+		Straightness (Calibrated)				
+		Strength				
+		Average SNR				
+	Step #7: Find Straight Edge 4	Step Status				
+		Point 1.X Position (Pixel)				
+		Point 1.Y Position (Pixel)				
+		Point 2.X Position (Pixel)				
+		Point 2.Y Position (Pixel)				
+		Point 1.X Position (Calibrated)				
+		Point 1.Y Position (Calibrated)				
+		Point 2.X Position (Calibrated)				
+		Point 2.Y Position (Calibrated)				
+		Angle				
+		Angle in Search Area				
+		Short Distance (Calibrated)				
+		Long Distance (Calibrated)				
+		Straightness (Calibrated)				
+		Strength				
+		Average SNR				
+	Step #8: Adv. Straight Edge 1	Step Status	Pass		Pass Fail	
+		# Edges	1		# of Edges	
+		Edge [ ].Point1 X Position (Pixel)	[352.752533]	pix	X Position (Pix.)	
+		Edge [1].Point1 X Position (Pixel)	352.75253	pix	X Position (Pix.)	
+		Edge [ ].Point1 Y Position (Pixel)	[119]	pix	Y Position (Pix.)	
+		Edge [1].Point1 Y Position (Pixel)	119	pix	Y Position (Pix.)	
+		Edge [ ].Point2 X Position (Pixel)	[353.151215]	pix	X Position (Pix.)	
+		Edge [1].Point2 X Position (Pixel)	353.15121	pix	X Position (Pix.)	
+		Edge [ ].Point2 Y Position (Pixel)	[191]	pix	Y Position (Pix.)	
+		Edge [1].Point2 Y Position (Pixel)	191	pix	Y Position (Pix.)	
+		Edge [ ].Point1 X Position (Calibrated)	[18.3563]	mm	X Position (World)	
+		Edge [1].Point1 X Position (Calibrated)	18.3563	mm	X Position (World)	
+		Edge [ ].Point1 Y Position (Calibrated)	[-67.554276]	mm	Y Position (World)	
+		Edge [1].Point1 Y Position (Calibrated)	-67.55428	mm	Y Position (World)	
+		Edge [ ].Point2 X Position (Calibrated)	[18.59149]	mm	X Position (World)	
+		Edge [1].Point2 X Position (Calibrated)	18.59149	mm	X Position (World)	
+		Edge [ ].Point2 Y Position (Calibrated)	[-46.713089]	mm	Y Position (World)	
+		Edge [1].Point2 Y Position (Calibrated)	-46.71309	mm	Y Position (World)	
+		Edge [ ].Angle	[90.317261]		Angle	
+		Edge [1].Angle	90.31726		Angle	
+		Edge [ ].Angle in Search Area	[0.317264]		Angle	
+		Edge [1].Angle in Search Area	0.31726		Angle	
+		Edge [ ].Score	[152.941176]		Score	
+		Edge [1].Score	152.94118		Score	
+		Edge [ ].Straightness	[0.06325]	pix	Straightness	
+		Edge [1].Straightness	0.06325	pix	Straightness	
+		Edge [ ].Average SNR	[6.686376]	dB	Numeric	
+		Edge [1].Average SNR	6.68638	dB	Numeric	
+		Edge [ ].Coverage	[60]	%	Numeric	
+		Edge [1].Coverage	60	%	Numeric	
+	Step #9: Adv. Straight Edge 2	Step Status	Pass		Pass Fail	
+		# Edges	1		# of Edges	
+		Edge [ ].Point1 X Position (Pixel)	[401]	pix	X Position (Pix.)	
+		Edge [1].Point1 X Position (Pixel)	401	pix	X Position (Pix.)	
+		Edge [ ].Point1 Y Position (Pixel)	[120]	pix	Y Position (Pix.)	
+		Edge [1].Point1 Y Position (Pixel)	120	pix	Y Position (Pix.)	
+		Edge [ ].Point2 X Position (Pixel)	[401]	pix	X Position (Pix.)	
+		Edge [1].Point2 X Position (Pixel)	401	pix	X Position (Pix.)	
+		Edge [ ].Point2 Y Position (Pixel)	[192]	pix	Y Position (Pix.)	
+		Edge [1].Point2 Y Position (Pixel)	192	pix	Y Position (Pix.)	
+		Edge [ ].Point1 X Position (Calibrated)	[32.324169]	mm	X Position (World)	
+		Edge [1].Point1 X Position (Calibrated)	32.32417	mm	X Position (World)	
+		Edge [ ].Point1 Y Position (Calibrated)	[-67.34507]	mm	Y Position (World)	
+		Edge [1].Point1 Y Position (Calibrated)	-67.34507	mm	Y Position (World)	
+		Edge [ ].Point2 X Position (Calibrated)	[32.443951]	mm	X Position (World)	
+		Edge [1].Point2 X Position (Calibrated)	32.44395	mm	X Position (World)	
+		Edge [ ].Point2 Y Position (Calibrated)	[-46.50322]	mm	Y Position (World)	
+		Edge [1].Point2 Y Position (Calibrated)	-46.50322	mm	Y Position (World)	
+		Edge [ ].Angle	[90]		Angle	
+		Edge [1].Angle	90		Angle	
+		Edge [ ].Angle in Search Area	[0]		Angle	
+		Edge [1].Angle in Search Area	0		Angle	
+		Edge [ ].Score	[121.568627]		Score	
+		Edge [1].Score	121.56863		Score	
+		Edge [ ].Straightness	[0]	pix	Straightness	
+		Edge [1].Straightness	0	pix	Straightness	
+		Edge [ ].Average SNR	[5.744834]	dB	Numeric	
+		Edge [1].Average SNR	5.74483	dB	Numeric	
+		Edge [ ].Coverage	[50]	%	Numeric	
+		Edge [1].Coverage	50	%	Numeric	
+	Step #10: Adv. Straight Edge 3	Step Status	Pass		Pass Fail	
+		# Edges	1		# of Edges	
+		Edge [ ].Point1 X Position (Pixel)	[346]	pix	X Position (Pix.)	
+		Edge [1].Point1 X Position (Pixel)	346	pix	X Position (Pix.)	
+		Edge [ ].Point1 Y Position (Pixel)	[131]	pix	Y Position (Pix.)	
+		Edge [1].Point1 Y Position (Pixel)	131	pix	Y Position (Pix.)	
+		Edge [ ].Point2 X Position (Pixel)	[406]	pix	X Position (Pix.)	
+		Edge [1].Point2 X Position (Pixel)	406	pix	X Position (Pix.)	
+		Edge [ ].Point2 Y Position (Pixel)	[131]	pix	Y Position (Pix.)	
+		Edge [1].Point2 Y Position (Pixel)	131	pix	Y Position (Pix.)	
+		Edge [ ].Point1 X Position (Calibrated)	[16.421608]	mm	X Position (World)	
+		Edge [1].Point1 X Position (Calibrated)	16.42161	mm	X Position (World)	
+		Edge [ ].Point1 Y Position (Calibrated)	[-64.069405]	mm	Y Position (World)	
+		Edge [1].Point1 Y Position (Calibrated)	-64.0694	mm	Y Position (World)	
+		Edge [ ].Point2 X Position (Calibrated)	[33.789818]	mm	X Position (World)	
+		Edge [1].Point2 X Position (Calibrated)	33.78982	mm	X Position (World)	
+		Edge [ ].Point2 Y Position (Calibrated)	[-64.16922]	mm	Y Position (World)	
+		Edge [1].Point2 Y Position (Calibrated)	-64.16922	mm	Y Position (World)	
+		Edge [ ].Angle	[180]		Angle	
+		Edge [1].Angle	180		Angle	
+		Edge [ ].Angle in Search Area	[0]		Angle	
+		Edge [1].Angle in Search Area	0		Angle	
+		Edge [ ].Score	[179.956429]		Score	
+		Edge [1].Score	179.95643		Score	
+		Edge [ ].Straightness	[0]	pix	Straightness	
+		Edge [1].Straightness	0	pix	Straightness	
+		Edge [ ].Average SNR	[286.305346]	dB	Numeric	
+		Edge [1].Average SNR	286.30535	dB	Numeric	
+		Edge [ ].Coverage	[63.636364]	%	Numeric	
+		Edge [1].Coverage	63.63636	%	Numeric	
+	Step #11: Adv. Straight Edge 4	Step Status	Pass		Pass Fail	
+		# Edges	1		# of Edges	
+		Edge [ ].Point1 X Position (Pixel)	[342]	pix	X Position (Pix.)	
+		Edge [1].Point1 X Position (Pixel)	342	pix	X Position (Pix.)	
+		Edge [ ].Point1 Y Position (Pixel)	[183]	pix	Y Position (Pix.)	
+		Edge [1].Point1 Y Position (Pixel)	183	pix	Y Position (Pix.)	
+		Edge [ ].Point2 X Position (Pixel)	[414]	pix	X Position (Pix.)	
+		Edge [1].Point2 X Position (Pixel)	414	pix	X Position (Pix.)	
+		Edge [ ].Point2 Y Position (Pixel)	[183]	pix	Y Position (Pix.)	
+		Edge [1].Point2 Y Position (Pixel)	183	pix	Y Position (Pix.)	
+		Edge [ ].Point1 X Position (Calibrated)	[15.350236]	mm	X Position (World)	
+		Edge [1].Point1 X Position (Calibrated)	15.35024	mm	X Position (World)	
+		Edge [ ].Point1 Y Position (Calibrated)	[-49.010296]	mm	Y Position (World)	
+		Edge [1].Point1 Y Position (Calibrated)	-49.0103	mm	Y Position (World)	
+		Edge [ ].Point2 X Position (Calibrated)	[36.192089]	mm	X Position (World)	
+		Edge [1].Point2 X Position (Calibrated)	36.19209	mm	X Position (World)	
+		Edge [ ].Point2 Y Position (Calibrated)	[-49.130077]	mm	Y Position (World)	
+		Edge [1].Point2 Y Position (Calibrated)	-49.13008	mm	Y Position (World)	
+		Edge [ ].Angle	[180]		Angle	
+		Edge [1].Angle	180		Angle	
+		Edge [ ].Angle in Search Area	[0]		Angle	
+		Edge [1].Angle in Search Area	0		Angle	
+		Edge [ ].Score	[141.736693]		Score	
+		Edge [1].Score	141.73669		Score	
+		Edge [ ].Straightness	[0]	pix	Straightness	
+		Edge [1].Straightness	0	pix	Straightness	
+		Edge [ ].Average SNR	[10.561185]	dB	Numeric	
+		Edge [1].Average SNR	10.56118	dB	Numeric	
+		Edge [ ].Coverage	[60]	%	Numeric	
+		Edge [1].Coverage	60	%	Numeric	
+	Step #12: Adv. Straight Edge 5	Step Status	Pass		Pass Fail	
+		# Edges	1		# of Edges	
+		Edge [ ].Point1 X Position (Pixel)	[352]	pix	X Position (Pix.)	
+		Edge [1].Point1 X Position (Pixel)	352	pix	X Position (Pix.)	
+		Edge [ ].Point1 Y Position (Pixel)	[258]	pix	Y Position (Pix.)	
+		Edge [1].Point1 Y Position (Pixel)	258	pix	Y Position (Pix.)	
+		Edge [ ].Point2 X Position (Pixel)	[352]	pix	X Position (Pix.)	
+		Edge [1].Point2 X Position (Pixel)	352	pix	X Position (Pix.)	
+		Edge [ ].Point2 Y Position (Pixel)	[321]	pix	Y Position (Pix.)	
+		Edge [1].Point2 Y Position (Pixel)	321	pix	Y Position (Pix.)	
+		Edge [ ].Point1 X Position (Calibrated)	[18.369711]	mm	X Position (World)	
+		Edge [1].Point1 X Position (Calibrated)	18.36971	mm	X Position (World)	
+		Edge [ ].Point1 Y Position (Calibrated)	[-27.316669]	mm	Y Position (World)	
+		Edge [1].Point1 Y Position (Calibrated)	-27.31667	mm	Y Position (World)	
+		Edge [ ].Point2 X Position (Calibrated)	[18.47452]	mm	X Position (World)	
+		Edge [1].Point2 X Position (Calibrated)	18.47452	mm	X Position (World)	
+		Edge [ ].Point2 Y Position (Calibrated)	[-9.080049]	mm	Y Position (World)	
+		Edge [1].Point2 Y Position (Calibrated)	-9.08005	mm	Y Position (World)	
+		Edge [ ].Angle	[90]		Angle	
+		Edge [1].Angle	90		Angle	
+		Edge [ ].Angle in Search Area	[0]		Angle	
+		Edge [1].Angle in Search Area	0		Angle	
+		Edge [ ].Score	[120.000001]		Score	
+		Edge [1].Score	120		Score	
+		Edge [ ].Straightness	[0]	pix	Straightness	
+		Edge [1].Straightness	0	pix	Straightness	
+		Edge [ ].Average SNR	[282.785624]	dB	Numeric	
+		Edge [1].Average SNR	282.78562	dB	Numeric	
+		Edge [ ].Coverage	[50]	%	Numeric	
+		Edge [1].Coverage	50	%	Numeric	
+	Step #13: Adv. Straight Edge 6	Step Status	Pass		Pass Fail	
+		# Edges	1		# of Edges	
+		Edge [ ].Point1 X Position (Pixel)	[400]	pix	X Position (Pix.)	
+		Edge [1].Point1 X Position (Pixel)	400	pix	X Position (Pix.)	
+		Edge [ ].Point1 Y Position (Pixel)	[254]	pix	Y Position (Pix.)	
+		Edge [1].Point1 Y Position (Pixel)	254	pix	Y Position (Pix.)	
+		Edge [ ].Point2 X Position (Pixel)	[400]	pix	X Position (Pix.)	
+		Edge [1].Point2 X Position (Pixel)	400	pix	X Position (Pix.)	
+		Edge [ ].Point2 Y Position (Pixel)	[324]	pix	Y Position (Pix.)	
+		Edge [1].Point2 Y Position (Pixel)	324	pix	Y Position (Pix.)	
+		Edge [ ].Point1 X Position (Calibrated)	[32.257626]	mm	X Position (World)	
+		Edge [1].Point1 X Position (Calibrated)	32.25763	mm	X Position (World)	
+		Edge [ ].Point1 Y Position (Calibrated)	[-28.554405]	mm	Y Position (World)	
+		Edge [1].Point1 Y Position (Calibrated)	-28.55441	mm	Y Position (World)	
+		Edge [ ].Point2 X Position (Calibrated)	[32.374081]	mm	X Position (World)	
+		Edge [1].Point2 X Position (Calibrated)	32.37408	mm	X Position (World)	
+		Edge [ ].Point2 Y Position (Calibrated)	[-8.291492]	mm	Y Position (World)	
+		Edge [1].Point2 Y Position (Calibrated)	-8.29149	mm	Y Position (World)	
+		Edge [ ].Angle	[90]		Angle	
+		Edge [1].Angle	90		Angle	
+		Edge [ ].Angle in Search Area	[0]		Angle	
+		Edge [1].Angle in Search Area	0		Angle	
+		Edge [ ].Score	[205.228753]		Score	
+		Edge [1].Score	205.22875		Score	
+		Edge [ ].Straightness	[0]	pix	Straightness	
+		Edge [1].Straightness	0	pix	Straightness	
+		Edge [ ].Average SNR	[287.446763]	dB	Numeric	
+		Edge [1].Average SNR	287.44676	dB	Numeric	
+		Edge [ ].Coverage	[45.454545]	%	Numeric	
+		Edge [1].Coverage	45.45455	%	Numeric	
+	Step #14: Adv. Straight Edge 7	Step Status	Pass		Pass Fail	
+		# Edges	1		# of Edges	
+		Edge [ ].Point1 X Position (Pixel)	[342]	pix	X Position (Pix.)	
+		Edge [1].Point1 X Position (Pixel)	342	pix	X Position (Pix.)	
+		Edge [ ].Point1 Y Position (Pixel)	[264.463531]	pix	Y Position (Pix.)	
+		Edge [1].Point1 Y Position (Pixel)	264.46353	pix	Y Position (Pix.)	
+		Edge [ ].Point2 X Position (Pixel)	[412]	pix	X Position (Pix.)	
+		Edge [1].Point2 X Position (Pixel)	412	pix	X Position (Pix.)	
+		Edge [ ].Point2 Y Position (Pixel)	[260.794983]	pix	Y Position (Pix.)	
+		Edge [1].Point2 Y Position (Pixel)	260.79498	pix	Y Position (Pix.)	
+		Edge [ ].Point1 X Position (Calibrated)	[15.485762]	mm	X Position (World)	
+		Edge [1].Point1 X Position (Calibrated)	15.48576	mm	X Position (World)	
+		Edge [ ].Point1 Y Position (Calibrated)	[-25.429033]	mm	Y Position (World)	
+		Edge [1].Point1 Y Position (Calibrated)	-25.42903	mm	Y Position (World)	
+		Edge [ ].Point2 X Position (Calibrated)	[35.742573]	mm	X Position (World)	
+		Edge [1].Point2 X Position (Calibrated)	35.74257	mm	X Position (World)	
+		Edge [ ].Point2 Y Position (Calibrated)	[-26.607424]	mm	Y Position (World)	
+		Edge [1].Point2 Y Position (Calibrated)	-26.60742	mm	Y Position (World)	
+		Edge [ ].Angle	[183]		Angle	
+		Edge [1].Angle	183		Angle	
+		Edge [ ].Angle in Search Area	[-3]		Angle	
+		Edge [1].Angle in Search Area	-3		Angle	
+		Edge [ ].Score	[198.692815]		Score	
+		Edge [1].Score	198.69282		Score	
+		Edge [ ].Straightness	[0]	pix	Straightness	
+		Edge [1].Straightness	0	pix	Straightness	
+		Edge [ ].Average SNR	[287.165642]	dB	Numeric	
+		Edge [1].Average SNR	287.16564	dB	Numeric	
+		Edge [ ].Coverage	[45.454545]	%	Numeric	
+		Edge [1].Coverage	45.45455	%	Numeric	
+	Step #15: Adv. Straight Edge 8	Step Status	Pass		Pass Fail	
+		# Edges	1		# of Edges	
+		Edge [ ].Point1 X Position (Pixel)	[343]	pix	X Position (Pix.)	
+		Edge [1].Point1 X Position (Pixel)	343	pix	X Position (Pix.)	
+		Edge [ ].Point1 Y Position (Pixel)	[316]	pix	Y Position (Pix.)	
+		Edge [1].Point1 Y Position (Pixel)	316	pix	Y Position (Pix.)	
+		Edge [ ].Point2 X Position (Pixel)	[406]	pix	X Position (Pix.)	
+		Edge [1].Point2 X Position (Pixel)	406	pix	X Position (Pix.)	
+		Edge [ ].Point2 Y Position (Pixel)	[316]	pix	Y Position (Pix.)	
+		Edge [1].Point2 Y Position (Pixel)	316	pix	Y Position (Pix.)	
+		Edge [ ].Point1 X Position (Calibrated)	[15.86097]	mm	X Position (World)	
+		Edge [1].Point1 X Position (Calibrated)	15.86097	mm	X Position (World)	
+		Edge [ ].Point1 Y Position (Calibrated)	[-10.512426]	mm	Y Position (World)	
+		Edge [1].Point1 Y Position (Calibrated)	-10.51243	mm	Y Position (World)	
+		Edge [ ].Point2 X Position (Calibrated)	[34.097591]	mm	X Position (World)	
+		Edge [1].Point2 X Position (Calibrated)	34.09759	mm	X Position (World)	
+		Edge [ ].Point2 Y Position (Calibrated)	[-10.617235]	mm	Y Position (World)	
+		Edge [1].Point2 Y Position (Calibrated)	-10.61724	mm	Y Position (World)	
+		Edge [ ].Angle	[180]		Angle	
+		Edge [1].Angle	180		Angle	
+		Edge [ ].Angle in Search Area	[0]		Angle	
+		Edge [1].Angle in Search Area	0		Angle	
+		Edge [ ].Score	[176.82709]		Score	
+		Edge [1].Score	176.82709		Score	
+		Edge [ ].Straightness	[0]	pix	Straightness	
+		Edge [1].Straightness	0	pix	Straightness	
+		Edge [ ].Average SNR	[286.152975]	dB	Numeric	
+		Edge [1].Average SNR	286.15298	dB	Numeric	
+		Edge [ ].Coverage	[50]	%	Numeric	
+		Edge [1].Coverage	50	%	Numeric	
+	Step #16: Geometry 1	Step Status	Pass		Pass Fail	
+		Measure 1.Status	Pass		Pass Fail	
+		Measure 1.Distance (Pixel)	46.45856	pix	Distance (Pix.)	
+		Measure 1.Distance (Calibrated)	13.4486	mm	Distance (World)	
+		Measure 1.Point 1.X Position (Pixel)	354.54221	pix	X Position (Pix.)	
+		Measure 1.Point 1.Y Position (Pixel)	442.20169	pix	Y Position (Pix.)	
+		Measure 1.Point 1.X Position (Calibrated)	19.41204	mm	X Position (World)	
+		Measure 1.Point 1.Y Position (Calibrated)	26	mm	Y Position (World)	
+		Measure 1.Point 2.X Position (Pixel)	401	pix	X Position (Pix.)	
+		Measure 1.Point 2.Y Position (Pixel)	442.46869	pix	Y Position (Pix.)	
+		Measure 1.Point 2.X Position (Calibrated)	32.86064	mm	X Position (World)	
+		Measure 1.Point 2.Y Position (Calibrated)	26	mm	Y Position (World)	
+	Step #17: Geometry 2	Step Status	Pass		Pass Fail	
+		Measure 1.Status	Pass		Pass Fail	
+		Measure 1.Distance (Pixel)	52.00084	pix	Distance (Pix.)	
+		Measure 1.Distance (Calibrated)	15.05294	mm	Distance (World)	
+		Measure 1.Point 1.X Position (Pixel)	420.54443	pix	X Position (Pix.)	
+		Measure 1.Point 1.Y Position (Pixel)	131.00002	pix	Y Position (Pix.)	
+		Measure 1.Point 1.X Position (Calibrated)	38	mm	X Position (World)	
+		Measure 1.Point 1.Y Position (Calibrated)	-64.19341	mm	Y Position (World)	
+		Measure 1.Point 2.X Position (Pixel)	420.24557	pix	X Position (Pix.)	
+		Measure 1.Point 2.Y Position (Pixel)	183	pix	Y Position (Pix.)	
+		Measure 1.Point 2.X Position (Calibrated)	38	mm	X Position (World)	
+		Measure 1.Point 2.Y Position (Calibrated)	-49.14047	mm	Y Position (World)	
+	Step #18: Geometry 3	Step Status	Pass		Pass Fail	
+		Measure 1.Status	Pass		Pass Fail	
+		Measure 1.Distance (Pixel)	48.00079	pix	Distance (Pix.)	
+		Measure 1.Distance (Calibrated)	13.89503	mm	Distance (World)	
+		Measure 1.Point 1.X Position (Pixel)	352	pix	X Position (Pix.)	
+		Measure 1.Point 1.Y Position (Pixel)	697.82654	pix	Y Position (Pix.)	
+		Measure 1.Point 1.X Position (Calibrated)	19.10142	mm	X Position (World)	
+		Measure 1.Point 1.Y Position (Calibrated)	100	mm	Y Position (World)	
+		Measure 1.Point 2.X Position (Pixel)	400	pix	X Position (Pix.)	
+		Measure 1.Point 2.Y Position (Pixel)	698.10242	pix	Y Position (Pix.)	
+		Measure 1.Point 2.X Position (Calibrated)	32.99645	mm	X Position (World)	
+		Measure 1.Point 2.Y Position (Calibrated)	100	mm	Y Position (World)	
+	Step #19: Geometry 4	Step Status	Pass		Pass Fail	
+		Measure 1.Status	Pass		Pass Fail	
+		Measure 1.Distance (Pixel)	66.84328	pix	Distance (Pix.)	
+		Measure 1.Distance (Calibrated)	19.34946	mm	Distance (World)	
+		Measure 1.Point 1.X Position (Pixel)	634.04974	pix	X Position (Pix.)	
+		Measure 1.Point 1.Y Position (Pixel)	249.15782	pix	Y Position (Pix.)	
+		Measure 1.Point 1.X Position (Calibrated)	100	mm	X Position (World)	
+		Measure 1.Point 1.Y Position (Calibrated)	-30.34544	mm	Y Position (World)	
+		Measure 1.Point 2.X Position (Pixel)	633.66565	pix	X Position (Pix.)	
+		Measure 1.Point 2.Y Position (Pixel)	316	pix	Y Position (Pix.)	
+		Measure 1.Point 2.X Position (Calibrated)	100	mm	X Position (World)	
+		Measure 1.Point 2.Y Position (Calibrated)	-10.99599	mm	Y Position (World)	
+	Step #20: Geometry 5	Step Status	Pass		Pass Fail	
+		Measure 1.Status	Pass		Pass Fail	
+		Measure 1.Distance (Pixel)	66.15891	pix	Distance (Pix.)	
+		Measure 1.Distance (Calibrated)	19.15135	mm	Distance (World)	
+		Measure 1.Point 1.X Position (Pixel)	634.42999	pix	X Position (Pix.)	
+		Measure 1.Point 1.Y Position (Pixel)	183	pix	Y Position (Pix.)	
+		Measure 1.Point 1.X Position (Calibrated)	100	mm	X Position (World)	
+		Measure 1.Point 1.Y Position (Calibrated)	-49.49679	mm	Y Position (World)	
+		Measure 1.Point 2.X Position (Pixel)	634.04974	pix	X Position (Pix.)	
+		Measure 1.Point 2.Y Position (Pixel)	249.15782	pix	Y Position (Pix.)	
+		Measure 1.Point 2.X Position (Calibrated)	100	mm	X Position (World)	
+		Measure 1.Point 2.Y Position (Calibrated)	-30.34544	mm	Y Position (World)	
+	Step #21: Calculator 1	Step Status	Pass		Pass Fail	
+		Step Result	False		Boolean	
+State: 4. Turn Light Off	Step #1: Turn Light Off	Step Status	Pass		Pass Fail	
+		Frame Index	0		Numeric	
+		Timeout	False		Boolean	
+		Trigger Overrun	False		Boolean	
+		Warning Message			String	
+		Number of Images Missed	0		Numeric	
+		Number of Images Behind	0		Numeric	
+		Acquisition Error	False		Boolean	
+		Calibration Error	False		Boolean	
+		Temperature	42		Numeric	
+		Simulation Image Name			String	
+State: 5. Export Data	Step #1: Calculator 1	Step Status	Pass		Pass Fail	
+		Step Result	False		Boolean	
+	Step #2: Image Logging 1	Step Status	Pass		Pass Fail	
+		File Path  	[image_test_2017-03-30 18.51.27.149.jpg]		String	
+		File Path 1	image_test_2017-03-30 18.51.27.149.jpg		String	
+	Step #3: Data Logging 1	Step Status	Pass		Pass Fail	
+		File Path	export_test2017-03-30 18.51.27.195.txt		String	
+		Time Stamp	3/30/2017 6:51:27.195 PM		String	
+	Step #4: Test Log to Camera	Step Status	Pass		Pass Fail	
+		File Path	c:\export_test\Averages_Test.txt		String	
+		Time Stamp	3/30/2017 6:51:27.239 PM		String	
+	Step #5: Copy of Ethernet/IP Adapter 1	Step Status	Pass		Pass Fail	
+State: 3.5. Calculate Means	Step #1: Lengths Mean	Step Status	Pass		Pass Fail	
+		Part Lengths [ ].Average	15.41138		Numeric	
+	Step #2: Widths Mean	Step Status	Pass		Pass Fail	
+		Part Widths [ ].Average	15.02626		Numeric	
+	Step #3: Lengths 2 Mean	Step Status	Pass		Pass Fail	
+		Part Lengths 2 [ ].Average	13.74402		Numeric	
+	Step #4: Widths 2 Mean	Step Status	Pass		Pass Fail	
+		Part Widths 2 [ ].Average	14.67931		Numeric	
+	Step #5: Distances Mean	Step Status	Pass		Pass Fail	
+		Distances [ ].Average	22.6001		Numeric	
+Variables	User-Defined System Variable	test	False		Boolean	
+	Inspection Variable	Distance Average	22.6001		Numeric	
+		Distances [ ]	[19.151348; 19.151348; 19.151348; 24.039965; 24.039965; ...]		Numeric 1D	
+		Distances [1]	19.15135		Numeric	
+		Distances [2]	19.15135		Numeric	
+		Distances [3]	19.15135		Numeric	
+		Distances [4]	24.03996		Numeric	
+		Distances [5]	24.03996		Numeric	
+		Distances [6]	24.03996		Numeric	
+		Distances [7]	22.86889		Numeric	
+		Distances [8]	22.86889		Numeric	
+		Distances [9]	19.15135		Numeric	
+		Distances [10]	24.03996		Numeric	
+		Distances [11]	22.86889		Numeric	
+		Distances [12]	22.86889		Numeric	
+		Distances [13]	24.03996		Numeric	
+		Distances [14]	19.15135		Numeric	
+		Distances [15]	22.86889		Numeric	
+		Distances [16]	22.86889		Numeric	
+		Distances [17]	22.86889		Numeric	
+		Distances [18]	24.03996		Numeric	
+		Distances [19]	22.86889		Numeric	
+		Distances [20]	19.15135		Numeric	
+		Distances [21]	19.15135		Numeric	
+		Distances [22]	24.03996		Numeric	
+		Distances [23]	24.03996		Numeric	
+		Distances [24]	22.86889		Numeric	
+		Distances [25]	24.03996		Numeric	
+		Distances [26]	22.86889		Numeric	
+		Distances [27]	24.03996		Numeric	
+		Distances [28]	22.86889		Numeric	
+		Distances [29]	24.03996		Numeric	
+		Distances [30]	24.03996		Numeric	
+		Distances [31]	22.86889		Numeric	
+		Distances [32]	22.86889		Numeric	
+		Distances [33]	22.86889		Numeric	
+		Distances [34]	22.86889		Numeric	
+		Distances [35]	22.86889		Numeric	
+		Distances [36]	24.03996		Numeric	
+		Distances [37]	24.03996		Numeric	
+		Distances [38]	22.86889		Numeric	
+		Distances [39]	22.86889		Numeric	
+		Distances [40]	20.32242		Numeric	
+		Distances [41]	22.86889		Numeric	
+		Distances [42]	22.86889		Numeric	
+		Distances [43]	22.86889		Numeric	
+		Distances [44]	22.86889		Numeric	
+		Distances [45]	24.03996		Numeric	
+		Distances [46]	24.03996		Numeric	
+		Distances [47]	22.86889		Numeric	
+		Distances [48]	24.03996		Numeric	
+		Distances [49]	22.86889		Numeric	
+		Distances [50]	21.70359		Numeric	
+		Distances [51]	22.86889		Numeric	
+		Distances [52]	22.86889		Numeric	
+		Distances [53]	22.86889		Numeric	
+		Distances [54]	24.03996		Numeric	
+		Distances [55]	22.86889		Numeric	
+		Distances [56]	19.15135		Numeric	
+		Distances [57]	22.86889		Numeric	
+		Distances [58]	22.86889		Numeric	
+		Distances [59]	24.03996		Numeric	
+		Distances [60]	24.03996		Numeric	
+		Distances [61]	20.32242		Numeric	
+		Distances [62]	19.15135		Numeric	
+		Distances [63]	24.03996		Numeric	
+		Distances [64]	22.86889		Numeric	
+		Distances [65]	24.03996		Numeric	
+		Distances [66]	22.86889		Numeric	
+		Distances [67]	21.70359		Numeric	
+		Distances [68]	22.86889		Numeric	
+		Distances [69]	22.86889		Numeric	
+		Distances [70]	22.86889		Numeric	
+		Distances [71]	24.03996		Numeric	
+		Distances [72]	19.15135		Numeric	
+		Distances [73]	21.70359		Numeric	
+		Distances [74]	22.86889		Numeric	
+		Distances [75]	22.86889		Numeric	
+		Distances [76]	20.32242		Numeric	
+		Distances [77]	19.15135		Numeric	
+		Distances [78]	24.03996		Numeric	
+		Distances [79]	22.86889		Numeric	
+		Distances [80]	24.03996		Numeric	
+		Distances [81]	22.86889		Numeric	
+		Distances [82]	22.86889		Numeric	
+		Distances [83]	22.86889		Numeric	
+		Distances [84]	22.86889		Numeric	
+		Distances [85]	24.03996		Numeric	
+		Distances [86]	24.03996		Numeric	
+		Distances [87]	22.86889		Numeric	
+		Distances [88]	19.15135		Numeric	
+		Distances [89]	24.03996		Numeric	
+		Distances [90]	24.03996		Numeric	
+		Distances [91]	22.86889		Numeric	
+		Distances [92]	24.03996		Numeric	
+		Distances [93]	22.86889		Numeric	
+		Distances [94]	22.86889		Numeric	
+		Distances [95]	22.86889		Numeric	
+		Distances [96]	22.86889		Numeric	
+		Distances [97]	22.86889		Numeric	
+		Distances [98]	22.86889		Numeric	
+		Distances [99]	24.03996		Numeric	
+		Distances [Max]	22.86889		Numeric	
+		Images Taken	247		Numeric	
+		Part Length Average	15.41138		Numeric	
+		Part Length Average 2	13.74402		Numeric	
+		Part Lengths [ ]	[13.448597; 13.448597; 13.448597; 13.449562; 13.525703; ...]		Numeric 1D	
+		Part Lengths [1]	13.4486		Numeric	
+		Part Lengths [2]	13.4486		Numeric	
+		Part Lengths [3]	13.4486		Numeric	
+		Part Lengths [4]	13.44956		Numeric	
+		Part Lengths [5]	13.5257		Numeric	
+		Part Lengths [6]	13.52663		Numeric	
+		Part Lengths [7]	13.44644		Numeric	
+		Part Lengths [8]	13.53878		Numeric	
+		Part Lengths [9]	13.46095		Numeric	
+		Part Lengths [10]	13.58458		Numeric	
+		Part Lengths [11]	13.40837		Numeric	
+		Part Lengths [12]	13.34938		Numeric	
+		Part Lengths [13]	13.51966		Numeric	
+		Part Lengths [14]	40.11259		Numeric	
+		Part Lengths [15]	40.12961		Numeric	
+		Part Lengths [16]	13.48674		Numeric	
+		Part Lengths [17]	13.41582		Numeric	
+		Part Lengths [18]	13.47173		Numeric	
+		Part Lengths [19]	13.42528		Numeric	
+		Part Lengths [20]	13.48143		Numeric	
+		Part Lengths [21]	13.46119		Numeric	
+		Part Lengths [22]	13.46304		Numeric	
+		Part Lengths [23]	13.44912		Numeric	
+		Part Lengths [24]	13.4617		Numeric	
+		Part Lengths [25]	13.45482		Numeric	
+		Part Lengths [26]	13.42449		Numeric	
+		Part Lengths [27]	13.48338		Numeric	
+		Part Lengths [28]	13.4233		Numeric	
+		Part Lengths [29]	13.51537		Numeric	
+		Part Lengths [30]	13.59452		Numeric	
+		Part Lengths [31]	13.51579		Numeric	
+		Part Lengths [32]	40.10464		Numeric	
+		Part Lengths [33]	13.54041		Numeric	
+		Part Lengths [34]	13.38787		Numeric	
+		Part Lengths [35]	40.00878		Numeric	
+		Part Lengths [36]	13.3646		Numeric	
+		Part Lengths [37]	13.41657		Numeric	
+		Part Lengths [38]	13.50914		Numeric	
+		Part Lengths [39]	13.43927		Numeric	
+		Part Lengths [40]	40.22304		Numeric	
+		Part Lengths [41]	13.48612		Numeric	
+		Part Lengths [42]	13.42565		Numeric	
+		Part Lengths [43]	13.43459		Numeric	
+		Part Lengths [44]	13.48722		Numeric	
+		Part Lengths [45]	13.49643		Numeric	
+		Part Lengths [46]	40.12065		Numeric	
+		Part Lengths [47]	13.38785		Numeric	
+		Part Lengths [48]	13.49788		Numeric	
+		Part Lengths [49]	13.42978		Numeric	
+		Part Lengths [50]	13.3506		Numeric	
+		Part Lengths [51]	13.54804		Numeric	
+		Part Lengths [52]	13.53857		Numeric	
+		Part Lengths [53]	13.52031		Numeric	
+		Part Lengths [54]	13.48393		Numeric	
+		Part Lengths [55]	13.54739		Numeric	
+		Part Lengths [56]	13.41968		Numeric	
+		Part Lengths [57]	13.51776		Numeric	
+		Part Lengths [58]	40.12123		Numeric	
+		Part Lengths [59]	13.39004		Numeric	
+		Part Lengths [60]	13.4963		Numeric	
+		Part Lengths [61]	13.45474		Numeric	
+		Part Lengths [62]	13.43138		Numeric	
+		Part Lengths [63]	13.48198		Numeric	
+		Part Lengths [64]	13.53592		Numeric	
+		Part Lengths [65]	13.48027		Numeric	
+		Part Lengths [66]	13.3989		Numeric	
+		Part Lengths [67]	13.49307		Numeric	
+		Part Lengths [68]	13.42158		Numeric	
+		Part Lengths [69]	13.41803		Numeric	
+		Part Lengths [70]	13.4944		Numeric	
+		Part Lengths [71]	13.41825		Numeric	
+		Part Lengths [72]	13.39151		Numeric	
+		Part Lengths [73]	40.03195		Numeric	
+		Part Lengths [74]	13.44332		Numeric	
+		Part Lengths [75]	13.47324		Numeric	
+		Part Lengths [76]	13.40092		Numeric	
+		Part Lengths [77]	13.60569		Numeric	
+		Part Lengths [78]	13.50385		Numeric	
+		Part Lengths [79]	13.4978		Numeric	
+		Part Lengths [80]	13.48855		Numeric	
+		Part Lengths [81]	13.45678		Numeric	
+		Part Lengths [82]	13.5645		Numeric	
+		Part Lengths [83]	13.4054		Numeric	
+		Part Lengths [84]	13.45895		Numeric	
+		Part Lengths [85]	13.35449		Numeric	
+		Part Lengths [86]	13.4468		Numeric	
+		Part Lengths [87]	13.47423		Numeric	
+		Part Lengths [88]	13.48669		Numeric	
+		Part Lengths [89]	13.48356		Numeric	
+		Part Lengths [90]	40.15979		Numeric	
+		Part Lengths [91]	13.46248		Numeric	
+		Part Lengths [92]	13.42655		Numeric	
+		Part Lengths [93]	13.48125		Numeric	
+		Part Lengths [94]	13.52882		Numeric	
+		Part Lengths [95]	13.6194		Numeric	
+		Part Lengths [96]	13.44013		Numeric	
+		Part Lengths [97]	13.45557		Numeric	
+		Part Lengths [98]	13.30087		Numeric	
+		Part Lengths [99]	13.52567		Numeric	
+		Part Lengths [Max]	13.46477		Numeric	
+		Part Lengths 2 [ ]	[13.895033; 13.895033; 13.895033; 13.895033; 13.895033; ...]		Numeric 1D	
+		Part Lengths 2 [1]	13.89503		Numeric	
+		Part Lengths 2 [2]	13.89503		Numeric	
+		Part Lengths 2 [3]	13.89503		Numeric	
+		Part Lengths 2 [4]	13.89503		Numeric	
+		Part Lengths 2 [5]	13.89503		Numeric	
+		Part Lengths 2 [6]	13.89503		Numeric	
+		Part Lengths 2 [7]	13.89503		Numeric	
+		Part Lengths 2 [8]	13.89503		Numeric	
+		Part Lengths 2 [9]	13.89503		Numeric	
+		Part Lengths 2 [10]	13.89503		Numeric	
+		Part Lengths 2 [11]	13.89503		Numeric	
+		Part Lengths 2 [12]	13.89503		Numeric	
+		Part Lengths 2 [13]	13.89503		Numeric	
+		Part Lengths 2 [14]	13.89503		Numeric	
+		Part Lengths 2 [15]	13.89503		Numeric	
+		Part Lengths 2 [16]	13.89503		Numeric	
+		Part Lengths 2 [17]	13.89503		Numeric	
+		Part Lengths 2 [18]	13.89503		Numeric	
+		Part Lengths 2 [19]	13.89503		Numeric	
+		Part Lengths 2 [20]	13.89503		Numeric	
+		Part Lengths 2 [21]	13.89503		Numeric	
+		Part Lengths 2 [22]	13.89503		Numeric	
+		Part Lengths 2 [23]	13.89503		Numeric	
+		Part Lengths 2 [24]	13.89503		Numeric	
+		Part Lengths 2 [25]	13.89503		Numeric	
+		Part Lengths 2 [26]	11.83304		Numeric	
+		Part Lengths 2 [27]	13.89503		Numeric	
+		Part Lengths 2 [28]	13.89503		Numeric	
+		Part Lengths 2 [29]	13.89503		Numeric	
+		Part Lengths 2 [30]	13.89503		Numeric	
+		Part Lengths 2 [31]	13.89503		Numeric	
+		Part Lengths 2 [32]	13.89503		Numeric	
+		Part Lengths 2 [33]	13.89503		Numeric	
+		Part Lengths 2 [34]	13.89503		Numeric	
+		Part Lengths 2 [35]	13.89503		Numeric	
+		Part Lengths 2 [36]	11.83304		Numeric	
+		Part Lengths 2 [37]	13.89503		Numeric	
+		Part Lengths 2 [38]	13.89503		Numeric	
+		Part Lengths 2 [39]	13.89503		Numeric	
+		Part Lengths 2 [40]	13.89503		Numeric	
+		Part Lengths 2 [41]	13.89503		Numeric	
+		Part Lengths 2 [42]	13.89503		Numeric	
+		Part Lengths 2 [43]	13.89503		Numeric	
+		Part Lengths 2 [44]	11.83304		Numeric	
+		Part Lengths 2 [45]	13.89503		Numeric	
+		Part Lengths 2 [46]	13.89503		Numeric	
+		Part Lengths 2 [47]	13.89503		Numeric	
+		Part Lengths 2 [48]	13.89503		Numeric	
+		Part Lengths 2 [49]	13.89503		Numeric	
+		Part Lengths 2 [50]	13.89503		Numeric	
+		Part Lengths 2 [51]	13.89503		Numeric	
+		Part Lengths 2 [52]	13.89503		Numeric	
+		Part Lengths 2 [53]	13.89503		Numeric	
+		Part Lengths 2 [54]	13.89503		Numeric	
+		Part Lengths 2 [55]	11.83304		Numeric	
+		Part Lengths 2 [56]	13.89503		Numeric	
+		Part Lengths 2 [57]	13.89503		Numeric	
+		Part Lengths 2 [58]	13.89503		Numeric	
+		Part Lengths 2 [59]	13.89503		Numeric	
+		Part Lengths 2 [60]	13.89503		Numeric	
+		Part Lengths 2 [61]	13.89503		Numeric	
+		Part Lengths 2 [62]	13.89503		Numeric	
+		Part Lengths 2 [63]	13.89503		Numeric	
+		Part Lengths 2 [64]	13.89503		Numeric	
+		Part Lengths 2 [65]	13.89503		Numeric	
+		Part Lengths 2 [66]	13.89503		Numeric	
+		Part Lengths 2 [67]	13.89503		Numeric	
+		Part Lengths 2 [68]	11.83304		Numeric	
+		Part Lengths 2 [69]	13.89503		Numeric	
+		Part Lengths 2 [70]	13.89503		Numeric	
+		Part Lengths 2 [71]	13.89503		Numeric	
+		Part Lengths 2 [72]	13.89503		Numeric	
+		Part Lengths 2 [73]	13.89503		Numeric	
+		Part Lengths 2 [74]	11.80087		Numeric	
+		Part Lengths 2 [75]	13.89503		Numeric	
+		Part Lengths 2 [76]	13.89503		Numeric	
+		Part Lengths 2 [77]	13.89503		Numeric	
+		Part Lengths 2 [78]	13.89503		Numeric	
+		Part Lengths 2 [79]	13.89503		Numeric	
+		Part Lengths 2 [80]	13.89503		Numeric	
+		Part Lengths 2 [81]	13.89503		Numeric	
+		Part Lengths 2 [82]	13.89503		Numeric	
+		Part Lengths 2 [83]	11.83304		Numeric	
+		Part Lengths 2 [84]	13.89503		Numeric	
+		Part Lengths 2 [85]	13.89503		Numeric	
+		Part Lengths 2 [86]	13.89503		Numeric	
+		Part Lengths 2 [87]	13.89503		Numeric	
+		Part Lengths 2 [88]	13.89503		Numeric	
+		Part Lengths 2 [89]	13.89503		Numeric	
+		Part Lengths 2 [90]	13.89503		Numeric	
+		Part Lengths 2 [91]	13.89503		Numeric	
+		Part Lengths 2 [92]	13.89503		Numeric	
+		Part Lengths 2 [93]	11.83304		Numeric	
+		Part Lengths 2 [94]	13.89503		Numeric	
+		Part Lengths 2 [95]	13.89503		Numeric	
+		Part Lengths 2 [96]	11.83304		Numeric	
+		Part Lengths 2 [97]	13.89503		Numeric	
+		Part Lengths 2 [98]	13.89503		Numeric	
+		Part Lengths 2 [99]	13.89503		Numeric	
+		Part Lengths 2 [Max]	13.89503		Numeric	
+		Part Width Average	15.02626		Numeric	
+		Part Width Average 2	14.67931		Numeric	
+		Part Widths [ ]	[15.052944; 15.052944; 15.052944; 14.964222; 14.964222; ...]		Numeric 1D	
+		Part Widths [1]	15.05294		Numeric	
+		Part Widths [2]	15.05294		Numeric	
+		Part Widths [3]	15.05294		Numeric	
+		Part Widths [4]	14.96422		Numeric	
+		Part Widths [5]	14.96422		Numeric	
+		Part Widths [6]	14.96422		Numeric	
+		Part Widths [7]	15.05294		Numeric	
+		Part Widths [8]	15.05294		Numeric	
+		Part Widths [9]	15.05294		Numeric	
+		Part Widths [10]	14.96422		Numeric	
+		Part Widths [11]	15.05294		Numeric	
+		Part Widths [12]	15.05294		Numeric	
+		Part Widths [13]	14.96422		Numeric	
+		Part Widths [14]	15.05294		Numeric	
+		Part Widths [15]	15.05294		Numeric	
+		Part Widths [16]	15.05294		Numeric	
+		Part Widths [17]	15.05294		Numeric	
+		Part Widths [18]	14.96422		Numeric	
+		Part Widths [19]	15.05294		Numeric	
+		Part Widths [20]	15.05294		Numeric	
+		Part Widths [21]	15.05294		Numeric	
+		Part Widths [22]	14.96422		Numeric	
+		Part Widths [23]	14.96422		Numeric	
+		Part Widths [24]	15.05294		Numeric	
+		Part Widths [25]	14.96422		Numeric	
+		Part Widths [26]	15.05294		Numeric	
+		Part Widths [27]	14.96422		Numeric	
+		Part Widths [28]	15.05294		Numeric	
+		Part Widths [29]	14.96422		Numeric	
+		Part Widths [30]	14.96422		Numeric	
+		Part Widths [31]	15.05294		Numeric	
+		Part Widths [32]	15.05294		Numeric	
+		Part Widths [33]	15.05294		Numeric	
+		Part Widths [34]	15.05294		Numeric	
+		Part Widths [35]	15.05294		Numeric	
+		Part Widths [36]	14.96422		Numeric	
+		Part Widths [37]	14.96422		Numeric	
+		Part Widths [38]	15.05294		Numeric	
+		Part Widths [39]	15.05294		Numeric	
+		Part Widths [40]	14.96422		Numeric	
+		Part Widths [41]	15.05294		Numeric	
+		Part Widths [42]	15.05294		Numeric	
+		Part Widths [43]	15.05294		Numeric	
+		Part Widths [44]	15.05294		Numeric	
+		Part Widths [45]	14.96422		Numeric	
+		Part Widths [46]	14.96422		Numeric	
+		Part Widths [47]	15.05294		Numeric	
+		Part Widths [48]	14.96422		Numeric	
+		Part Widths [49]	15.05294		Numeric	
+		Part Widths [50]	15.05294		Numeric	
+		Part Widths [51]	15.05294		Numeric	
+		Part Widths [52]	15.05294		Numeric	
+		Part Widths [53]	15.05294		Numeric	
+		Part Widths [54]	14.96422		Numeric	
+		Part Widths [55]	15.05294		Numeric	
+		Part Widths [56]	15.05294		Numeric	
+		Part Widths [57]	15.05294		Numeric	
+		Part Widths [58]	15.05294		Numeric	
+		Part Widths [59]	14.96422		Numeric	
+		Part Widths [60]	14.96422		Numeric	
+		Part Widths [61]	14.96422		Numeric	
+		Part Widths [62]	15.05294		Numeric	
+		Part Widths [63]	14.96422		Numeric	
+		Part Widths [64]	15.05294		Numeric	
+		Part Widths [65]	14.96422		Numeric	
+		Part Widths [66]	15.05294		Numeric	
+		Part Widths [67]	15.05294		Numeric	
+		Part Widths [68]	15.05294		Numeric	
+		Part Widths [69]	15.05294		Numeric	
+		Part Widths [70]	15.05294		Numeric	
+		Part Widths [71]	14.96422		Numeric	
+		Part Widths [72]	15.05294		Numeric	
+		Part Widths [73]	15.05294		Numeric	
+		Part Widths [74]	15.05294		Numeric	
+		Part Widths [75]	15.05294		Numeric	
+		Part Widths [76]	14.96422		Numeric	
+		Part Widths [77]	15.05294		Numeric	
+		Part Widths [78]	14.96422		Numeric	
+		Part Widths [79]	15.05294		Numeric	
+		Part Widths [80]	14.96422		Numeric	
+		Part Widths [81]	15.05294		Numeric	
+		Part Widths [82]	15.05294		Numeric	
+		Part Widths [83]	15.05294		Numeric	
+		Part Widths [84]	15.05294		Numeric	
+		Part Widths [85]	14.96422		Numeric	
+		Part Widths [86]	14.96422		Numeric	
+		Part Widths [87]	15.05294		Numeric	
+		Part Widths [88]	15.05294		Numeric	
+		Part Widths [89]	14.96422		Numeric	
+		Part Widths [90]	14.96422		Numeric	
+		Part Widths [91]	15.05294		Numeric	
+		Part Widths [92]	14.96422		Numeric	
+		Part Widths [93]	15.05294		Numeric	
+		Part Widths [94]	15.05294		Numeric	
+		Part Widths [95]	15.05294		Numeric	
+		Part Widths [96]	15.05294		Numeric	
+		Part Widths [97]	15.05294		Numeric	
+		Part Widths [98]	15.05294		Numeric	
+		Part Widths [99]	14.96422		Numeric	
+		Part Widths [Max]	15.05294		Numeric	
+		Part Widths 2 [ ]	[19.349457; 19.349457; 19.349457; 15.63191; 15.63191; ...]		Numeric 1D	
+		Part Widths 2 [1]	19.34946		Numeric	
+		Part Widths 2 [2]	19.34946		Numeric	
+		Part Widths 2 [3]	19.34946		Numeric	
+		Part Widths 2 [4]	15.63191		Numeric	
+		Part Widths 2 [5]	15.63191		Numeric	
+		Part Widths 2 [6]	15.63191		Numeric	
+		Part Widths 2 [7]	15.63191		Numeric	
+		Part Widths 2 [8]	15.63191		Numeric	
+		Part Widths 2 [9]	19.34946		Numeric	
+		Part Widths 2 [10]	15.63191		Numeric	
+		Part Widths 2 [11]	15.63191		Numeric	
+		Part Widths 2 [12]	4.67599		Numeric	
+		Part Widths 2 [13]	15.63191		Numeric	
+		Part Widths 2 [14]	8.39353		Numeric	
+		Part Widths 2 [15]	15.63191		Numeric	
+		Part Widths 2 [16]	15.63191		Numeric	
+		Part Widths 2 [17]	15.63191		Numeric	
+		Part Widths 2 [18]	15.63191		Numeric	
+		Part Widths 2 [19]	15.63191		Numeric	
+		Part Widths 2 [20]	19.34946		Numeric	
+		Part Widths 2 [21]	19.34946		Numeric	
+		Part Widths 2 [22]	15.63191		Numeric	
+		Part Widths 2 [23]	15.63191		Numeric	
+		Part Widths 2 [24]	15.63191		Numeric	
+		Part Widths 2 [25]	4.67599		Numeric	
+		Part Widths 2 [26]	15.63191		Numeric	
+		Part Widths 2 [27]	15.63191		Numeric	
+		Part Widths 2 [28]	15.63191		Numeric	
+		Part Widths 2 [29]	15.63191		Numeric	
+		Part Widths 2 [30]	15.63191		Numeric	
+		Part Widths 2 [31]	15.63191		Numeric	
+		Part Widths 2 [32]	4.67599		Numeric	
+		Part Widths 2 [33]	4.67599		Numeric	
+		Part Widths 2 [34]	15.63191		Numeric	
+		Part Widths 2 [35]	15.63191		Numeric	
+		Part Widths 2 [36]	4.67599		Numeric	
+		Part Widths 2 [37]	15.63191		Numeric	
+		Part Widths 2 [38]	15.63191		Numeric	
+		Part Widths 2 [39]	15.63191		Numeric	
+		Part Widths 2 [40]	19.34946		Numeric	
+		Part Widths 2 [41]	4.67599		Numeric	
+		Part Widths 2 [42]	15.63191		Numeric	
+		Part Widths 2 [43]	15.63191		Numeric	
+		Part Widths 2 [44]	15.63191		Numeric	
+		Part Widths 2 [45]	15.63191		Numeric	
+		Part Widths 2 [46]	15.63191		Numeric	
+		Part Widths 2 [47]	15.63191		Numeric	
+		Part Widths 2 [48]	15.63191		Numeric	
+		Part Widths 2 [49]	4.67599		Numeric	
+		Part Widths 2 [50]	16.79722		Numeric	
+		Part Widths 2 [51]	15.63191		Numeric	
+		Part Widths 2 [52]	15.63191		Numeric	
+		Part Widths 2 [53]	15.63191		Numeric	
+		Part Widths 2 [54]	15.63191		Numeric	
+		Part Widths 2 [55]	15.63191		Numeric	
+		Part Widths 2 [56]	19.34946		Numeric	
+		Part Widths 2 [57]	4.67599		Numeric	
+		Part Widths 2 [58]	15.63191		Numeric	
+		Part Widths 2 [59]	15.63191		Numeric	
+		Part Widths 2 [60]	15.63191		Numeric	
+		Part Widths 2 [61]	19.34946		Numeric	
+		Part Widths 2 [62]	19.34946		Numeric	
+		Part Widths 2 [63]	15.63191		Numeric	
+		Part Widths 2 [64]	15.63191		Numeric	
+		Part Widths 2 [65]	15.63191		Numeric	
+		Part Widths 2 [66]	4.67599		Numeric	
+		Part Widths 2 [67]	16.79722		Numeric	
+		Part Widths 2 [68]	15.63191		Numeric	
+		Part Widths 2 [69]	4.67599		Numeric	
+		Part Widths 2 [70]	15.63191		Numeric	
+		Part Widths 2 [71]	15.63191		Numeric	
+		Part Widths 2 [72]	19.34946		Numeric	
+		Part Widths 2 [73]	16.79722		Numeric	
+		Part Widths 2 [74]	15.63191		Numeric	
+		Part Widths 2 [75]	4.67599		Numeric	
+		Part Widths 2 [76]	19.34946		Numeric	
+		Part Widths 2 [77]	19.34946		Numeric	
+		Part Widths 2 [78]	15.63191		Numeric	
+		Part Widths 2 [79]	4.67599		Numeric	
+		Part Widths 2 [80]	15.63191		Numeric	
+		Part Widths 2 [81]	15.63191		Numeric	
+		Part Widths 2 [82]	15.63191		Numeric	
+		Part Widths 2 [83]	15.63191		Numeric	
+		Part Widths 2 [84]	15.63191		Numeric	
+		Part Widths 2 [85]	15.63191		Numeric	
+		Part Widths 2 [86]	15.63191		Numeric	
+		Part Widths 2 [87]	15.63191		Numeric	
+		Part Widths 2 [88]	19.34946		Numeric	
+		Part Widths 2 [89]	15.63191		Numeric	
+		Part Widths 2 [90]	4.67599		Numeric	
+		Part Widths 2 [91]	4.67599		Numeric	
+		Part Widths 2 [92]	15.63191		Numeric	
+		Part Widths 2 [93]	15.63191		Numeric	
+		Part Widths 2 [94]	15.63191		Numeric	
+		Part Widths 2 [95]	15.63191		Numeric	
+		Part Widths 2 [96]	15.63191		Numeric	
+		Part Widths 2 [97]	15.63191		Numeric	
+		Part Widths 2 [98]	15.63191		Numeric	
+		Part Widths 2 [99]	15.63191		Numeric	
+		Part Widths 2 [Max]	15.63191		Numeric	
+	System Variable	Device Name	NI1752-01AA565D		String	
+		IP Address	192.168.1.100		String	
+		Device Start Date	3/30/2017		String	
+		Device Start Time	6:37:38 PM		String	
+		Current Date	3/30/2017		String	
+		Current Time	6:51:32 PM		String	
+		Inspection Name	Test0330		String	
+		Inspection Start Date	3/30/2017		String	
+		Inspection Start Time	6:46:58 PM		String	
+		Inspection Iteration Counter	0		Numeric	
+		Active Time (s.)	0		Numeric	
+		Idle Time (s.)	0		Numeric	
+		Inspection Rate (parts per sec.)	0		Numeric	
+		Inspection Status	Pass		Pass Fail	
+		# Pass	0		Numeric	
+		# Fail	0		Numeric	
+		# Parts Inspected	0		Numeric	
+		Yield (%)	0		Numeric	
+		Memory Allocated (MB)	351.14844		Numeric	
