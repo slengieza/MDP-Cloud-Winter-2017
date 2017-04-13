@@ -59,10 +59,12 @@ short.form(ar.aggregated)
 short.form(ma.model)
 
 # forcast 
-nstart = 5000
-nstep = 5000
-Forecasts = arma.forecast(series=ts(fanuc[1:10000,]), marima=model, nstart=nstart, nstep=nstep, dif.poly = dif.poly, check=FALSE)
+nstart = 4000
+nstep = 1000
+Forecasts = arma.forecast(series=ts(fanuc[1:5000,]), marima=model, nstart=nstart, nstep=nstep, dif.poly = dif.poly, check=FALSE)
 Predict = Forecasts$forecasts[,(nstart+1):(nstart+nstep)]
-plot((nstart+1):(nstart+nstep),Predict[2,], xlim = c(0,10000),ylim = c(30,130), type='l',col = "blue",xlab= "index",ylab = "data")
+jpeg('marima_plot.jpg')
+plot((nstart+1):(nstart+nstep),Predict[2,], xlim = c(0,5000),ylim = c(30,130), type='l',col = "blue",xlab= "index",ylab = "data")
 par(new = TRUE)
-plot(vol[1:10000],type = 'l',col = "red",xlim = c(0,10000), ylim = c(30,130),xlab= "index",ylab = "data")
+plot(vol[1:5000],type = 'l',col = "red",xlim = c(0,5000), ylim = c(30,130),xlab= "index",ylab = "data")
+dev.off()

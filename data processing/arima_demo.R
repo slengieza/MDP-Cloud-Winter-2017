@@ -55,7 +55,9 @@ print(c("mean current is:",data.curr.mean))
 print(c("max current is:",data.curr.max))
 print(c("current std is:",data.curr.std))
 
+jpeg('plot1.jpg')
 #PLOT 
+
 hist(data.curr[data.curr.idx], breaks = seq(data.curr.min,data.curr.max,by=0.01), main ="Histogram of Observed Current Data", xlab = "current (Amp)", ylab = "frequency ()", xlim = c(0.35,0.55), plot= TRUE)
 plot(density(data.curr[data.curr.idx]), main = "Density Estimate of Current Data")
 fitdistr(data.curr[data.curr.idx],"normal")
@@ -64,7 +66,7 @@ x11()
 hist(data.vol[data.vol.idx], breaks = seq(data.vol.min,data.vol.max,by=0.1), main = "Histogram of Observed Voltage Data", xlab = "voltage (Volt)", ylab = "frequency ()", xlim = c(100,108), plot= TRUE)
 plot(density(data.vol[data.vol.idx]), main = "Density Estimate of Voltage Data")
 fitdistr(data.vol[data.vol.idx],"normal")
-
+dev.off()
 
 # Deal with data
 dec = which(time.month == 12)
@@ -73,7 +75,7 @@ dec.cur = data.curr[which(data.curr[decidx] > 0)]
 dec.vol = data.vol[which(data.vol[decidx] > 0)]
 cur_fit <- auto.arima(dec.cur[1:5000])
 vol_fit <- auto.arima(dec.vol[1:5000])
-
+jpeg('plot2.jpg')
 par(mfrow = c(2,1))
 plot(forecast(cur_fit, h = length(dec.cur)-5000), xlab = "index of current data point", ylab = "actual current data (Amp)",xlim = c(0,length(dec.cur))) 
 par(new = TRUE)
@@ -82,7 +84,6 @@ err.cur = 0
 err.cur[1:5000] = 0.0;
 err.cur[5001:length(dec.cur)] = dec.cur[5001:length(dec.cur)]-as.numeric(unlist(forecast(cur_fit, h = length(dec.cur)-5000)[4]))
 plot(err.cur, type = "h", xlab = "index of current data point")
-
 x11()
 par(mfrow = c(2,1))
 plot(forecast(vol_fit, h = length(dec.vol)-5000), xlab = "index of voltage data point", ylab = "actual voltage data (Volt)",xlim = c(0,length(dec.vol))) 
@@ -92,6 +93,7 @@ err.vol = 0
 err.vol[1:5000] = 0.0;
 err.vol[5001:length(dec.vol)] = dec.vol[5001:length(dec.vol)]-as.numeric(unlist(forecast(vol_fit, h = length(dec.vol)-5000)[4]))
 plot(err.vol, main = "prediction model vs. actual data error",type = "h", xlab = "index of voltage data point", ylab = "error between model and test data (Volt)")
+dev.off()
 
 
 #x11()
