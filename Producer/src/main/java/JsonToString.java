@@ -80,6 +80,9 @@ public class JsonToString {
 				//addValue(kafkaMessages, tagName, tagValue, timeStamp);
 				(kafkaMessages.get(timeStamp)).add(tagValue);
 			}
+			else if (kafkaMessages.get(tagName) != null){ //tag already exists
+				continue;
+			}
 			else{ //new timestamp
 				kafkaMessages.put(timeStamp, new ArrayList<String>());
 				//addValue(kafkaMessages, tagName, tagValue, timeStamp);

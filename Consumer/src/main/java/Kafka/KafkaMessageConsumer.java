@@ -97,7 +97,7 @@ public class KafkaMessageConsumer implements Runnable{
 
         int numConsumers = 1;
         String groupId = "1";
-        List<String> topics = Arrays.asList("test1");
+        // List<String> topics = Arrays.asList("test_schema");
         ExecutorService executor = Executors.newFixedThreadPool(numConsumers);
 
         final List<KafkaMessageConsumer> consumers = new ArrayList<>();

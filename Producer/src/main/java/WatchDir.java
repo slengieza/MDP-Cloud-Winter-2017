@@ -40,10 +40,12 @@ import kafka.utils.ZkUtils;
 //Kafka
 import com.mdp.producer.JsonToString;
 import com.mdp.producer.ExtractCSV;
+import com.mdp.producer.JsonToCSV;
 
 public class WatchDir {
 
     private final WatchService watcher;
+    private final JsonToCSV converter;
     private final Map<WatchKey,Path> keys;
     private boolean trace = false;
 
@@ -79,7 +81,7 @@ public class WatchDir {
     public WatchDir(Path dir) throws IOException {
         this.watcher = FileSystems.getDefault().newWatchService();
         this.keys = new HashMap<WatchKey,Path>();
-
+        this.converter = new JsonToCSV();
         register(dir);
 
         // enable trace after initial registration
@@ -185,13 +187,13 @@ public class WatchDir {
             AdminUtils.createTopic(zkUtils, topic, partitions, replication, topicConfig);
         }
         catch (Exception e){
-            System.out.println("Topic exists");
+            System.out.println("Topic: " + topic + " exists");
         }
     }
 
     public static void main(String[] args) throws IOException {
         // Kafka 
-        String topic = "test2";
+        String topic = "test1";
         String group_id = "report";
         new_topic(topic);
         //PRODUCTION
@@ -224,26 +226,7 @@ public class WatchDir {
 
         public void run(){
             if(file.toString().toLowerCase().endsWith(".dat")){
-                // Kafka 
-                //System.out.println("Getting kafkaMessages");
-                HashMap<Long, List<String>> kafkaMessages = JsonToString.GetKafkaMessage(file);
-                Set set = kafkaMessages.entrySet();
-                // System.out.println("Kafka Message: " + set.toString());
-                Iterator iterator = set.iterator();
-                while(iterator.hasNext()) {
-                    Map.Entry mentry = (Map.Entry)iterator.next();
-                    // System.out.println("Sending data for Timestamp " + mentry.getKey());
-                    //System.out.println("Timestamp: " + mentry.getKey() + " data " + (Arrays.toString(((List)mentry.getValue()).toArray())));
-                    String dataList = "TestBed\t";
-                    Iterator it = ((List)mentry.getValue()).iterator();
-                    while(it.hasNext()){
-                        dataList += it.next().toString() + "\t";
-                    }
-                    ProducerRecord<String, String> data = new ProducerRecord<String, String>("test1", dataList);
-                    System.out.println("Sending Message: " + dataList);
-                    producer.send(data);
-                }
-                file.delete();
+                sendTestBedData(file);
                 return;
             }
             else if(file.toString().toLowerCase().endsWith(".csv")){
@@ -278,15 +261,28 @@ public class WatchDir {
     public static void sendTestBedData(File file){
         try{
             HashMap<Long, List<String>> kafkaMessages = JsonToString.GetKafkaMessage(file);
-            Set set = kafkaMessages.entrySet();
-            Iterator iterator = set.iterator();
-            while(iterator.hasNext()){
-                Map.Entry mentry = (Map.Entry)iterator.next();
-                String dataList= "TestBed\t";
-                Iterator it = ((List)mentry.getValue()).iterator();
-                while(it.hasNext()){
-                    dataList += it.next() + "\t";
+
+            try{
+                String path1 = "C:\\Rockwell Automation\\WorkingDirectory\\SimulationData\\test.csv";
+                path1 = path1.replace("\\", "/");
+                PrintWriter writer = new PrintWriter(path1, "UTF-8");
+                writer.println("TimeStamp,  Fanuc1, Fanuc2, Fanuc3, ABB1, ABB2, ABB3, RFID56, RFID57, RFID54, RFID55, RFID1, RFID2, RFID3, RFID4, RFID5, RFID6");
+
+                Iterator it = kafkaMessages.entrySet().iterator();
+                String dataList = "TestBed\t";
+                while (it.hasNext()) {
+                    Map.Entry pair = (Map.Entry)it.next();
+                    List<String> values = (List)pair.getValue();
+                    String v = "";
+                    for(String val : values){
+                        v += val + ",";
+                        dataList += val + "\t";
+                    }
+                    v = v.substring(0, v.length()-1);
+                    writer.println(v);
+                    it.remove();
                 }
+
                 ProducerRecord<String, String> data = new ProducerRecord<String, String>("test1", dataList);
                 try {
                     System.out.println("Sending Message: " + dataList);
@@ -297,9 +293,14 @@ public class WatchDir {
                     e.printStackTrace(System.out);
                     return;
                 }
+
+                file.delete();
+                writer.close();
+            } 
+            catch (IOException e) {
+               // do something
             }
-            file.delete();
-        }
+       }
         catch (Exception e){
             System.out.println("Getting kafkaMessage failed with error message: " + e.getMessage());
             e.printStackTrace(System.out);

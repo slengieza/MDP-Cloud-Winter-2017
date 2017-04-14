@@ -80,6 +80,8 @@ public class InfluxConsumer implements ConsumerListener {
         boolean rfid4 = Boolean.valueOf(parts[15]);
         boolean rfid5 = Boolean.valueOf(parts[16]);
         boolean rfid6 = Boolean.valueOf(parts[17]);
+        // double dim1 = Double.parseDouble(parts[18]);
+        // double dim2 = Double.parseDouble(parts[19]);
 
         Point point1=Point.measurement(measurementName)
         .time(timeStamp, TimeUnit.MILLISECONDS)
@@ -95,6 +97,8 @@ public class InfluxConsumer implements ConsumerListener {
         .addField("RFID4", rfid4)
         .addField("RFID5", rfid5)
         .addField("RFID6", rfid6)
+        // .addField("Dim1_avg", dim1)
+        // .addField("Dim2_avg", dim2)
         .build();
         this.batchPoints.point(point1);
         logger.error(format.format(new Date(timeStamp)) + " Received TestBed Message: " +
