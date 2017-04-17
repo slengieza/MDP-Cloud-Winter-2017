@@ -226,6 +226,7 @@ public class WatchDir {
 
         public void run(){
             if(file.toString().toLowerCase().endsWith(".dat")){
+                JsonToXml.GetMTCXML(file);
                 sendTestBedData(file);
                 return;
             }
