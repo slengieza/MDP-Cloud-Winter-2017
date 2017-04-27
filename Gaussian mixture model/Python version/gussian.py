@@ -42,12 +42,7 @@ def plot_results(X, Y_, means, covariances, index, title):
 # Number of samples per component
 n_samples = 500
 
-# Generate random sample, two components
-np.random.seed(0)
-C = np.array([[0., -0.1], [1.7, .4]])
-X = np.r_[np.dot(np.random.randn(n_samples, 2), C),
-          .7 * np.random.randn(n_samples, 2) + np.array([-6, 3])]
-
+# Input the dataset
 # Fit a Gaussian mixture with EM using five components
 gmm = mixture.GaussianMixture(n_components=2, covariance_type='full').fit(X)
 D = gmm.predict(X)
