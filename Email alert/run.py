@@ -10,15 +10,11 @@ from email.mime.text import MIMEText
 SMTP_SERVER = "smtp.163.com"
 SMTP_PORT = 25
 SMTP_USERNAME = "18937109768"
-SMTP_PASSWORD = "lxt19960201"
+SMTP_PASSWORD = ########
 EMAIL_FROM = "18937109768@163.com"
 EMAIL_TO = "lxtian@umich.edu"
 EMAIL_SUBJECT = "Secure Cloud Manufacturing notification"
-co_msg = """
-499 points are clustered as frequency 40
-300 points are clustered as frequency 30
-anomaly detected
-"""
+co_msg = message
 def send_email():
     msg = MIMEText(co_msg)
     msg['Subject'] = EMAIL_SUBJECT
