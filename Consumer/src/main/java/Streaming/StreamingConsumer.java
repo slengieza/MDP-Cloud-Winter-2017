@@ -27,6 +27,13 @@ import org.influxdb.dto.QueryResult.Series;
 import com.mdp.consumer.KafkaMessageConsumer;
 import com.mdp.consumer.ConsumerListener;
 
+/*
+/ TODO: Streaming Consumer needs to be fixed with input data in mind.
+/       When we changed what data we were inputting, everything broke. 
+/       Right now, we aren't really using the streaming for anything.
+*/
+
+
 public class StreamingConsumer implements ConsumerListener {
 
     private InfluxDB influxDB;
@@ -124,8 +131,7 @@ public class StreamingConsumer implements ConsumerListener {
             cycleState[cycleID] = OFF;
             Long cycleTime = (timeStamp - cycleStartTimeStamp[cycleID])/1000; //end of RFID54 to beginning of RFID55
             //add cycle time to prev cycle times
-            updateStats(cycleTime, cycleID);
-            double upperStddevCycleTime = average[cycleID] + 1.96*stddev[cycleID];
+             double upperStddevCycleTime = average[cycleID] + 1.96*stddev[cycleID];
             double lowerStddevCycleTime = average[cycleID] - 1.96*stddev[cycleID];
             if(lowerStddevCycleTime < 0){
                 lowerStddevCycleTime = 0.0;
