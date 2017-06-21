@@ -73,7 +73,7 @@ public class StreamingConsumer implements ConsumerListener {
     public void onReceiveMessage(String message){
         String parts[] = message.split("\t");
         String typeOfData = parts[0];
-        Long timeStamp= Long.parseLong(parts[1]);
+        /*Long timeStamp= Long.parseLong(parts[1]);
         Long fanucFreq = Long.parseLong(parts[2]);
         Long fanucCurrent = Long.parseLong(parts[3]);
         Long fanucVoltage = Long.parseLong(parts[4]);
@@ -90,11 +90,21 @@ public class StreamingConsumer implements ConsumerListener {
         rfidState[3] = Boolean.valueOf(parts[15]);  //RFID 4
         rfidState[4] = Boolean.valueOf(parts[16]); //RFID 5
         rfidState[5] = Boolean.valueOf(parts[17]); //RFID 6
+        */
 
-        monitorCycle(0, timeStamp, rfidState[0], rfidState[2]);  // Travel time from Cell 1 to Cell 2 
+        // UPDATE: Data input has changed
+        // TODO: Come up with permanent solution
+        Long timeStamp = Long.parseLong(parts[1]);
+        Double xPos = Double.parseDouble(parts[2]);
+        Double xSpeed = Double.parseDouble(parts[3]);
+        Double yPos = Double.parseDouble(parts[4]);
+        Double ySpeed = Double.parseDouble(parts[5]);
+        Double zPos = Double.parseDouble(parts[6]);
+        Double zSpeed = Double.parseDouble(parts[7]);
+        //monitorCycle(0, timeStamp, rfidState[0], rfidState[2]);  // Travel time from Cell 1 to Cell 2 
     }
 
-    public void monitorCycle(int cycleID, Long timeStamp, boolean rfid1, boolean rfid2){
+    /*public void monitorCycle(int cycleID, Long timeStamp, boolean rfid1, boolean rfid2){
         // System.out.println("cycleState: " + cycleState[cycleID]);
         // System.out.println("inTransit: " + inTransit[cycleID]);
         // System.out.println("RFID54: " + rfid1);
@@ -136,7 +146,7 @@ public class StreamingConsumer implements ConsumerListener {
             inTransit[cycleID] = false;
             cycleState[cycleID] = OFF;
         }
-    }
+    }*/
 
     public void updateStats(Long cycleTime, int cycleID){
         System.out.println("Updating stats");

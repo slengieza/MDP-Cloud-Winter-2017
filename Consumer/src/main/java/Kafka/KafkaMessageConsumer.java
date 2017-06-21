@@ -70,6 +70,7 @@ public class KafkaMessageConsumer implements Runnable{
             while (true) {
                 ConsumerRecords<String, String> records = consumer.poll(1000);
                 for (ConsumerRecord<String, String> record : records) {
+                    //System.out.println(record);
                     System.out.println("Got Message: " + record.value());
                     for (ConsumerListener listener : this.listeners) {
                         listener.onReceiveMessage(record.value());   
