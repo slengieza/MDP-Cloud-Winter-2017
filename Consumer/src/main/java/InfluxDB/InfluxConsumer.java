@@ -133,7 +133,8 @@ public class InfluxConsumer implements ConsumerListener {
     	Double yPos = Double.parseDouble(parts[3]);
     	Double ySpeed = Double.parseDouble(parts[4]);
     	Double zPos = Double.parseDouble(parts[5]);
-    	Double zSpeed = Double.parseDouble(parts[6]);
+    	Double zSpeed = Double.parseDouble(parts[6]);   
+	// Currently measurementName is OldValues
     	Point point1=Point.measurement(measurementName)
 	    .time(timeStamp, TimeUnit.MILLISECONDS)
 	    .addField("X Position", xPos)
