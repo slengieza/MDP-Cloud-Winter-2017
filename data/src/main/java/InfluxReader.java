@@ -37,12 +37,16 @@ public class InfluxReader {
     }
 
     public void execute(String queryString){        
-
-        Query query = new Query(queryString, dbName);
-        QueryResult result = influxDB.query(query);
-        List<List<Object>> values = result.getResults().get(0).getSeries().get(0).getValues();
-        for (Object value : values) {
-            System.out.println(value.toString());
+        try{
+            Query query = new Query(queryString, dbName);
+            QueryResult result = influxDB.query(query);
+            List<List<Object>> values = result.getResults().get(0).getSeries().get(0).getValues();
+            for (Object value : values) {
+                System.out.println(value.toString());
+            }
+        }
+        catch(RuntimeException ex){
+            System.out.println("You Have an Error in Your Query");
         }
     }
 }
