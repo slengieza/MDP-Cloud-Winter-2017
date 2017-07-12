@@ -41,7 +41,7 @@ public class InfluxConsumer implements ConsumerListener {
         this.measurementName = measurementName;
         this.batchPoints = BatchPoints
                     .database(dbName)
-                    .retentionPolicy("default")
+                    .retentionPolicy("infinite")
                     .consistency(ConsistencyLevel.ALL)
                     .build();
     }
@@ -134,6 +134,7 @@ public class InfluxConsumer implements ConsumerListener {
     	Double ySpeed = Double.parseDouble(parts[4]);
     	Double zPos = Double.parseDouble(parts[5]);
     	Double zSpeed = Double.parseDouble(parts[6]);
+    	System.out.println(measurementName);
     	Point point1=Point.measurement(measurementName)
 	    .time(timeStamp, TimeUnit.MILLISECONDS)
 	    .addField("X Position", xPos)
@@ -149,6 +150,14 @@ public class InfluxConsumer implements ConsumerListener {
 	                                " X Actual Speed: " + parts[2] + " Y Position: " + parts[3] + 
 	                                " Y Actual Speed: " + parts[4] + " Z Position: " + parts[5] + " Z Actual Speed: " + parts[6]);
 	    influxDB.write(this.batchPoints);
+	    //List<String> databases = influxDB.describeDatabases();
+	    //int i;
+	    //for(i = 0; i < databases.size(); ++i){
+	    //	System.out.print(databases[i] + "\t");
+	    //}
+	    //for(String l : databases){
+	    //	System.out.print(l + " ");
+	    //}
 	    System.out.println("Data Sent\t\n");
     }
     public void addSimulationData(String[] parts){

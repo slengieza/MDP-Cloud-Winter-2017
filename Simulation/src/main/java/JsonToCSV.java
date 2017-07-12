@@ -49,20 +49,26 @@ public class JsonToCSV {
         
 		JsonToCSV converter = new JsonToCSV();
 
-        //LOCAL
-        Path dir = Paths.get("/Users/stevenlengieza/Documents/college/Research/MDP-Cloud-Winter-2017/data/New_Data"); //path to .dat files
+        //PRODUCTION
+        String path = "C:\\Rockwell Automation\\WorkingDirectory";
+        Path dir = Paths.get(path.replace("\\", "/"));
         //send files that are already there
         File folder = new File(dir.toString()); 
         File[] listOfFiles = folder.listFiles();
         
         for (File file : listOfFiles) {
             if (file.toString().toLowerCase().endsWith(".dat")){
+            	System.out.println("Converting file " + file.toString());
                 converter.getCSV(file);
             }
         }
         try{
-		    PrintWriter writer = new PrintWriter("/Users/stevenlengieza/Documents/college/Research/MDP-Cloud-Winter-2017/data/New_Data/test.csv", "UTF-8");
-		    writer.println("TimeStamp, FanucFreq, FanucCurrent, FanucVoltage, ABBFreq, ABBCurrent, ABBVoltage, RFID56, RFID57, RFID54, RFID55");
+        	String path1 = "C:\\Rockwell Automation\\WorkingDirectory\\SimulationData\\test.csv";
+        	path1 = path1.replace("\\", "/");
+        	System.out.println(path1);
+		    PrintWriter writer = new PrintWriter(path1, "UTF-8");
+		    System.out.println("Writing headers to file");
+		    writer.println("TimeStamp,  Fanuc1, Fanuc2, Fanuc3, ABB1, ABB2, ABB3, RFID56, RFID57, RFID54, RFID55, RFID1, RFID2, RFID3, RFID4, RFID5, RFID6");
 		    Iterator it = kafkaMessages.entrySet().iterator();
 		    while (it.hasNext()) {
 		    	Map.Entry pair = (Map.Entry)it.next();

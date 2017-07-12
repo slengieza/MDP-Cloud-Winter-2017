@@ -210,5 +210,31 @@ public class StreamingConsumer implements ConsumerListener {
             cycleState[i] = OFF;
         }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }

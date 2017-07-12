@@ -67,6 +67,7 @@ public class JsonToCSV {
         	path1 = path1.replace("\\", "/");
         	System.out.println(path1);
 		    PrintWriter writer = new PrintWriter(path1, "UTF-8");
+		    //PrintWriter writer = new PrintWriter(file, "UTF-8");
 		    System.out.println("Writing headers to file");
 		    writer.println("TimeStamp,  Fanuc1, Fanuc2, Fanuc3, ABB1, ABB2, ABB3, RFID56, RFID57, RFID54, RFID55, RFID1, RFID2, RFID3, RFID4, RFID5, RFID6");
 		    Iterator it = kafkaMessages.entrySet().iterator();
@@ -82,6 +83,7 @@ public class JsonToCSV {
 			    it.remove();
 			}
 		    writer.close();
+		    System.out.println("This is working");
 		} 
 		catch (IOException e) {
 		   // do something

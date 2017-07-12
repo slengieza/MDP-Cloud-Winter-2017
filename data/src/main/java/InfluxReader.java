@@ -22,8 +22,8 @@ import org.influxdb.dto.QueryResult.Series;
 
 public class InfluxReader {
 
-    private String username = "cloud_data";
-    private String password = "2016SummerProj";
+    private String username = "hkardos";
+    private String password = "Migffn##567";
     private String database = "https://migsae-influx.arc-ts.umich.edu:8086";
     private String dbName = "test";
     private InfluxDB influxDB;

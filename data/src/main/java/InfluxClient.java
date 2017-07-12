@@ -58,8 +58,8 @@ public class InfluxClient{
     public static void main(String[] args) throws Exception{
         String groupId = "1";
         String topic = "test1";
-        String username = "graphana_acc";
-        String password = "testBed_read16";
+        String username = "hkardos";
+        String password = "Migffn##567";
         String database = "https://migsae-influx.arc-ts.umich.edu:8086";
         String dbName = "test";
         int threads = 1;

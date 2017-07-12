@@ -32,9 +32,10 @@ public class KafkaMessageConsumer implements Runnable{
     private String zookeeper = "migsae-kafka.aura.arc-ts.umich.edu:2181/kafka";
     private String groupId = "1";
     private List<String> topics = Arrays.asList("test1");
-    private String username = "cloud_data";
-    private String password = "2016SummerProj";
+    private String username = "hkardos";
+    private String password = "Migffn##567";
     private String database = "https://migsae-influx.arc-ts.umich.edu:8086";
+    //private String database = "https://localhost:8086";
     private String dbName = "test";
     private String continuousDataTable = "OldValues";
     private String cycleTimeTable = "CycleTimes";
