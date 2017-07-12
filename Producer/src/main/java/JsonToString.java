@@ -29,7 +29,7 @@ import javax.json.JsonValue;
 
 public class JsonToString {
 
-	/* Kafka message format 
+	/* Kafka message format
 
 	Hashmap of timestamps where each timestamp has a list of values as follows
 
@@ -59,7 +59,7 @@ public class JsonToString {
 			array = jsonReader.readArray();
 			jsonReader.close();
 			fis.close();
-		  } 
+		  }
 		  catch (Exception e) {}
 
 		// This happens when program fails to open file
@@ -72,12 +72,14 @@ public class JsonToString {
 		  while(x<total_values){
 		 	JsonObject object = array.getJsonObject(x);
 			String tagName = object.getString("TagName");
+			tagName = tagName.replace("::[New_Shortcut]", "");
 			String tagValue = object.getString("TagValue");
-			
+
 			Long timeStamp = Long.parseLong(object.getString("TimeStamp").substring(6,19));
 			//Long time = Long.parseLong(timestamp.substring(6,19));
 			if (kafkaMessages.get(timeStamp) != null) { //timestamp already exists
 				//addValue(kafkaMessages, tagName, tagValue, timeStamp);
+				(kafkaMessages.get(timeStamp)).add(tagName);
 				(kafkaMessages.get(timeStamp)).add(tagValue);
 			}
 			else if (kafkaMessages.get(tagName) != null){ //tag already exists
@@ -86,7 +88,9 @@ public class JsonToString {
 			else{ //new timestamp
 				kafkaMessages.put(timeStamp, new ArrayList<String>());
 				//addValue(kafkaMessages, tagName, tagValue, timeStamp);
+				(kafkaMessages.get(timeStamp)).add("TimeStamp");
 				(kafkaMessages.get(timeStamp)).add(timeStamp.toString());
+				(kafkaMessages.get(timeStamp)).add(tagName);
 				(kafkaMessages.get(timeStamp)).add(tagValue);
 			}
 			x++;

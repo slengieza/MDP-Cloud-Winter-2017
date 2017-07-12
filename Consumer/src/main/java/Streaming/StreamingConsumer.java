@@ -100,14 +100,6 @@ public class StreamingConsumer implements ConsumerListener {
         */
 
         // UPDATE: Data input has changed
-        // TODO: Come up with permanent solution
-        Long timeStamp = Long.parseLong(parts[1]);
-        Double xPos = Double.parseDouble(parts[2]);
-        Double xSpeed = Double.parseDouble(parts[3]);
-        Double yPos = Double.parseDouble(parts[4]);
-        Double ySpeed = Double.parseDouble(parts[5]);
-        Double zPos = Double.parseDouble(parts[6]);
-        Double zSpeed = Double.parseDouble(parts[7]);
         //monitorCycle(0, timeStamp, rfidState[0], rfidState[2]);  // Travel time from Cell 1 to Cell 2 
     }
 

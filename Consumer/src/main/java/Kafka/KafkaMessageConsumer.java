@@ -32,8 +32,8 @@ public class KafkaMessageConsumer implements Runnable{
     private String zookeeper = "migsae-kafka.aura.arc-ts.umich.edu:2181/kafka";
     private String groupId = "1";
     private List<String> topics = Arrays.asList("test1");
-    private String username = "cloud_data";
-    private String password = "2016SummerProj";
+    private String username = "hkardos";
+    private String password = "Migffn##567";
     private String database = "https://migsae-influx.arc-ts.umich.edu:8086";
     private String dbName = "test";
     private String continuousDataTable = "OldValues";
@@ -50,7 +50,7 @@ public class KafkaMessageConsumer implements Runnable{
         props.put("zookeeper.sync.time.ms", "200");//200
         props.put("auto.commit.interval.ms", "1000");
         props.put("key.deserializer", StringDeserializer.class.getName());
-        props.put("value.deserializer", StringDeserializer.class.getName());  
+        props.put("value.deserializer", StringDeserializer.class.getName());
         this.consumer = new KafkaConsumer<>(props);
 
         InfluxClient influx_client = new InfluxClient(username, password, database, dbName, continuousDataTable);
@@ -73,20 +73,20 @@ public class KafkaMessageConsumer implements Runnable{
                     //System.out.println(record);
                     System.out.println("Got Message: " + record.value());
                     for (ConsumerListener listener : this.listeners) {
-                        listener.onReceiveMessage(record.value());   
+                        listener.onReceiveMessage(record.value());
                     }
                 }
             }
-        } 
+        }
         catch (WakeupException e) {
-          // ignore for shutdown 
+          // ignore for shutdown
             System.out.println("WakeupException");
             e.printStackTrace();
         }
         catch (Exception e){
             System.out.println("Exception");
             e.printStackTrace();
-        } 
+        }
     }
 
     public void shutdown() {
@@ -94,7 +94,7 @@ public class KafkaMessageConsumer implements Runnable{
     }
 
     public static void main(String[] args) {
-        
+
 
         int numConsumers = 1;
         String groupId = "1";
@@ -162,14 +162,14 @@ public class KafkaMessageConsumer implements Runnable{
 //                     for (ConsumerRecord<String, String> record : records) {
 //                         System.out.println(this.id + ": " + record.value());
 //                         for (ConsumerListener listener : this.listeners) {
-//                             listener.onReceiveMessage(record.value());   
+//                             listener.onReceiveMessage(record.value());
 //                         }
 //                     }
 //                 }
-//             } 
+//             }
 //             catch (WakeupException e) {
-//               // ignore for shutdown 
-//             } 
+//               // ignore for shutdown
+//             }
 //             finally {
 //                 consumer.close();
 //             }
@@ -190,7 +190,7 @@ public class KafkaMessageConsumer implements Runnable{
 //         String continuousDataTable = "TrainingData_3_6_2017";
 //         String cycleTimeTable = "CycleTimes";
 //         int threads = 1;
-    
+
 //         InfluxClient influx_client = new InfluxClient(username, password, database, dbName, continuousDataTable);
 //         StreamingClient streaming_client = new StreamingClient(username, password, database, dbName, cycleTimeTable);
 //         // HadoopClient hadoop_client = new HadoopClient();
@@ -237,7 +237,7 @@ public class KafkaMessageConsumer implements Runnable{
 //             public void run() {
 //                 for (ConsumerLoop consumer : consumers) {
 //                     consumer.shutdown();
-//                 } 
+//                 }
 //                 executor.shutdown();
 //                 try {
 //                     executor.awaitTermination(5000, TimeUnit.MILLISECONDS);
@@ -250,7 +250,7 @@ public class KafkaMessageConsumer implements Runnable{
 
 //     public void stop(){
 //         for (ConsumerListener listener : this.listeners) {
-//             listener.onShutdown();   
+//             listener.onShutdown();
 //         }
 //         this.shutdown();
 //     }
