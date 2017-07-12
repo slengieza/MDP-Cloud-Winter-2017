@@ -32,7 +32,7 @@ public class InfluxConsumer implements ConsumerListener {
     private BatchPoints batchPoints;
     private String measurementName;
     private Logger logger;
-  
+
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
     public InfluxConsumer(InfluxDB influxdb, String dbName, String measurementName) {
@@ -68,16 +68,24 @@ public class InfluxConsumer implements ConsumerListener {
 	    // The most important change for modifying data is to change sendTestBedData
 	    */
 	    int i = 1;
-	    while(i < parts.length - 6){
-	    	Double part = Double.parseDouble(parts[i]);
+	    while(i < parts.length){
+	    	//Double part = Double.parseDouble(parts[i]);
 	    	// Magic Numbers -> need a sufficiently large number bigger than our data ever will be (if we get off track with our inputs)
-	    	if((part > 1000000000)){
+	    	if(parts[i] == "TimeStamp"){
 	    		//System.out.println(part);
-	    		String[] stringSend = {parts[i], parts[i+1], parts[i+2],parts[i+3], parts[i+4], parts[i+5],parts[i+6]};
+	    		//String[] stringSend = {parts[i], parts[i+1], parts[i+2],parts[i+3], parts[i+4], parts[i+5],parts[i+6]};
+          ArrayList<String> stringSend = new ArrayList<String>();
+          stringSend.add(parts[i]);
+          i++;
+          while(parts[i] != "TimeStamp"){
+            stringSend.add(parts[i]);
+            i++;
+          }
 	    		sendTestBedData(stringSend);
 	    	}
 	    	i++;
 	    }
+
 	    /*
 	    Long timeStamp= Long.parseLong(parts[1]);
 	    Long fanucFreq = Long.parseLong(parts[2]);
@@ -119,21 +127,22 @@ public class InfluxConsumer implements ConsumerListener {
 	    this.batchPoints.point(point1);
 	    logger.error(format.format(new Date(timeStamp)) + " Received TestBed Message: " +
 	                                "TimeStamp: " + parts[1] + " fanucFreq: " + parts[2] +
-	                                " fanucCurrent: " + parts[3] + " fanucVoltage: " + parts[4] + 
+	                                " fanucCurrent: " + parts[3] + " fanucVoltage: " + parts[4] +
 	                                " abbFreq: " + parts[5] + " abbCurrent: " + parts[6] + " abbVoltage: " + parts[7] +
 									" RFID54: " + parts[10] + " RFID55: " + parts[11] + " RFID56: " + parts[8] + " RFID57: " + parts[9]);
 	    influxDB.write(this.batchPoints);
 	    */
     }
-    public void sendTestBedData(String[] parts){
+    public void sendTestBedData(ArrayList<String> parts){
     	System.out.println(parts[0]);
-    	Long timeStamp = Long.parseLong(parts[0]);
+      System.out.println(parts[1]);
+    	/*Long timeStamp = Long.parseLong(parts[0]);
     	Double xPos = Double.parseDouble(parts[1]);
     	Double xSpeed = Double.parseDouble(parts[2]);
     	Double yPos = Double.parseDouble(parts[3]);
     	Double ySpeed = Double.parseDouble(parts[4]);
     	Double zPos = Double.parseDouble(parts[5]);
-    	Double zSpeed = Double.parseDouble(parts[6]);   
+    	Double zSpeed = Double.parseDouble(parts[6]);
 	// Currently measurementName is OldValues
     	Point point1=Point.measurement(measurementName)
 	    .time(timeStamp, TimeUnit.MILLISECONDS)
@@ -147,9 +156,21 @@ public class InfluxConsumer implements ConsumerListener {
 	    this.batchPoints.point(point1);
 	    logger.error(format.format(new Date(timeStamp)) + " Received TestBed Message: " +
 	                                "TimeStamp: " + parts[0] + " X Position: " + parts[1] +
-	                                " X Actual Speed: " + parts[2] + " Y Position: " + parts[3] + 
+	                                " X Actual Speed: " + parts[2] + " Y Position: " + parts[3] +
 	                                " Y Actual Speed: " + parts[4] + " Z Position: " + parts[5] + " Z Actual Speed: " + parts[6]);
 	    influxDB.write(this.batchPoints);
+      */
+      int i = 2;
+      Long timeStamp = Long.parseLong(parts[1]);
+      Point point1=Point.measurement(measurementName).time(timeStamp, TimeUnit.MILLISECONDS);
+      while(i < parts.length - 1){
+        Double measurementValue = Double.parseDouble(parts[i + 1]);
+        point1.addField(parts[i], measurementValue);
+        i += 2;
+      }
+      point1.build();
+      this.batchPoints.point(point1);
+      influxDB.write(this.batchPoints);
 	    System.out.println("Data Sent\t\n");
     }
     public void addSimulationData(String[] parts){

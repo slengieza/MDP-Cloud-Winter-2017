@@ -46,16 +46,16 @@ public class JsonToCSV {
 	}
 
 	public static void main(String[] args){
-        
+
 		JsonToCSV converter = new JsonToCSV();
 
         //PRODUCTION
         String path = "C:\\Rockwell Automation\\WorkingDirectory";
         Path dir = Paths.get(path.replace("\\", "/"));
         //send files that are already there
-        File folder = new File(dir.toString()); 
+        File folder = new File(dir.toString());
         File[] listOfFiles = folder.listFiles();
-        
+
         for (File file : listOfFiles) {
             if (file.toString().toLowerCase().endsWith(".dat")){
             	System.out.println("Converting file " + file.toString());
@@ -68,7 +68,7 @@ public class JsonToCSV {
         	System.out.println(path1);
 		    PrintWriter writer = new PrintWriter(path1, "UTF-8");
 		    System.out.println("Writing headers to file");
-		    writer.println("TimeStamp,  Fanuc1, Fanuc2, Fanuc3, ABB1, ABB2, ABB3, RFID56, RFID57, RFID54, RFID55, RFID1, RFID2, RFID3, RFID4, RFID5, RFID6");
+		    //writer.println("TimeStamp,  Fanuc1, Fanuc2, Fanuc3, ABB1, ABB2, ABB3, RFID56, RFID57, RFID54, RFID55, RFID1, RFID2, RFID3, RFID4, RFID5, RFID6");
 		    Iterator it = kafkaMessages.entrySet().iterator();
 		    while (it.hasNext()) {
 		    	Map.Entry pair = (Map.Entry)it.next();
@@ -82,7 +82,7 @@ public class JsonToCSV {
 			    it.remove();
 			}
 		    writer.close();
-		} 
+		}
 		catch (IOException e) {
 		   // do something
 		}
@@ -91,7 +91,7 @@ public class JsonToCSV {
 	public static void getCSV(File jsonfile) {
 		// Initialize this array to check later
 		//JSONArray array = null;
-		JsonArray array = null; 
+		JsonArray array = null;
 
 		int numDataPoints = 6; //TODO must change when we add more data (its number of data points * 2 because we have one for each loop)
 		int total_values = 0;
@@ -106,7 +106,7 @@ public class JsonToCSV {
 			array = jsonReader.readArray(); //this is the error
 			jsonReader.close();
 			fis.close();
-		  } 
+		  }
 		  catch (Exception e) {
 		  	System.out.println("Error reading file");
 		  }
@@ -114,21 +114,24 @@ public class JsonToCSV {
 		  int x=0;
 		  total_values = array.size();
 		  while(x<total_values){
-		 	
+
 			try {
 				JsonObject object = array.getJsonObject(x);
 				String tagName = object.getString("TagName");
 				String tagValue = object.getString("TagValue");
-				
+
 				Long timeStamp = Long.parseLong(object.getString("TimeStamp").substring(6,19));
 				if (kafkaMessages.get(timeStamp) != null) { //timestamp already exists
-					//addValue(kafkaMessages, tagName, tagValue, timeStamp);
+					// Added for automatic Data writing
+					(kafkaMessages.get(timeStamp)).add(tagName);
 					(kafkaMessages.get(timeStamp)).add(tagValue);
 				}
 				else{ //new timestamp
 					kafkaMessages.put(timeStamp, new ArrayList<String>());
-					//addValue(kafkaMessages, tagName, tagValue, timeStamp);
+					(kafkaMessages.get(timeStamp)).add("TimeStamp");
 					(kafkaMessages.get(timeStamp)).add(timeStamp.toString());
+					// Added for automatic Data writing
+					(kafkaMessages.get(timeStamp)).add(tagName);
 					(kafkaMessages.get(timeStamp)).add(tagValue);
 				}
 	        }
@@ -137,7 +140,7 @@ public class JsonToCSV {
 	        }
 	        catch (Exception e){
 	        	e.printStackTrace();
-	        }  
+	        }
 			x++;
 		  }
 	  	return;
