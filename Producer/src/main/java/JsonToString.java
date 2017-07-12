@@ -72,12 +72,14 @@ public class JsonToString {
 		  while(x<total_values){
 		 	JsonObject object = array.getJsonObject(x);
 			String tagName = object.getString("TagName");
+			tagName = tagName.replace("::[New_Shortcut]", "");
 			String tagValue = object.getString("TagValue");
 
 			Long timeStamp = Long.parseLong(object.getString("TimeStamp").substring(6,19));
 			//Long time = Long.parseLong(timestamp.substring(6,19));
 			if (kafkaMessages.get(timeStamp) != null) { //timestamp already exists
 				//addValue(kafkaMessages, tagName, tagValue, timeStamp);
+				(kafkaMessages.get(timeStamp)).add(tagName);
 				(kafkaMessages.get(timeStamp)).add(tagValue);
 			}
 			else if (kafkaMessages.get(tagName) != null){ //tag already exists

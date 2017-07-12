@@ -118,6 +118,7 @@ public class JsonToCSV {
 			try {
 				JsonObject object = array.getJsonObject(x);
 				String tagName = object.getString("TagName");
+				tagName = tagName.replace("::[New_Shortcut]", "");
 				String tagValue = object.getString("TagValue");
 
 				Long timeStamp = Long.parseLong(object.getString("TimeStamp").substring(6,19));
