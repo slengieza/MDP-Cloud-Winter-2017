@@ -22,11 +22,11 @@ import org.influxdb.dto.QueryResult.Series;
 import com.mdp.data.InfluxReader;
 
 /*
-This class is used to interact with influxDB. There are three 
+This class is used to interact with influxDB. There are three
 options, read, listen and quit. To run, first start zookeeper
- and then kafka. 
+ and then kafka.
 
-Next build and run this class using "gradle build" and 
+Next build and run this class using "gradle build" and
 "java -jar ./build/libs/InfluxDB.jar" from the main
 InfluxDB directory
 
@@ -52,7 +52,7 @@ public class InfluxClient{
         this.database = database;
         this.dbName = dbName;
         this.influxDB = InfluxDBFactory.connect(database, username, password);
-        this.reader = new InfluxReader(this.influxDB);   
+        this.reader = new InfluxReader(this.influxDB);
     }
 
     public static void main(String[] args) throws Exception{
@@ -63,10 +63,10 @@ public class InfluxClient{
         String database = "https://migsae-influx.arc-ts.umich.edu:8086";
         String dbName = "test";
         int threads = 1;
-        
+
         InfluxClient client = new InfluxClient(username, password, database, dbName);
-        
-        while(true){ 
+
+        while(true){
             //  prompt for the method and get input
             Scanner scanner = new Scanner(System.in);
             System.out.print("Enter your method (query/quit): ");
@@ -82,7 +82,7 @@ public class InfluxClient{
                 word = scanner.next();
             }
             query += word + " ";
-            
+
             System.out.println("Executing " + query);
             client.reader.execute(query);
         }
