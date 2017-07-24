@@ -37,7 +37,7 @@ public class KafkaMessageConsumer implements Runnable{
     private String database = "https://migsae-influx.arc-ts.umich.edu:8086";
     //private String database = "https://localhost:8086";
     private String dbName = "test";
-    private String continuousDataTable = "OldValues";
+    private String continuousDataTable = "test1";
     private String cycleTimeTable = "CycleTimes";
 
     public KafkaMessageConsumer(int id){
