@@ -32,21 +32,7 @@ public class InfluxConsumer implements ConsumerListener {
 	private BatchPoints batchPoints;
 	private String measurementName;
 	private Logger logger;
-
-<<<<<<< HEAD
-    public InfluxConsumer(InfluxDB influxdb, String dbName, String measurementName) {
-        this.influxDB = influxdb;
-        this.logger = LoggerFactory.getLogger(InfluxConsumer.class.getName());
-        this.measurementName = measurementName;
-        this.batchPoints = BatchPoints
-                    .database(dbName)
-                    .retentionPolicy("infinite")
-                    .consistency(ConsistencyLevel.ALL)
-                    .build();
-    }
-=======
 	private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
->>>>>>> bca462cf86936a9204c430cacc492c2cc3de5694
 
 	public InfluxConsumer(InfluxDB influxdb, String dbName, String measurementName) {
 		this.influxDB = influxdb;
