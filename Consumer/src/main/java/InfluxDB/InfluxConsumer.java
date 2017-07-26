@@ -92,7 +92,7 @@ public class InfluxConsumer implements ConsumerListener {
 			Long timeStamp = Long.parseLong(parts.get(1));
 			Map<String, Object> fields_list = new HashMap<String, Object>();
 			while(i < parts.size() - 1){
-				fields_list.put(parts.get(i), Double.parseDouble(parts.get(i + 1));
+				fields_list.put(parts.get(i), Double.parseDouble(parts.get(i + 1)));
 				i += 2;
 			}
 			Point fullPoint = Point.measurement(this.series)

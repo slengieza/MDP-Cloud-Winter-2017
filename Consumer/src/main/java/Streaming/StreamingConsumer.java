@@ -34,7 +34,7 @@ public class StreamingConsumer implements ConsumerListener {
     private BatchPoints batchPoints;
     private String series;
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-
+    private Logger logger;
     public StreamingConsumer(InfluxDB influxdb, String dbName, String seriesIn) {
         this.influxDB = influxdb;
         this.logger = LoggerFactory.getLogger(StreamingConsumer.class.getName());

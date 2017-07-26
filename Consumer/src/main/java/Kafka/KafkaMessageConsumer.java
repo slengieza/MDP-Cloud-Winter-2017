@@ -3,6 +3,7 @@ package com.mdp.consumer;
 import java.io.*;
 import java.lang.*;
 import java.util.concurrent.TimeUnit;
+import java.util.Scanner;
 
 import org.apache.kafka.clients.consumer.*;
 import org.apache.kafka.streams.KafkaStreams;
@@ -65,7 +66,7 @@ public class KafkaMessageConsumer implements Runnable{
         props.put("key.deserializer", StringDeserializer.class.getName());
         props.put("value.deserializer", StringDeserializer.class.getName());
         this.consumer = new KafkaConsumer<>(props);
-        this.influxDB = new InfluxDBFactory.connect(database, username, password);
+        this.influxDB = InfluxDBFactory.connect(database, username, password);
         seriesSelect();
         InfluxClient influx_client = new InfluxClient(this.influxDB, this.dbName, this.series);
         StreamingClient streaming_client = new StreamingClient(this.influxDB, this.dbName, this.series);
@@ -88,7 +89,7 @@ public class KafkaMessageConsumer implements Runnable{
       System.out.print("Please enter the name of which series you'd like to use : ");
       String seriesNameIn = scans.nextLine();
       // Replace any Quotation Marks and Single Quotes
-      seriesNameIn = seriesNameIn.replace('\"', '').replace('\'', '');
+      seriesNameIn = seriesNameIn.replace("\"", "").replace("\'", "");
       this.series = seriesNameIn;
     }
 
