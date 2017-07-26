@@ -66,76 +66,31 @@ public class KafkaMessageConsumer implements Runnable{
         props.put("value.deserializer", StringDeserializer.class.getName());
         this.consumer = new KafkaConsumer<>(props);
         this.influxDB = new InfluxDBFactory.connect(database, username, password);
-        // public InfluxConsumer(InfluxDB influxdb, String dbName, String seriesIn)
-        // public InfluxClient(InfluxDB influxIn, String dbNameIn, String seriesIn)
-
-        InfluxClient influx_client = new InfluxClient(username, password, database, dbName, continuousDataTable);
-        StreamingClient streaming_client = new StreamingClient(username, password, database, dbName, cycleTimeTable);
-
+        seriesSelect();
+        InfluxClient influx_client = new InfluxClient(this.influxDB, this.dbName, this.series);
+        StreamingClient streaming_client = new StreamingClient(this.influxDB, this.dbName, this.series);
         this.listeners = new ArrayList<ConsumerListener>();
         this.listeners.add((ConsumerListener)influx_client.listener);
         this.listeners.add((ConsumerListener)streaming_client.listener);
     }
 
 
-private int seriesSelect(){
-  Scanner scans = new Scanner(System.in);
-  //****** GO TO HERE ******
-  System.out.println("Current Series :");
-  /*
-  Query query = new Query(queryString, dbName); X
-  QueryResult result = influxDB.query(query); X
-  List<List<Object>> values = result.getResults().get(0).getSeries().get(0).getValues();
-  */
-  Query seriesQuery = new Query("SHOW SERIES", "test");
-  QueryResult seriesResult = this.influxDB.query(seriesQuery);
-  List<List<Object>> values = seriesResult.getResults().get(0).getSeries().get(0).getValues();
-  for(String db : current_databases){
-    System.out.println(db);
-  }
-  System.out.println("--------------------------------------------------");
-  System.out.print("Please enter which database you'd like to use : ");
-  String dbNameIn = scans.nextLine();
-  // Replace any Quotation Marks
-  dbNameIn = dbNameIn.replace('\"', '');
-  dbNameIn = dbNameIn.replace('\'', '');
-  if(influxIn.databaseExists(dbNameIn)){
-      String ins = "";
-      do{
-        System.out.println("Press Y to add onto the existing database, or Press N to delete all previous values from this database.");
-        ins = scans.nextLine();
-      }while(!(ins.toLowerCase().equals("y") || ins.toLowerCase().equals("n") || ins.toLowerCase().equals("yes") || ins.toLowerCase().equals("no")))
-      if(ins.toLowerCase.equals("y") || ins.toLowerCase.equals("yes")){
-        this.dbName = dbNameIn;
+    private void seriesSelect(){
+      Scanner scans = new Scanner(System.in);
+      System.out.println("Current Series :");
+      Query seriesQuery = new Query("SHOW SERIES", "test");
+      QueryResult seriesResult = this.influxDB.query(seriesQuery);
+      List<List<Object>> values = seriesResult.getResults().get(0).getSeries().get(0).getValues();
+      for (Object value : values) {
+          System.out.println(value.toString());
       }
-      else{
-        System.out.println("Continuing will permanently delete previous data. Do you wish to continue? <Y, N>");
-        ins = scans.nextLine();
-        while(!(ins.toLowerCase().equals("y") || ins.toLowerCase().equals("n") || ins.toLowerCase().equals("yes") || ins.toLowerCase().equals("no"))){
-          System.out.println("Please press Y to delete previous data, or N to go back.");
-          ins = scans.nextLine();
-        }
-        if(ins.toLowerCase.equals("y") || ins.toLowerCase.equals("yes")){
-          this.dbName = dbNameIn;
-          influxIn.deleteDatabase(dbName);
-          influxIn.createDatabase(dbName);
-        }
-        else{
-          return 0;
-        }
-      }
-  }
-  else{
-    influxDB.createDatabase(dbNameIn);
-    this.dbName = dbNameIn;
-  }
-  InfluxClient influx_client = new InfluxClient(influxDB, dbName);
-  StreamingClient streaming_client = new StreamingClient(influxDB, dbName);
-  this.listeners = new ArrayList<ConsumerListener>();
-  this.listeners.add((ConsumerListener)influx_client.listener);
-  this.listeners.add((ConsumerListener)streaming_client.listener);
-  return 1;
-}
+      System.out.println("--------------------------------------------------");
+      System.out.print("Please enter the name of which series you'd like to use : ");
+      String seriesNameIn = scans.nextLine();
+      // Replace any Quotation Marks and Single Quotes
+      seriesNameIn = seriesNameIn.replace('\"', '').replace('\'', '');
+      this.series = seriesNameIn;
+    }
 
     @Override
     public void run() {
