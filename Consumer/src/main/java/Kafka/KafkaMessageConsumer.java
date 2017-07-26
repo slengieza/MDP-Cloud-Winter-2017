@@ -48,12 +48,19 @@ public class KafkaMessageConsumer implements Runnable{
     private String username = "hkardos";
     private String password = "Migffn##567";
     private String database = "https://migsae-influx.arc-ts.umich.edu:8086";
-    //private String database = "https://localhost:8086";
     private String dbName = "test";
     private String series;
     private InfluxDB influxDB;
 
+  /**
+   * Establishes our Kafka Message Consumer. This drives all the other different
+   * classes and parts of our consumer System
+   *
+   * @param id
+   *            For if we have multiple message consumers. Generally just 1 though
+   **/
     public KafkaMessageConsumer(int id){
+        // START -> List of properties for compilation and build
         this.id = id;
         Properties props = new Properties();
         props.put("zookeeper.connect", this.zookeeper);
@@ -65,6 +72,7 @@ public class KafkaMessageConsumer implements Runnable{
         props.put("auto.commit.interval.ms", "1000");
         props.put("key.deserializer", StringDeserializer.class.getName());
         props.put("value.deserializer", StringDeserializer.class.getName());
+        // END
         this.consumer = new KafkaConsumer<>(props);
         this.influxDB = InfluxDBFactory.connect(database, username, password);
         seriesSelect();
@@ -75,7 +83,10 @@ public class KafkaMessageConsumer implements Runnable{
         this.listeners.add((ConsumerListener)streaming_client.listener);
     }
 
-
+  /**
+   * For testing, lets us decide which series we want to write our data to. Thus,
+   * it's easier to distinguish between different experiments we run
+   **/
     private void seriesSelect(){
       Scanner scans = new Scanner(System.in);
       System.out.println("Current Series :");
@@ -83,13 +94,12 @@ public class KafkaMessageConsumer implements Runnable{
       QueryResult seriesResult = this.influxDB.query(seriesQuery);
       List<List<Object>> values = seriesResult.getResults().get(0).getSeries().get(0).getValues();
       for (Object value : values) {
-          System.out.println(value.toString());
+          System.out.println(value.toString()); // Prints out all of the different series options
       }
       System.out.println("--------------------------------------------------");
       System.out.print("Please enter the name of which series you'd like to use : ");
       String seriesNameIn = scans.nextLine();
-      // Replace any Quotation Marks and Single Quotes
-      seriesNameIn = seriesNameIn.replace("\"", "").replace("\'", "");
+      seriesNameIn = seriesNameIn.replace("\"", "").replace("\'", ""); // Replace any Quotation Marks and Single Quotes
       this.series = seriesNameIn;
     }
 
@@ -98,12 +108,9 @@ public class KafkaMessageConsumer implements Runnable{
         System.out.println("run");
         try {
             consumer.subscribe(this.topics);
-            System.out.println("subscribed to topic " + this.topics.toString());
             while (true) {
                 ConsumerRecords<String, String> records = consumer.poll(1000);
                 for (ConsumerRecord<String, String> record : records) {
-                    //System.out.println(record);
-                    System.out.println("Got Message: " + record.value());
                     for (ConsumerListener listener : this.listeners) {
                         listener.onReceiveMessage(record.value());
                     }
@@ -132,12 +139,9 @@ public class KafkaMessageConsumer implements Runnable{
         final List<KafkaMessageConsumer> consumers = new ArrayList<>();
 
         for (int i = 0; i < numConsumers; i++) {
-            System.out.println("Adding consumer");
             KafkaMessageConsumer consumer = new KafkaMessageConsumer(i);
             consumers.add(consumer);
-            System.out.println("Submitting consumer");
             executor.submit(consumer);
-            System.out.println("After Submitting consumer");
         }
 
     }//main
