@@ -25,21 +25,15 @@ import com.mdp.consumer.StreamingConsumer;
 
 public class StreamingClient{
 
-	private String username;
-    private String password;
-    private String database;
     private String dbName;
-    private String measurementName;
+		private String series;
     private InfluxDB influxDB;
     ConsumerListener listener;
 
-    public StreamingClient(String username, String password, String database, String dbName, String measurementName){
-    	this.username = username;
-        this.password = password;
-        this.database = database;
-        this.dbName = dbName;
-        this.measurementName = measurementName;
-        this.influxDB = InfluxDBFactory.connect(database, username, password);
-        this.listener = new StreamingConsumer(this.influxDB, dbName, measurementName);
+    public StreamingClient(InfluxDB influxIn, String dbNameIn, String seriesIn){
+    		this.influxDB = influxIn;
+				this.dbName = dbNameIn;
+				this.series = seriesIn;
+				this.listener = new StreamingConsumer(this.influxDB, this.dbName, this.series);
     }
 }

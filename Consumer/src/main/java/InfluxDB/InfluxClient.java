@@ -25,21 +25,15 @@ import com.mdp.consumer.InfluxConsumer;
 
 public class InfluxClient{
 
-	private String username;
-    private String password;
-    private String database;
     private String dbName;
-    private String measurementName;
+    private String series;
     private InfluxDB influxDB;
     ConsumerListener listener;
 
-    public InfluxClient(String username, String password, String database, String dbName, String measurementName){
-    	this.username = username;
-        this.password = password;
-        this.database = database;
-        this.dbName = dbName;
-        this.measurementName = measurementName;
-        this.influxDB = InfluxDBFactory.connect(database, username, password);
-        this.listener = new InfluxConsumer(this.influxDB, dbName, measurementName);
+    public InfluxClient(InfluxDB influxIn, String dbNameIn, String seriesIn){
+        this.dbName = dbNameIn;
+        this.series = seriesIn;
+        this.influxDB = influxIn;
+        this.listener = new InfluxConsumer(this.influxDB, this.dbName, this.series);
     }
 }

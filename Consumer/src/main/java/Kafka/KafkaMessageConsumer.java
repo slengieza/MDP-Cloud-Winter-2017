@@ -18,6 +18,18 @@ import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.influxdb.InfluxDB;
+import org.influxdb.InfluxDB.ConsistencyLevel;
+import org.influxdb.InfluxDBFactory;
+import org.influxdb.dto.BatchPoints;
+
+import org.influxdb.dto.Point;
+import org.influxdb.dto.Pong;
+import org.influxdb.dto.Query;
+import org.influxdb.dto.QueryResult;
+import org.influxdb.dto.QueryResult.Result;
+import org.influxdb.dto.QueryResult.Series;
+
 import com.mdp.consumer.ConsumerListener;
 import com.mdp.consumer.InfluxClient;
 import com.mdp.consumer.StreamingClient;
@@ -37,8 +49,8 @@ public class KafkaMessageConsumer implements Runnable{
     private String database = "https://migsae-influx.arc-ts.umich.edu:8086";
     //private String database = "https://localhost:8086";
     private String dbName = "test";
-    private String continuousDataTable = "test1";
-    private String cycleTimeTable = "CycleTimes";
+    private String series;
+    private InfluxDB influxDB;
 
     public KafkaMessageConsumer(int id){
         this.id = id;
@@ -53,6 +65,9 @@ public class KafkaMessageConsumer implements Runnable{
         props.put("key.deserializer", StringDeserializer.class.getName());
         props.put("value.deserializer", StringDeserializer.class.getName());
         this.consumer = new KafkaConsumer<>(props);
+        this.influxDB = new InfluxDBFactory.connect(database, username, password);
+        // public InfluxConsumer(InfluxDB influxdb, String dbName, String seriesIn)
+        // public InfluxClient(InfluxDB influxIn, String dbNameIn, String seriesIn)
 
         InfluxClient influx_client = new InfluxClient(username, password, database, dbName, continuousDataTable);
         StreamingClient streaming_client = new StreamingClient(username, password, database, dbName, cycleTimeTable);
@@ -61,6 +76,66 @@ public class KafkaMessageConsumer implements Runnable{
         this.listeners.add((ConsumerListener)influx_client.listener);
         this.listeners.add((ConsumerListener)streaming_client.listener);
     }
+
+
+private int seriesSelect(){
+  Scanner scans = new Scanner(System.in);
+  //****** GO TO HERE ******
+  System.out.println("Current Series :");
+  /*
+  Query query = new Query(queryString, dbName); X
+  QueryResult result = influxDB.query(query); X
+  List<List<Object>> values = result.getResults().get(0).getSeries().get(0).getValues();
+  */
+  Query seriesQuery = new Query("SHOW SERIES", "test");
+  QueryResult seriesResult = this.influxDB.query(seriesQuery);
+  List<List<Object>> values = seriesResult.getResults().get(0).getSeries().get(0).getValues();
+  for(String db : current_databases){
+    System.out.println(db);
+  }
+  System.out.println("--------------------------------------------------");
+  System.out.print("Please enter which database you'd like to use : ");
+  String dbNameIn = scans.nextLine();
+  // Replace any Quotation Marks
+  dbNameIn = dbNameIn.replace('\"', '');
+  dbNameIn = dbNameIn.replace('\'', '');
+  if(influxIn.databaseExists(dbNameIn)){
+      String ins = "";
+      do{
+        System.out.println("Press Y to add onto the existing database, or Press N to delete all previous values from this database.");
+        ins = scans.nextLine();
+      }while(!(ins.toLowerCase().equals("y") || ins.toLowerCase().equals("n") || ins.toLowerCase().equals("yes") || ins.toLowerCase().equals("no")))
+      if(ins.toLowerCase.equals("y") || ins.toLowerCase.equals("yes")){
+        this.dbName = dbNameIn;
+      }
+      else{
+        System.out.println("Continuing will permanently delete previous data. Do you wish to continue? <Y, N>");
+        ins = scans.nextLine();
+        while(!(ins.toLowerCase().equals("y") || ins.toLowerCase().equals("n") || ins.toLowerCase().equals("yes") || ins.toLowerCase().equals("no"))){
+          System.out.println("Please press Y to delete previous data, or N to go back.");
+          ins = scans.nextLine();
+        }
+        if(ins.toLowerCase.equals("y") || ins.toLowerCase.equals("yes")){
+          this.dbName = dbNameIn;
+          influxIn.deleteDatabase(dbName);
+          influxIn.createDatabase(dbName);
+        }
+        else{
+          return 0;
+        }
+      }
+  }
+  else{
+    influxDB.createDatabase(dbNameIn);
+    this.dbName = dbNameIn;
+  }
+  InfluxClient influx_client = new InfluxClient(influxDB, dbName);
+  StreamingClient streaming_client = new StreamingClient(influxDB, dbName);
+  this.listeners = new ArrayList<ConsumerListener>();
+  this.listeners.add((ConsumerListener)influx_client.listener);
+  this.listeners.add((ConsumerListener)streaming_client.listener);
+  return 1;
+}
 
     @Override
     public void run() {
@@ -95,14 +170,11 @@ public class KafkaMessageConsumer implements Runnable{
     }
 
     public static void main(String[] args) {
-
-
         int numConsumers = 1;
-        String groupId = "1";
-        // List<String> topics = Arrays.asList("test_schema");
-        ExecutorService executor = Executors.newFixedThreadPool(numConsumers);
 
+        ExecutorService executor = Executors.newFixedThreadPool(numConsumers);
         final List<KafkaMessageConsumer> consumers = new ArrayList<>();
+
         for (int i = 0; i < numConsumers; i++) {
             System.out.println("Adding consumer");
             KafkaMessageConsumer consumer = new KafkaMessageConsumer(i);
@@ -114,145 +186,3 @@ public class KafkaMessageConsumer implements Runnable{
 
     }//main
 }
-
-// public class KafkaMessageConsumer {
-
-//     // private ConsumerConnector consumer;
-
-//     private String topic;
-
-//     private KafkaConsumer<String, String> consumer;
-//     private ExecutorService executor;
-
-//     private int threads;
-//     private List<ConsumerListener> listeners;
-
-//     public KafkaMessageConsumer(String zookeeper, String groupId, String topic, int threads, List<ConsumerListener> listeners) {
-//         Properties props = new Properties();
-//         props.put("zookeeper.connect", zookeeper);
-//         props.put("group.id", groupId);
-//         props.put("zookeeper.session.timeout.ms", "10000");//400
-//         props.put("zookeeper.sync.time.ms", "10000");//200
-//         props.put("auto.commit.interval.ms", "1000");
-//         props.put("key.deserializer", StringDeserializer.class.getName());
-//         props.put("value.deserializer", StringDeserializer.class.getName());
-//         this.consumer = new KafkaConsumer<>(props);
-//         this.topic = topic;
-//         this.threads = threads;
-//         this.listeners = listeners;
-//     }
-
-//     private class MessageConsumer implements Runnable {
-//         private KafkaStreams stream;
-//         private int threadNumber;
-//         private List<ConsumerListener> listeners;
-
-//         public MessageConsumer(KafkaStreams stream, int threadNumber, List<ConsumerListener> listeners) {
-//             this.stream = stream;
-//             this.threadNumber = threadNumber;
-//             this.listeners = listeners;
-//         }
-
-//         @Override
-//         public void run() {
-//             try {
-//                 consumer.subscribe(topics);
-
-//                 while (true) {
-//                     ConsumerRecords<String, String> records = consumer.poll(10000.0);
-//                     for (ConsumerRecord<String, String> record : records) {
-//                         System.out.println(this.id + ": " + record.value());
-//                         for (ConsumerListener listener : this.listeners) {
-//                             listener.onReceiveMessage(record.value());
-//                         }
-//                     }
-//                 }
-//             }
-//             catch (WakeupException e) {
-//               // ignore for shutdown
-//             }
-//             finally {
-//                 consumer.close();
-//             }
-//         }
-
-//         public void shutdown() {
-//             consumer.wakeup();
-//         }
-//     }
-//     public static void main(String[] args) {
-//         String zookeeper = "migsae-kafka.aura.arc-ts.umich.edu:2181/kafka";
-//         String groupId = "1";
-//         String topic = "test2";
-//         String username = "cloud_data";
-//         String password = "2016SummerProj";
-//         String database = "https://migsae-influx.arc-ts.umich.edu:8086";
-//         String dbName = "test";
-//         String continuousDataTable = "TrainingData_3_6_2017";
-//         String cycleTimeTable = "CycleTimes";
-//         int threads = 1;
-
-//         InfluxClient influx_client = new InfluxClient(username, password, database, dbName, continuousDataTable);
-//         StreamingClient streaming_client = new StreamingClient(username, password, database, dbName, cycleTimeTable);
-//         // HadoopClient hadoop_client = new HadoopClient();
-
-//         List<ConsumerListener> listeners = new ArrayList<ConsumerListener>();
-//         listeners.add((ConsumerListener)influx_client.listener);
-//         listeners.add((ConsumerListener)streaming_client.listener);
-//         // listeners.add((ConsumerListener)hadoop_client.listener);
-
-//         KafkaMessageConsumer consumer = new KafkaMessageConsumer(zookeeper, groupId, topic, threads, listeners);
-
-//         int numConsumers = 1;
-//         String groupId = "1"
-//         List<String> topics = Arrays.asList("test1");
-//         ExecutorService executor = Executors.newFixedThreadPool(numConsumers);
-
-//         final List<ConsumerLoop> consumers = new ArrayList<>();
-//         for (int i = 0; i < numConsumers; i++) {
-//             ConsumerLoop consumer = new ConsumerLoop(i, groupId, topics);
-//             consumers.add(consumer);
-//             executor.submit(consumer);
-//         }
-
-
-
-//         Map<String, Integer> topicCountMap = new HashMap<String, Integer>();
-//         topicCountMap.put(topic, new Integer(this.threads));
-//         Map<String, List<KafkaStreams<byte[], byte[]>>> consumerMap = consumer.createMessageStreams(topicCountMap);
-//         List<KafkaStream<byte[], byte[]>> streams = consumerMap.get(topic);
-
-//         // launch all the threads
-//         executor = Executors.newFixedThreadPool(this.threads);
-
-//         // create an object to consume the messages
-//         int threadNumber = 0;
-//         System.out.println(streams.size());
-//         for (final KafkaStream stream : streams) {
-//             executor.submit(new MessageConsumer(stream, threadNumber, this.listeners));
-//             threadNumber++;
-//         }
-
-//         Runtime.getRuntime().addShutdownHook(new Thread() {
-//             @Override
-//             public void run() {
-//                 for (ConsumerLoop consumer : consumers) {
-//                     consumer.shutdown();
-//                 }
-//                 executor.shutdown();
-//                 try {
-//                     executor.awaitTermination(5000, TimeUnit.MILLISECONDS);
-//                 } catch (InterruptedException e) {
-//                     e.printStackTrace();
-//                 }
-//             }
-//         });
-//     }
-
-//     public void stop(){
-//         for (ConsumerListener listener : this.listeners) {
-//             listener.onShutdown();
-//         }
-//         this.shutdown();
-//     }
-// }
