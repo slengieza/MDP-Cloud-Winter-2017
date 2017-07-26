@@ -30,6 +30,15 @@ public class InfluxReader {
 
     public InfluxReader(InfluxDB influxdb){
         this.influxDB = influxdb;
+        System.out.println("Enter your database From The Following : ");
+        List<String> databases = this.influxDB.describeDatabases();
+        for(String db : databases){
+          System.out.println(db);
+        }
+        System.out.println("------------------");
+        Scanner scans = new Scanner(System.in);
+        String dbNameIn = scans.nextLine();
+        this.dbName = dbNameIn;
     }
 
     public InfluxReader(String username, String password, String database){

@@ -46,7 +46,7 @@ public class InfluxClient{
     private InfluxDB influxDB;
     private InfluxReader reader;
 
-    public InfluxClient(String username, String password, String database, String dbName){
+    public InfluxClient(String username, String password, String database){
         this.username = username;
         this.password = password;
         this.database = database;
@@ -61,28 +61,18 @@ public class InfluxClient{
         String username = "hkardos";
         String password = "Migffn##567";
         String database = "https://migsae-influx.arc-ts.umich.edu:8086";
-        String dbName = "test";
         int threads = 1;
 
-        InfluxClient client = new InfluxClient(username, password, database, dbName);
+        InfluxClient client = new InfluxClient(username, password, database);
 
         while(true){
             //  prompt for the method and get input
             Scanner scanner = new Scanner(System.in);
-            System.out.print("Enter your method (query/quit): ");
-            String method = scanner.next();
-            if(method.equals("quit") || method.equals("q")){
-                break;
+            System.out.print("Please Enter Your Query : ");
+            String query = scanner.nextLine();
+            if(query.toLowerCase().equals("quit") || query.toLowerCase().equals("q")){
+              break;
             }
-            System.out.print("Please enter your Query: ");
-            String query = "";
-            String word = scanner.next();
-            while(!word.endsWith(";")){
-                query += word + " ";
-                word = scanner.next();
-            }
-            query += word + " ";
-
             System.out.println("Executing " + query);
             client.reader.execute(query);
         }
