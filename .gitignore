@@ -6,3 +6,4 @@ kafka-0.8.2.1-src/
 Consumer/log.out
 nssm-2.24/
 wrapper-windows-x86-32-3.5.30-st
+*.csv
