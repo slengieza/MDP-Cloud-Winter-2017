@@ -1,18 +1,16 @@
-package com.mdp.hadoop;
-  /**
-   *
-   *  Import Packages
-   *
-   **/
+package hadoop;
+
 import java.io.*;
 import java.lang.*;
 import java.util.*;
 
 import org.influxdb.*;
+import org.influxdb.impl.*;
+import org.influxdb.dto.*;
 
-import com.mdp.hadoop.HadoopWriteClient;
+import hadoop.HadoopWriteClient;
 
-public class HadoopClient {
+public class HadoopClient{
 
     private String username = "hkardos";
     private String password = "Migffn##567";
@@ -22,27 +20,30 @@ public class HadoopClient {
     private String series = "";
     private InfluxDB influxdb;
 
+    public HadoopClient(){
+        this.influxdb = InfluxDBFactory.connect(this.database, this.username, this.password);
+        this.method = HadoopMethod(); // Determine how much data we want to write to Hadoop (all or just one series)
+        //HadoopWriter();
+    }
+
    /**
     * Hadoop Writer, steers our flow between either writing to Hadoopa specific
     * series, or writing entire contents of our InfluxDB database
     **/
-    public HadoopWriter(){
-        // Connect to our InfluxDB database, where we will pull data from
-        this.influxdb = InfluxDBFactory.connect(this.database, this.username, this.password);
-        HadoopMethod(); // Determine how much data we want to write to Hadoop (all or just one series)
+    private void HadoopWriter(){
         if(this.method.equals("series")){
             seriesSelect();
-            HadoopWriteClient(this.influxdb, this.series); // Partial write constructor
+            HadoopWriteClient h1 = new HadoopWriteClient(this.influxdb, this.series); // Partial write constructor
         }
         else if (this.method.equals("all")) {
-            HadoopWriteClient(this.influxdb); // Full write constructor
+            HadoopWriteClient h2 = new HadoopWriteClient(this.influxdb); // Full write constructor
         }
     }
 
   /**
    *  TODO: Querying from Hadoop
    **/
-    public HadoopReader(){
+    private void HadoopReader(){
 
     }
 
@@ -54,9 +55,9 @@ public class HadoopClient {
         Scanner scans = new Scanner(System.in);
         System.out.println("Current Series :");
         Query seriesQuery = new Query("SHOW SERIES", "test"); // Returns a Query object containing all measurements (series) in database test
-        QueryResult seriesResult = this.influxDB.query(seriesQuery); // Conforming to the API
+        QueryResult seriesResult = this.influxdb.query(seriesQuery); // Conforming to the API
         List<List<Object>> values = seriesResult.getResults().get(0).getSeries().get(0).getValues();
-        List<String> seriesAvail;
+        ArrayList<String> seriesAvail = new ArrayList<String>();
         for (Object value : values) {
             System.out.println(value.toString()); // Prints out all of the different series options
             seriesAvail.add(value.toString()); // Add Possible Series to check for later
@@ -65,10 +66,10 @@ public class HadoopClient {
         System.out.print("Please enter the name of which series you'd like to add to Hadoop : ");
         String seriesNameIn = scans.nextLine();
         while(!(seriesAvail.contains(seriesNameIn))){
-          System.out.println("Invalid series entered! Please enter a valid series :")
+          System.out.println("Invalid series entered! Please enter a valid series :");
           seriesNameIn = scans.nextLine();
         }
-        this.measurement = seriesNameIn;
+        this.series = seriesNameIn;
     }
 
    /**
@@ -79,7 +80,7 @@ public class HadoopClient {
     *       3) Wipe all data from InfluxDB (USE PRODUCTION; DROP SERIES FROM *)
     * However, for testing, we want to be add specific data at will
     **/
-    private void HadoopMethod(){
+    private String HadoopMethod(){
         System.out.println("Would you like to add all available data in Influx to Hadoop, or would you like to add a specific series? Enter Y to add all data, or N to add an individual series <Y / N> :");
         Scanner scans = new Scanner(System.in);
         String methodIn = scans.next();
@@ -89,14 +90,15 @@ public class HadoopClient {
           methodIn = scans.next();
         }
         if(methodIn.equalsIgnoreCase("y")){
-          this.method = "all"; // Used to determine how much data we write to Hadoop
+          return "all"; // Used to determine how much data we write to Hadoop
         }
         else{
-          this.method = "series"; // Could've used a boolean  ¯¯\_(ツ)_/¯¯
+          return "series"; // Could've used a boolean  ¯¯\_(ツ)_/¯¯
         }
     }
 
-    public static void main(String[] args){
-        HadoopWriter();
+    public static void main(String[] args) {
+        HadoopClient writer = new HadoopClient();
+        writer.HadoopWriter();
     }
 }

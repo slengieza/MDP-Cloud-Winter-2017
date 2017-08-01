@@ -1,11 +1,23 @@
-package com.mdp.hadoop;
+package hadoop;
 
 import java.io.*;
 import java.util.*;
 import java.lang.*;
-import java.javax.json.*;
+
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import javax.json.JsonValue;
 
 import org.influxdb.*;
+import org.influxdb.impl.*;
+import org.influxdb.dto.*;
+import org.influxdb.dto.QueryResult;
+import org.influxdb.InfluxDB;
+import org.influxdb.InfluxDB.ConsistencyLevel;
+import org.influxdb.InfluxDBFactory;
+import org.influxdb.dto.BatchPoints;
 
 public class HadoopWriteClient{
     private String series = "";
@@ -23,7 +35,7 @@ public class HadoopWriteClient{
    *                The name of the series we intend to write into Hadoop
    **/
 
-    public HadoopWriteClient(InfluxBD influxIn, final String seriesIn){
+    public HadoopWriteClient(InfluxDB influxIn, final String seriesIn){
         this.influxdb = influxIn;
         this.series = seriesIn;
 
@@ -38,19 +50,19 @@ public class HadoopWriteClient{
     *                An open connection to our InfluxDB database
     **/
 
-    public HadoopWriteClient(InfluxBD influxIn){
+    public HadoopWriteClient(InfluxDB influxIn){
 
     }
 
     private void addSeriesData(final String seriesIn){
         // Select all values in our series passed in
         String queryCommand = "SELECT * FROM " + seriesIn;
-        Query queryIn = Query(queryCommand, "test");
+        Query queryIn = new Query(queryCommand, "test");
         QueryResult query = influxdb.query(queryIn);
-        List<Result> qResults = query.getResults();
-        for(Result res : qResults){
-            List<Series> seriesValues = res.getSeries();
-            for(Series ser : seriesValues){
+        List<QueryResult.Result> qResults = query.getResults();
+        for(QueryResult.Result res : qResults){
+            List<QueryResult.Series> seriesValues = res.getSeries();
+            for(QueryResult.Series ser : seriesValues){
                 System.out.println(Arrays.toString(ser.getColumns().toArray()));
                 System.out.println(Arrays.toString(ser.getValues().toArray()));
             }
