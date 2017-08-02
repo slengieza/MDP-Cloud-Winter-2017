@@ -20,7 +20,7 @@ public class HadoopClient{
     private String method = "";
     private String series = "";
     private InfluxDB influxdb;
-    private ArrayList<String> SeriesList;
+    private ArrayList<String> SeriesList = new ArrayList<String>();
 
     public HadoopClient(){
         this.influxdb = InfluxDBFactory.connect(this.database, this.username, this.password);
@@ -33,12 +33,13 @@ public class HadoopClient{
     * series, or writing entire contents of our InfluxDB database
     **/
     private void HadoopWriter(){
+        setSeriesList();
         if(this.method.equals("series")){
             seriesSelect();
             HadoopWriteClient h1 = new HadoopWriteClient(this.influxdb, this.series); // Partial write constructor
         }
         else if (this.method.equals("all")) {
-            HadoopWriteClient h2 = new HadoopWriteClient(this.influxdb); // Full write constructor
+            HadoopWriteClient h2 = new HadoopWriteClient(this.influxdb, this.SeriesList); // Full write constructor
         }
     }
 
@@ -49,6 +50,17 @@ public class HadoopClient{
 
     }
 
+    private void setSeriesList(){
+        Scanner scans = new Scanner(System.in);
+        Query seriesQuery = new Query("SHOW SERIES", "test"); // Returns a Query object containing all measurements (series) in database test
+        QueryResult seriesResult = this.influxdb.query(seriesQuery); // Conforming to the API
+        List<List<Object>> values = seriesResult.getResults().get(0).getSeries().get(0).getValues();
+        for (Object value : values) {
+            String seriesName = value.toString().replaceAll("\\[|\\]", ""); // Regex replace
+            SeriesList.add(seriesName); // Add Possible Series to check for later
+        }
+    }
+
    /**
     * During testing, we will be adding data to Hadoop ad-hoc, therefore using this
     * label it's easier to keep our Hadoop file system as we actually want it
@@ -56,24 +68,16 @@ public class HadoopClient{
     **/
     private void seriesSelect(){
         Scanner scans = new Scanner(System.in);
-        System.out.println("Current Series :");
-        Query seriesQuery = new Query("SHOW SERIES", "test"); // Returns a Query object containing all measurements (series) in database test
-        QueryResult seriesResult = this.influxdb.query(seriesQuery); // Conforming to the API
-        List<List<Object>> values = seriesResult.getResults().get(0).getSeries().get(0).getValues();
-        ArrayList<String> seriesAvail = new ArrayList<String>();
-        for (Object value : values) {
-            System.out.println(value.toString()); // Prints out all of the different series options
-            seriesAvail.add(value.toString()); // Add Possible Series to check for later
+        System.out.println("Current Series List :");
+        for (String seriesName : SeriesList) {
+            System.out.println(seriesName); // Prints out all of the different series options
         }
         System.out.println("--------------------------------------------------");
         System.out.print("Please enter the name of which series you'd like to add to Hadoop : ");
         String seriesNameIn = scans.nextLine();
-        String tempString = "[" + seriesNameIn + "]"; // Returned string is in form of: [series]
-                                                      // i.e series1 returns [series1]
-        while(!(seriesAvail.contains(tempString))){
+        while(!(SeriesList.contains(seriesNameIn))){
           System.out.println("Invalid series entered! Please enter a valid series :");
           seriesNameIn = scans.nextLine();
-          tempString = "[" + seriesNameIn + "]";
         }
         this.series = seriesNameIn;
     }

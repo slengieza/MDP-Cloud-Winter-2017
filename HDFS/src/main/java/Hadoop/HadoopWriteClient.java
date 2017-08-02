@@ -20,9 +20,9 @@ import org.influxdb.dto.Query;
 import org.influxdb.InfluxDB;
 
 public class HadoopWriteClient{
-    private String series = "";
     private InfluxDB influxdb;
     private ArrayList<JSONObject> WriteData = new ArrayList<JSONObject>();
+    private ArrayList<String> SeriesList = new ArrayList<String>();
 
   /**
    * This initializer is called from HadoopWriter in HadoopClient, if the option
@@ -36,8 +36,7 @@ public class HadoopWriteClient{
    **/
     public HadoopWriteClient(InfluxDB influxIn, final String seriesIn){
         this.influxdb = influxIn;
-        this.series = seriesIn;
-        addSeriesData(this.series);
+        addSeriesData(seriesIn);
         writeToHadoop();
     }
 
@@ -48,8 +47,16 @@ public class HadoopWriteClient{
     * @param influxIn
     *                An open connection to our InfluxDB database
     **/
-    public HadoopWriteClient(InfluxDB influxIn){
-
+    public HadoopWriteClient(InfluxDB influxIn, ArrayList<String> seriesListIn){
+        this.influxdb = influxIn;
+        this.SeriesList = seriesListIn;
+        for(String series : SeriesList){
+            addSeriesData(series);
+        }
+        writeToHadoop();
+        for(JSONObject json : WriteData){
+            System.out.println(json.toString(2));
+        }
     }
 
    /**
@@ -73,7 +80,7 @@ public class HadoopWriteClient{
                 // getColumns returns the labels for our JSON, and getValues returns the values
                 List<String> JsonKeys = ser.getColumns();
                 List<List<Object>> JsonVals = ser.getValues();
-                csvToJson(JsonKeys, JsonVals); // Call our function which contains a list of JSON Objects
+                csvToJson(JsonKeys, JsonVals, seriesIn); // Call our function which contains a list of JSON Objects
             }
         }
     }
@@ -88,14 +95,11 @@ public class HadoopWriteClient{
     * @param values
     *                The list of values associated with the different keys
     **/
-    private void csvToJson(List<String> keys, List<List<Object>> values){
+    private void csvToJson(List<String> keys, List<List<Object>> values, String seriesIn){
         int i = 0;
         while(i < values.size()){ // Each line is one point -> while{...} is for each line in series
-            pointToJSON(keys, values.get(i));
+            pointToJSON(keys, values.get(i), seriesIn);
             i++;
-        }
-        for(JSONObject json : WriteData){
-            System.out.println(json.toString(2));
         }
     }
 
@@ -112,11 +116,12 @@ public class HadoopWriteClient{
     * @return
     *                Returns the fully built JSON Objects
     **/
-    private void pointToJSON(List<String> keys, List<Object> values){
+    private void pointToJSON(List<String> keys, List<Object> values, String seriesIn){
         JSONObject point = new JSONObject(); // JSONObject to be added to; in the form
                                             // {"Timestamp":timestamp,
                                             //  "Values": ["Measuremnt":measurement value, ...]}
         point.put("Timestamp", rfc3339ToEpoch(values.get(0).toString())); // Add Timestamp
+        point.put("Series", seriesIn); // Add Series Information
         int i = 1; // Start at measurement after timestamp for second JSONObject
         JSONObject vals = new JSONObject(); // Make a second JSONObject, associated with Values
         while(i < values.size()){
@@ -148,7 +153,7 @@ public class HadoopWriteClient{
         Date dat = calends.getTime(); // Conform to interface
         // Milliseconds are important for our tests, so we must account for them accurately
         int milliseconds = 0;
-        if(splits[6].length() == 0){} // Don't need to add milliseconds
+        if(splits.length == 6){} // Don't need to add milliseconds
         else{ // Fix magnitude of value of milliseconds (i.e. if milliseconds is 100, the value of splits[6] is 1; if milliseconds is 10 then splits[6] is 01)
             if(splits[6].length() == 1){
                 milliseconds = Integer.parseInt(splits[6]) * 100;
@@ -167,7 +172,7 @@ public class HadoopWriteClient{
     }
 
     private void writeToHadoop(){
-        
+
     }
 
 
