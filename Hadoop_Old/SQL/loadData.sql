@@ -1,0 +1,1 @@
+LOAD DATA INPATH 'data/data.dat' OVERWRITE INTO TABLE OldValues;
