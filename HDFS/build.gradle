@@ -11,11 +11,9 @@ repositories {
 
 
 dependencies {
-    testCompile 'junit:junit:4.12'
+    compile 'org.apache.hadoop:hadoop-client:2.6.0'
     compile group: 'org.json', name: 'json', version: '20160810'
     compile group: 'org.clapper', name: 'javautil', version: '3.1.1'
-    compile 'org.apache.hadoop:hadoop-client:2.6.0'
-    compile group: 'org.apache.spark', name: 'spark-core_2.10', version: '1.6.2'
     compile group: 'org.influxdb', name: 'influxdb-java', version: '2.2'
 }
 

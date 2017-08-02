@@ -34,7 +34,6 @@ import org.influxdb.dto.QueryResult.Series;
 import com.mdp.consumer.ConsumerListener;
 import com.mdp.consumer.InfluxClient;
 import com.mdp.consumer.StreamingClient;
-import com.mdp.consumer.HadoopClient;
 
 
 

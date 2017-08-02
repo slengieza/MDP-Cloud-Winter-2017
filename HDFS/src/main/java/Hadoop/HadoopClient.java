@@ -4,9 +4,10 @@ import java.io.*;
 import java.lang.*;
 import java.util.*;
 
-import org.influxdb.*;
-import org.influxdb.impl.*;
-import org.influxdb.dto.*;
+import org.influxdb.dto.QueryResult;
+import org.influxdb.dto.Query;
+import org.influxdb.InfluxDB;
+import org.influxdb.InfluxDBFactory;
 
 import com.mdp.hdfs.HadoopWriteClient;
 
@@ -19,6 +20,7 @@ public class HadoopClient{
     private String method = "";
     private String series = "";
     private InfluxDB influxdb;
+    private ArrayList<String> SeriesList;
 
     public HadoopClient(){
         this.influxdb = InfluxDBFactory.connect(this.database, this.username, this.password);
@@ -50,6 +52,7 @@ public class HadoopClient{
    /**
     * During testing, we will be adding data to Hadoop ad-hoc, therefore using this
     * label it's easier to keep our Hadoop file system as we actually want it
+    * NOTE: Must be running UMVPN to be able to access InfluxDB
     **/
     private void seriesSelect(){
         Scanner scans = new Scanner(System.in);
@@ -82,6 +85,8 @@ public class HadoopClient{
     *       2) Write all data from InfluxDB to Hadoop
     *       3) Wipe all data from InfluxDB (USE PRODUCTION; DROP SERIES FROM *)
     * However, for testing, we want to be add specific data at will
+    * @return
+    *                The specific method we choose for this run (i.e. send all data or partial)
     **/
     private String HadoopMethod(){
         System.out.println("Would you like to add all available data in Influx to Hadoop, or would you like to add a specific series? Enter Y to add all data, or N to add an individual series <Y / N> :");
@@ -113,46 +118,3 @@ public class HadoopClient{
         writer.HadoopWriter();
     }
 }
-
-/**
-apply plugin: 'java'
-apply plugin: 'application'
-
-mainClassName = 'com.mdp.hdfs.HadoopClient'
-
-repositories {
-    mavenCentral()
-    maven { url 'http://maven.clapper.org/' }
-    jcenter()
-}
-
-
-dependencies {
-    testCompile 'junit:junit:4.12'
-    compile group: 'org.json', name: 'json', version: '20160810'
-    compile group: 'org.clapper', name: 'javautil', version: '3.1.1'
-    compile 'org.apache.hadoop:hadoop-client:2.6.0'
-    compile group: 'org.apache.spark', name: 'spark-core_2.10', version: '1.6.2'
-    compile group: 'org.influxdb', name: 'influxdb-java', version: '2.2'
-}
-
-jar {
-	zip64 = true
-    from {
-        configurations.compile.collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
-        configurations.runtime.collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
-    }
-    {
-        exclude "META-INF/*.SF"
-        exclude "META-INF/*.DSA"
-        exclude "META-INF/*.RSA"
-    }
-    manifest {
-        attributes 'Main-Class': 'com.mdp.hdfs.HadoopClient'
-    }
-}
-**/

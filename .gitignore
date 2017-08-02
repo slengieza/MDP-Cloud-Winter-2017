@@ -1,3 +1,5 @@
+.gitignore
+quickDrop.py
 data_backup/
 .gradle/
 *.DS_Store

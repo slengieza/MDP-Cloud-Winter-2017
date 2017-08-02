@@ -1,24 +1,28 @@
 package com.mdp.hdfs;
 
-import java.io.*;
-import java.util.*;
-import java.lang.*;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
+
+import java.lang.Integer;
+import java.lang.Long;
+import java.lang.Math;
+import java.lang.String;
 
 import org.json.JSONObject;
 
-import org.influxdb.*;
-import org.influxdb.impl.*;
-import org.influxdb.dto.*;
 import org.influxdb.dto.QueryResult;
+import org.influxdb.dto.Query;
 import org.influxdb.InfluxDB;
-import org.influxdb.InfluxDB.ConsistencyLevel;
-import org.influxdb.InfluxDBFactory;
-import org.influxdb.dto.BatchPoints;
 
 public class HadoopWriteClient{
     private String series = "";
     private InfluxDB influxdb;
-    //private List<JSONObject> WriteData;
+    private ArrayList<JSONObject> WriteData = new ArrayList<JSONObject>();
 
   /**
    * This initializer is called from HadoopWriter in HadoopClient, if the option
@@ -34,7 +38,7 @@ public class HadoopWriteClient{
         this.influxdb = influxIn;
         this.series = seriesIn;
         addSeriesData(this.series);
-
+        writeToHadoop();
     }
 
    /**
@@ -63,7 +67,8 @@ public class HadoopWriteClient{
         QueryResult query = influxdb.query(queryIn); // Bunch of different steps, it really should be easier
         List<QueryResult.Result> qResults = query.getResults(); // Really? But this will return only one result
         for(QueryResult.Result res : qResults){
-            List<QueryResult.Series> seriesValues = res.getSeries(); // This will return only one series, as a result of how we set up our addSeriesData method
+            // This will return only one series, as a result of how we set up our addSeriesData method
+            List<QueryResult.Series> seriesValues = res.getSeries();
             for(QueryResult.Series ser : seriesValues){
                 // getColumns returns the labels for our JSON, and getValues returns the values
                 List<String> JsonKeys = ser.getColumns();
@@ -73,38 +78,96 @@ public class HadoopWriteClient{
         }
     }
 
+   /**
+    * This function takes CSV data from a series and turns it into JSON Objects;
+    * Each JSON Object represents one full point in the given series
+    *
+    * @param keys
+    *                The list of different measurements (String) from a given series
+    *
+    * @param values
+    *                The list of values associated with the different keys
+    **/
     private void csvToJson(List<String> keys, List<List<Object>> values){
-        Collection<JSONObject> JSON_Objects = new ArrayList<JSONObject>();
         int i = 0;
-        System.out.println(values.size());
-        while(i < values.size()){
-            JSONObject jo = lineJson(keys, values.get(i));
-            System.out.println(jo.toString());
-            JSON_Objects.add(jo);
+        while(i < values.size()){ // Each line is one point -> while{...} is for each line in series
+            pointToJSON(keys, values.get(i));
             i++;
+        }
+        for(JSONObject json : WriteData){
+            System.out.println(json.toString(2));
         }
     }
 
-    private JSONObject lineJson(List<String> keys, List<Object> values){
-        JSONObject full = new JSONObject();
-        full.put("Timestamp", rfc3339ToEpoch(values.get(0).toString()));
-        int i = 1;
-        JSONObject vals = new JSONObject();
+   /**
+    * This function takes in the keys and values for a single point and creates
+    * a JSON Object and adds it to the collection of JSON Objects we are going
+    * to write to Hadoop
+    *
+    * @param keys
+    *                The list of different measurements (String) from series passed in
+    * @param values
+    *                The list of values associated with the different keys for this
+    *                specific point
+    * @return
+    *                Returns the fully built JSON Objects
+    **/
+    private void pointToJSON(List<String> keys, List<Object> values){
+        JSONObject point = new JSONObject(); // JSONObject to be added to; in the form
+                                            // {"Timestamp":timestamp,
+                                            //  "Values": ["Measuremnt":measurement value, ...]}
+        point.put("Timestamp", rfc3339ToEpoch(values.get(0).toString())); // Add Timestamp
+        int i = 1; // Start at measurement after timestamp for second JSONObject
+        JSONObject vals = new JSONObject(); // Make a second JSONObject, associated with Values
         while(i < values.size()){
-            vals.put(keys.get(i).toString(), (double)values.get(i));
+            vals = vals.put(keys.get(i).toString(), (double)values.get(i)); // Add all measurements and values
             i++;
         }
-        full.put("Values", vals);
-        return full;
+        point = point.put("Values", vals); // Add all measurements to this JSONObject
+        WriteData.add(point);
     }
 
+   /**
+    * This function takes in a timestamp in RFC3339 format (How InfluxDB returns
+    * data) and turns it into epoch time to the precision of milliseconds;
+    * RFC3339 is in the format: YYYY-MM-DDThh:mm:ss:nnnZ
+    *
+    *        Example: 2017-07-26T20:04:44.73Z (RFC3339) -> 1503792284730 (Epoch)
+    *
+    * @param lineIn
+    *                The timestamp in RFC3339 format passed in from PointToJSON
+    *
+    * @return
+    *                The Epoch time with precision in milliseconds of time passed in
+    **/
     private Long rfc3339ToEpoch(String lineIn){
-        String[] splits = lineIn.replaceAll("-|T|Z|:|\\.", " ").split(" ");
-        Calendar calends = Calendar.getInstance();
+        String[] splits = lineIn.replaceAll("-|T|Z|:|\\.", " ").split(" "); // Regex for removing unnecessary characters
+        Calendar calends = Calendar.getInstance(); // Java Interface for time
+        // Splits[0] -> Year; Splits[1] -> Month; Splits[2] -> Day; Splits[3] -> Hours (24 Hour Format); Splits[4] -> Minutes; Splits[5] -> Seconds; Splits[6] -> milliseconds
         calends.set(Integer.parseInt(splits[0]), Integer.parseInt(splits[1]), Integer.parseInt(splits[2]), Integer.parseInt(splits[3]), Integer.parseInt(splits[4]), Integer.parseInt(splits[5]));
-        Date dat = calends.getTime();
-        Long epochTime = dat.getTime() + Long.parseLong(splits[6]);
+        Date dat = calends.getTime(); // Conform to interface
+        // Milliseconds are important for our tests, so we must account for them accurately
+        int milliseconds = 0;
+        if(splits[6].length() == 0){} // Don't need to add milliseconds
+        else{ // Fix magnitude of value of milliseconds (i.e. if milliseconds is 100, the value of splits[6] is 1; if milliseconds is 10 then splits[6] is 01)
+            if(splits[6].length() == 1){
+                milliseconds = Integer.parseInt(splits[6]) * 100;
+            }
+            else{
+                if(splits[6].length() == 2){
+                    milliseconds = Integer.parseInt(splits[6]) * 10;
+                }
+                else{
+                    milliseconds = Integer.parseInt(splits[6]);
+                }
+            }
+        }
+        Long epochTime = ((Long)dat.getTime() - ((Long)dat.getTime() % 1000) /* Subtract off error*/ ) + milliseconds;
         return epochTime;
+    }
+
+    private void writeToHadoop(){
+        
     }
 
 
