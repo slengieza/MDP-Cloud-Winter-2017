@@ -113,8 +113,6 @@ public class HadoopWriteClient{
     * @param values
     *                The list of values associated with the different keys for this
     *                specific point
-    * @return
-    *                Returns the fully built JSON Objects
     **/
     private void pointToJSON(List<String> keys, List<Object> values, String seriesIn){
         JSONObject point = new JSONObject(); // JSONObject to be added to; in the form
@@ -153,7 +151,7 @@ public class HadoopWriteClient{
         Date dat = calends.getTime(); // Conform to interface
         // Milliseconds are important for our tests, so we must account for them accurately
         int milliseconds = 0;
-        if(splits.length == 6){} // Don't need to add milliseconds
+        if(splits.lengthtat == 6){} // Don't need to add milliseconds
         else{ // Fix magnitude of value of milliseconds (i.e. if milliseconds is 100, the value of splits[6] is 1; if milliseconds is 10 then splits[6] is 01)
             if(splits[6].length() == 1){
                 milliseconds = Integer.parseInt(splits[6]) * 100;
