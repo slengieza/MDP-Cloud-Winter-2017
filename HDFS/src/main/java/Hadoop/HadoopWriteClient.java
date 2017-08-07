@@ -187,6 +187,20 @@ public class HadoopWriteClient{
             Path pathToFile = Paths.get(System.getProperty("user.dir"), "files", jo.get("Series") + ".txt");
             String s = jo.toString()+ "\n";
             Charset charset = Charset.forName("US-ASCII");
+            String testFile = "test -e " + pathToFile.toString();
+            String touchFile = "touch ./files/" + jo.get("Series") + ".txt";
+            try{
+                Process testing = Runtime.getRuntime().exec(testFile);
+                testing.waitFor();
+                int returnVal = testing.exitValue();
+                if(returnVal != 0){
+                    Process touch = Runtime.getRuntime().exec(touchFile);
+                    touch.waitFor();
+                }
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
             try (BufferedWriter writer = Files.newBufferedWriter(pathToFile, charset, CREATE, APPEND)) {
                 writer.write(s, 0, s.length());
             } catch (IOException x) {
