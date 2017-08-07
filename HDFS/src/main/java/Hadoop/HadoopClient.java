@@ -25,7 +25,6 @@ public class HadoopClient{
     public HadoopClient(){
         this.influxdb = InfluxDBFactory.connect(this.database, this.username, this.password);
         this.method = HadoopMethod(); // Determine how much data we want to write to Hadoop (all or just one series)
-        //HadoopWriter();
     }
 
    /**

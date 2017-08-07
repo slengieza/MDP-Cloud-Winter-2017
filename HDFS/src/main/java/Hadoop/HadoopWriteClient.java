@@ -26,6 +26,8 @@ import org.influxdb.dto.QueryResult;
 import org.influxdb.dto.Query;
 import org.influxdb.InfluxDB;
 
+
+
 public class HadoopWriteClient{
     private InfluxDB influxdb;
     private ArrayList<JSONObject> WriteData = new ArrayList<JSONObject>();
@@ -183,17 +185,24 @@ public class HadoopWriteClient{
    * Hadoop directly
    **/
     private void writeToFile(){
+        // Take Each JSON Object and add them to a temporary local file based on Series
         for(JSONObject jo : WriteData){
+            // Path Object -> from root to our new file
             Path pathToFile = Paths.get(System.getProperty("user.dir"), "files", jo.get("Series") + ".txt");
+            // Full JSON Object in string
             String s = jo.toString()+ "\n";
             Charset charset = Charset.forName("US-ASCII");
+            // Test if file exists yet
             String testFile = "test -e " + pathToFile.toString();
+            // Touch it if it doesn't
             String touchFile = "touch " + pathToFile.toString();
             try{
                 Process testing = Runtime.getRuntime().exec(testFile);
                 testing.waitFor();
+                // Return 0 on success (file exists)
                 int returnVal = testing.exitValue();
                 if(returnVal != 0){
+                    // File doesn't exist -> we touch it to create it
                     Process touch = Runtime.getRuntime().exec(touchFile);
                     touch.waitFor();
                 }
@@ -201,6 +210,7 @@ public class HadoopWriteClient{
             catch (Exception e){
                 e.printStackTrace();
             }
+            // Now Open file and write JSON Object to the end
             try (BufferedWriter writer = Files.newBufferedWriter(pathToFile, charset, CREATE, APPEND)) {
                 writer.write(s, 0, s.length());
             } catch (IOException x) {
@@ -209,39 +219,60 @@ public class HadoopWriteClient{
         }
     }
 
+  /**
+   * This function takes our local files that we created in writeToFile and copies
+   * them to our HDFS instance, and then deletes the local files
+   *
+   * TODO: Testing for speed, whether we want to write directly to Hadoop instead
+   *       of making a temporary local file; Hadoop is slow on writes, so it may
+   *       be worth it to continue doing it this way, but we can decide on that
+   *       later
+   **/
     private void fileToHadoop(){
+        // Creates an File object that points to our temporary files
         File folder = new File(System.getProperty("user.dir") + "/files/");
+        // List of temporary files, contains pointers to file with full file path, from root
         File [] listOfFiles = folder.listFiles();
+        // Path in string form for all our temp files
         ArrayList<String> files = new ArrayList<String>();
         for(int i = 0; i < listOfFiles.length; ++i){
+            // Hadoop method to copy files from local library to HDFS
             String addToHadoop = "hdfs dfs -put " + listOfFiles[i].toString() + " /user/hkardos/" + listOfFiles[i].getName();
+            // Touch a file if it doesn't exist
             String touchFile = "hdfs dfs -touchz /user/hkardos/" + listOfFiles[i].getName();
+            // Test if a file exists
             String testFile = "hdfs dfs -test -e /user/hkardos/"+ listOfFiles[i].getName();
             try{
+                // Test if file exists
                 Process testing = Runtime.getRuntime().exec(testFile);
+                // Make sure the process terminates before we move on
                 testing.waitFor();
+                // Return value = 0 if file exists (unlikely)
                 int returnVal = testing.exitValue();
                 if(returnVal != 0){
+                    // Touch to avoid a NoSuchFileException
                     Process touch = Runtime.getRuntime().exec(touchFile);
                     touch.waitFor();
                 }
+                // Move local data to Hadoop
                 Process moveToHadoop = Runtime.getRuntime().exec(addToHadoop);
             }
-            catch (Exception e){
+            catch (Exception e){ // Exception
                 e.printStackTrace();
             }
+            // Add the path to the file so we can remove in next for loop
             files.add(listOfFiles[i].toString());
         }
+        // Removes local files
         for(int i = 0; i < files.size(); ++i){
             String removeLocal = "rm " + files.get(i);
             try{
                 Process remove = Runtime.getRuntime().exec(removeLocal);
             }
-            catch (Exception e){
+            catch (Exception e){ // If we somehow had multiple of the same file, this'll catch that
                 e.printStackTrace();
             }
         }
-
     }
 
 
