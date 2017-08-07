@@ -13,6 +13,11 @@ import java.lang.Long;
 import java.lang.Math;
 import java.lang.String;
 
+import java.nio.file.*;
+import java.nio.charset.Charset;
+import java.io.*;
+import static java.nio.file.StandardOpenOption.*;
+
 import org.json.JSONObject;
 
 import org.influxdb.dto.QueryResult;
@@ -37,7 +42,8 @@ public class HadoopWriteClient{
     public HadoopWriteClient(InfluxDB influxIn, final String seriesIn){
         this.influxdb = influxIn;
         addSeriesData(seriesIn);
-        writeToHadoop();
+        writeToFile();
+        fileToHadoop();
     }
 
    /**
@@ -53,10 +59,8 @@ public class HadoopWriteClient{
         for(String series : SeriesList){
             addSeriesData(series);
         }
-        writeToHadoop();
-        for(JSONObject json : WriteData){
-            System.out.println(json.toString(2));
-        }
+        writeToFile();
+        fileToHadoop();
     }
 
    /**
@@ -169,9 +173,31 @@ public class HadoopWriteClient{
         return epochTime;
     }
 
-    private void writeToHadoop(){
-        for(JSONObject jo : WriteData){
-            
+  /**
+   * Takes all the JSON Objects we've already created before, and creates individual
+   * files for each series in our directory /MDP-Cloud-Winter-2017/HDFS/files/
+   *
+   * NOTE: Only doing it this way for testing, will later merge to write to
+   * Hadoop directly
+   **/
+    private void writeToFile(){
+        /*for(JSONObject jo : WriteData){
+            Path pathToFile = Paths.get(System.getProperty("user.dir"), "files", jo.get("Series") + ".txt");
+            String s = jo.toString()+ "\n";
+            Charset charset = Charset.forName("US-ASCII");
+            try (BufferedWriter writer = Files.newBufferedWriter(pathToFile, charset, CREATE, APPEND)) {
+                writer.write(s, 0, s.length());
+            } catch (IOException x) {
+                System.err.format("IOException: %s%n", x);
+            }
+        }*/
+    }
+
+    private void fileToHadoop(){
+        File folder = new File(System.getProperty("user.dir") + "/files/");
+        File [] listOfFiles = folder.listFiles();
+        for(int i = 0; i < listOfFiles.length; ++i){
+            //System.out.println(listOfFiles[i].getName());
         }
     }
 
