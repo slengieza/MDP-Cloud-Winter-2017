@@ -45,7 +45,7 @@ public class HadoopWriteClient{
         this.influxdb = influxIn;
         addSeriesData(seriesIn);
         writeToFile();
-        //fileToHadoop();
+        fileToHadoop();
     }
 
    /**
@@ -62,7 +62,7 @@ public class HadoopWriteClient{
             addSeriesData(series);
         }
         writeToFile();
-        //fileToHadoop();
+        fileToHadoop();
     }
 
    /**
