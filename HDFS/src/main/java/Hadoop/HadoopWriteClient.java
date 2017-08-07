@@ -188,7 +188,7 @@ public class HadoopWriteClient{
             String s = jo.toString()+ "\n";
             Charset charset = Charset.forName("US-ASCII");
             String testFile = "test -e " + pathToFile.toString();
-            String touchFile = "touch ./files/" + jo.get("Series") + ".txt";
+            String touchFile = "touch " + pathToFile.toString();
             try{
                 Process testing = Runtime.getRuntime().exec(testFile);
                 testing.waitFor();
