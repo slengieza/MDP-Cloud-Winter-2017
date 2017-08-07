@@ -216,7 +216,7 @@ public class HadoopWriteClient{
         for(int i = 0; i < listOfFiles.length; ++i){
             String addToHadoop = "hdfs dfs -put " + listOfFiles[i].toString() + " /user/hkardos/" + listOfFiles[i].getName();
             String touchFile = "hdfs dfs -touchz /user/hkardos/" + listOfFiles[i].getName();
-            String testFile = "hdfs dfs -test -e /user/hkardos"+ listOfFiles[i].getName();
+            String testFile = "hdfs dfs -test -e /user/hkardos/"+ listOfFiles[i].getName();
             try{
                 Process testing = Runtime.getRuntime().exec(testFile);
                 testing.waitFor();
