@@ -200,7 +200,7 @@ public class HadoopWriteClient{
         File [] listOfFiles = folder.listFiles();
         ArrayList<String> files = new ArrayList<String>();
         for(int i = 0; i < listOfFiles.length; ++i){
-            String addToHadoop = "hdfs dfs -put " + Paths.get(System.getProperty("user.dir"), "files", listOfFiles[i]).toString();
+            String addToHadoop = "hdfs dfs -put " + listOfFiles[i].toString() + " /user/hkardos/" + listOfFiles[i].getName();
             try{
                 Process moveToHadoop = Runtime.getRuntime().exec(addToHadoop);
             }
