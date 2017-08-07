@@ -205,8 +205,8 @@ public class HadoopWriteClient{
             String testFile = "hdfs dfs -test -e /user/hkardos"+ listOfFiles[i].getName();
             try{
                 Process testing = Runtime.getRuntime().exec(testFile);
-                test.waitFor();
-                int returnVal = test.exitValue();
+                testing.waitFor();
+                int returnVal = testing.exitValue();
                 if(returnVal != 0){
                     Process touch = Runtime.getRuntime().exec(touchFile);
                     touch.waitFor();
