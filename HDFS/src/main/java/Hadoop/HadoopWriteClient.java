@@ -20,6 +20,8 @@ import static java.nio.file.StandardOpenOption.*;
 
 import org.json.JSONObject;
 
+import org.apache.hadoop.fs.FileSystem;
+
 import org.influxdb.dto.QueryResult;
 import org.influxdb.dto.Query;
 import org.influxdb.InfluxDB;
@@ -181,7 +183,7 @@ public class HadoopWriteClient{
    * Hadoop directly
    **/
     private void writeToFile(){
-        /*for(JSONObject jo : WriteData){
+        for(JSONObject jo : WriteData){
             Path pathToFile = Paths.get(System.getProperty("user.dir"), "files", jo.get("Series") + ".txt");
             String s = jo.toString()+ "\n";
             Charset charset = Charset.forName("US-ASCII");
@@ -190,15 +192,33 @@ public class HadoopWriteClient{
             } catch (IOException x) {
                 System.err.format("IOException: %s%n", x);
             }
-        }*/
+        }
     }
 
     private void fileToHadoop(){
         File folder = new File(System.getProperty("user.dir") + "/files/");
         File [] listOfFiles = folder.listFiles();
+        ArrayList<String> files = new ArrayList<String>();
         for(int i = 0; i < listOfFiles.length; ++i){
-            //System.out.println(listOfFiles[i].getName());
+            String addToHadoop = "hdfs dfs -put " + Paths.get(System.getProperty("user.dir"), "files", listOfFiles[i]).toString();
+            try{
+                Process moveToHadoop = Runtime.getRuntime().exec(addToHadoop);
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+            files.add(listOfFiles[i].toString());
         }
+        for(int i = 0; i < files.size(); ++i){
+            String removeLocal = "rm " + files.get(i);
+            try{
+                Process remove = Runtime.getRuntime().exec(removeLocal);
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
     }
 
 
