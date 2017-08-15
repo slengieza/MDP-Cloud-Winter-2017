@@ -264,7 +264,7 @@ public class HadoopWriteClient{
             files.add(listOfFiles[i].toString());
         }
         // Removes local files
-        for(int i = 0; i < files.size(); ++i){
+        /*for(int i = 0; i < files.size(); ++i){
             String removeLocal = "rm " + files.get(i);
             try{
                 Process remove = Runtime.getRuntime().exec(removeLocal);
@@ -272,7 +272,7 @@ public class HadoopWriteClient{
             catch (Exception e){ // If we somehow had multiple of the same file, this'll catch that
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 
 
