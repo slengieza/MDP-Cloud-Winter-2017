@@ -237,7 +237,7 @@ public class HadoopWriteClient{
         ArrayList<String> files = new ArrayList<String>();
         for(int i = 0; i < listOfFiles.length; ++i){
             // Hadoop method to copy files from local library to HDFS
-            String addToHadoop = "hdfs dfs -put " + listOfFiles[i].toString() + " /var/mdp-cloud/" + listOfFiles[i].getName();
+            String addToHadoop = "hdfs dfs -put " + listOfFiles[i].toString() + " hdfs:///var/mdp-cloud/" + listOfFiles[i].getName();
             // Touch a file if it doesn't exist
             String touchFile = "hdfs dfs -touchz /var/mdp-cloud/" + listOfFiles[i].getName();
             // Test if a file exists
@@ -264,7 +264,7 @@ public class HadoopWriteClient{
             files.add(listOfFiles[i].toString());
         }
         // Removes local files
-        /*for(int i = 0; i < files.size(); ++i){
+        for(int i = 0; i < files.size(); ++i){
             String removeLocal = "rm " + files.get(i);
             try{
                 Process remove = Runtime.getRuntime().exec(removeLocal);
@@ -272,7 +272,7 @@ public class HadoopWriteClient{
             catch (Exception e){ // If we somehow had multiple of the same file, this'll catch that
                 e.printStackTrace();
             }
-        }*/
+        }
     }
 
 
