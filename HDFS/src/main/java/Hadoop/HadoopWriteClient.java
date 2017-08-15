@@ -237,7 +237,7 @@ public class HadoopWriteClient{
         ArrayList<String> files = new ArrayList<String>();
         for(int i = 0; i < listOfFiles.length; ++i){
             // Hadoop method to copy files from local library to HDFS
-            String addToHadoop = "hdfs dfs -put " + listOfFiles[i].toString() + " /user/hkardos/" + listOfFiles[i].getName();
+            String addToHadoop = "hdfs dfs -put " + listOfFiles[i].toString() + " /var/mdp-cloud/" + listOfFiles[i].getName();
             // Touch a file if it doesn't exist
             String touchFile = "hdfs dfs -touchz /var/mdp-cloud/" + listOfFiles[i].getName();
             // Test if a file exists

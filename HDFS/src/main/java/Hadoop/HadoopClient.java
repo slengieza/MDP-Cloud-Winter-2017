@@ -43,7 +43,9 @@ public class HadoopClient{
     }
 
   /**
-   *  TODO: Querying from Hadoop
+   * TODO: Querying from Hadoop
+   *
+   * NOTE: May be handled in Spark JAR
    **/
     private void HadoopReader(){
 
