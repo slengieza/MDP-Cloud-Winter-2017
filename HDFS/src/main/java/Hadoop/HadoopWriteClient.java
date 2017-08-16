@@ -301,17 +301,26 @@ public class HadoopWriteClient{
         // Path in string form for all our temp files
         ArrayList<String> files = new ArrayList<String>();
 
-        Configuration conf = new Configuration();
-        URI uri = new URI("hdfs:///var/mdp-cloud/");
-        FileSystem fs = FileSystem.get(uri, conf);
-
+        try{
+            Configuration conf = new Configuration();
+            URI uri = new URI("hdfs:///var/mdp-cloud/");
+            FileSystem fs = FileSystem.get(uri, conf);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
         for(int i = 0; i < listOfFiles.length; ++i){
-            if(fs.isFile(new org.apache.hadoop.fs.Path("hdfs:///var/mdp-cloud/" + listOfFiles[i].getName()))){
-                fs.delete(new org.apache.hadoop.fs.Path("hdfs:///var/mdp-cloud/" + listOfFiles[i].getName()), false);
-                System.out.println("Removed " + listOfFiles[i].getName());
+            try{
+                if(fs.isFile(new org.apache.hadoop.fs.Path("hdfs:///var/mdp-cloud/" + listOfFiles[i].getName()))){
+                    fs.delete(new org.apache.hadoop.fs.Path("hdfs:///var/mdp-cloud/" + listOfFiles[i].getName()), false);
+                    System.out.println("Removed " + listOfFiles[i].getName());
+                }
+                //fs.createNewFile(new Path("hdfs:///var/mdp-cloud/" + listOfFiles[i].getName()));
+                fs.moveFromLocalFile(new org.apache.hadoop.fs.Path(listOfFiles[i].toString()), new org.apache.hadoop.fs.Path("hdfs:///var/mdp-cloud/" + listOfFiles[i].getName()));
             }
-            //fs.createNewFile(new Path("hdfs:///var/mdp-cloud/" + listOfFiles[i].getName()));
-            fs.moveFromLocalFile(new org.apache.hadoop.fs.Path(listOfFiles[i].toString()), new org.apache.hadoop.fs.Path("hdfs:///var/mdp-cloud/" + listOfFiles[i].getName()));
+            catch(Exception e){
+                e.printStackTrace();
+            }
         }
 
         for(int i = 0; i < files.size(); ++i){
