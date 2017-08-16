@@ -125,6 +125,6 @@ public class HadoopClient{
         HadoopClient writer = new HadoopClient();
         writer.HadoopWriter();
         Long timeOut = new Date().getTime();
-        System.out.println(toString((timeOut - timeIn)));
+        System.out.println(Long.toString((timeOut - timeIn)));
     }
 }
