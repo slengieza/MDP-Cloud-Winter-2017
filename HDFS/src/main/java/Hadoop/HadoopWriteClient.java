@@ -263,6 +263,7 @@ public class HadoopWriteClient{
                     // Touch to avoid a NoSuchFileException
                     Process touch = Runtime.getRuntime().exec(touchFile);
                     touch.waitFor();
+                    System.out.println("Removed " + listOfFiles[i].getName());
                 }
                 // Move local data to Hadoop
                 Process moveToHadoop = Runtime.getRuntime().exec(addToHadoop);
