@@ -274,7 +274,6 @@ public class HadoopWriteClient{
             files.add(listOfFiles[i].toString());
         }
         // Removes local files
-        /*
         for(int i = 0; i < files.size(); ++i){
             String removeLocal = "rm " + files.get(i);
             try{
@@ -284,7 +283,7 @@ public class HadoopWriteClient{
                 e.printStackTrace();
             }
         }
-        */
+
     }
 
 
