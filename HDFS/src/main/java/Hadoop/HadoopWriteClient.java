@@ -306,11 +306,12 @@ public class HadoopWriteClient{
         FileSystem fs = FileSystem.get(uri, conf);
 
         for(int i = 0; i < listOfFiles.length; ++i){
-            if(fs.isFile(new Path("hdfs:///var/mdp-cloud/" + listOfFiles[i].getName()))){
-                fs.delete(new Path("hdfs:///var/mdp-cloud/" + listOfFiles[i].getName()), false);
+            if(fs.isFile(Paths.get("hdfs:///var/mdp-cloud/" + listOfFiles[i].getName()))){
+                fs.delete(Paths.get("hdfs:///var/mdp-cloud/" + listOfFiles[i].getName()), false);
+                System.out.println("Removed " + listOfFiles[i].getName());
             }
             //fs.createNewFile(new Path("hdfs:///var/mdp-cloud/" + listOfFiles[i].getName()));
-            fs.moveFromLocalFile(new Path(listOfFiles[i].toString()), new Path("hdfs:///var/mdp-cloud/" + listOfFiles[i].getName()));
+            fs.moveFromLocalFile(Paths.get(listOfFiles[i].toString()), Paths.get("hdfs:///var/mdp-cloud/" + listOfFiles[i].getName()));
         }
 
         for(int i = 0; i < files.size(); ++i){
