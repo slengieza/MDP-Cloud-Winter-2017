@@ -17,7 +17,7 @@ public class SparkClient {
         System.out.println("Please Enter Which File To Work On: ");
         try{
             Process display = Runtime.getRuntime().exec("hdfs dfs -ls ");
-            diplay.waitFor();
+            display.waitFor();
         }
         catch(Exception e){
             e.printStackTrace();
