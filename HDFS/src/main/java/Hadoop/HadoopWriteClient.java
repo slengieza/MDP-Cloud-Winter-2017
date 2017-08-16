@@ -233,7 +233,7 @@ public class HadoopWriteClient{
    *       be worth it to continue doing it this way, but we can decide on that
    *       later
    **/
-    /*private void fileToHadoop(){
+   private void fileToHadoop(){
         // Creates an File object that points to our temporary files
         File folder = new File(System.getProperty("user.dir") + "/files/");
         // List of temporary files, contains pointers to file with full file path, from root
@@ -290,10 +290,12 @@ public class HadoopWriteClient{
                 e.printStackTrace();
             }
         }
-    }*/
+    }
 
-
-    private void fileToHadoop(){
+   /**
+    * TODO: Try to get this version of fileToHadoop() to work
+    **/
+    /*private void fileToHadoop(){
         // Creates a File object that points to our temporary files
         File folder = new File(System.getProperty("user.dir") + "/files/");
         // List of temporary files, contains pointers to file with full file path, from root
@@ -327,6 +329,6 @@ public class HadoopWriteClient{
                 e.printStackTrace();
             }
         }
-    }
+    }*/
 
 }
