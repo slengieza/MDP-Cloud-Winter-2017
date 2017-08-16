@@ -16,7 +16,11 @@ public class SparkClient {
         String logFile = "hdfs:///var/mdp-cloud/";
         System.out.println("Please Enter Which File To Work On: ");
         try{
-            Process display = Runtime.getRuntime().exec("hdfs dfs -ls ")
+            Process display = Runtime.getRuntime().exec("hdfs dfs -ls ");
+            diplay.waitFor();
+        }
+        catch(Exception e){
+            e.printStackTrace();
         }
         Scanner scans = new Scanner(System.in);
         logFile += scans;
@@ -24,17 +28,6 @@ public class SparkClient {
         SparkConf conf = new SparkConf().setAppName("Spark Client");
         JavaSparkContext sc = new JavaSparkContext(conf);
         SQLContext sqlContext = new org.apache.spark.sql.SQLContext(sc);
-
-        JavaRDD<String> logData = sc.textFile(logFile).cache();
-
-        JSONObject  = logData.map(new Function<String, JSONObject>() {
-            public JSONObject call(String s) { return JSONObject(s); }
-        }).count();
-
-        long numBs = logData.filter(new Function<String, Integer>() {
-            public Integer call(String s) { return s.contains("b"); }
-        }).count();
-
-        System.out.println("Lines with a: " + numAs + ", lines with b: " + numBs);
-    }
+        DataFrame df = sqlContext.read().json("hdfs:///var/mdp-cloup/test1.txt");
+        df.show();
 }
