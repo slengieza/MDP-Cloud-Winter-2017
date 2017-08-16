@@ -303,6 +303,7 @@ public class HadoopWriteClient{
 
         try{
             Configuration conf = new Configuration();
+            conf.set("fs.defaultFS", "hdfs:///var/mdp-cloud/");
             URI uri = new URI("hdfs:///var/mdp-cloud/");
             FileSystem fs = FileSystem.get(uri, conf);
             for(int i = 0; i < listOfFiles.length; ++i){
