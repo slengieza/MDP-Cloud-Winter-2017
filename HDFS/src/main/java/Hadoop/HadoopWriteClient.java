@@ -301,15 +301,15 @@ public class HadoopWriteClient{
         ArrayList<String> files = new ArrayList<String>();
 
         Configuration conf = new Configuration();
-        String uri = "hdfs:///var/mdp-cloud/";
-        FileSystem fs = FileSystem.get( URI.create(uri), conf);
+        URI uri = new URI("hdfs:///var/mdp-cloud/");
+        FileSystem fs = FileSystem.get(uri, conf);
 
         for(int i = 0; i < listOfFiles.length; ++i){
-            if(fs.isFile(Path("hdfs:///var/mdp-cloud/" + listOfFiles[i].getName()))){
-                fs.delete(Path("hdfs:///var/mdp-cloud/" + listOfFiles[i].getName()), false);
+            if(fs.isFile(new Path("hdfs:///var/mdp-cloud/" + listOfFiles[i].getName()))){
+                fs.delete(new Path("hdfs:///var/mdp-cloud/" + listOfFiles[i].getName()), false);
             }
             //fs.createNewFile(new Path("hdfs:///var/mdp-cloud/" + listOfFiles[i].getName()));
-            fs.moveFromLocalFile(Path(listOfFiles[i].toString()), Path("hdfs:///var/mdp-cloud/" + listOfFiles[i].getName()));
+            fs.moveFromLocalFile(new Path(listOfFiles[i].toString()), new Path("hdfs:///var/mdp-cloud/" + listOfFiles[i].getName()));
         }
 
         for(int i = 0; i < files.size(); ++i){
