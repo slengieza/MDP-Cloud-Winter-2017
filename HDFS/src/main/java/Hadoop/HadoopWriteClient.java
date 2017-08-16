@@ -304,8 +304,7 @@ public class HadoopWriteClient{
         try{
             Configuration conf = new Configuration();
             conf.set("fs.defaultFS", "hdfs:///var/mdp-cloud/");
-            URI uri = new URI("hdfs:///var/mdp-cloud/");
-            FileSystem fs = FileSystem.get(uri, conf);
+            FileSystem fs = FileSystem.get(conf);
             for(int i = 0; i < listOfFiles.length; ++i){
                 if(fs.isFile(new org.apache.hadoop.fs.Path("hdfs:///var/mdp-cloud/" + listOfFiles[i].getName()))){
                     fs.delete(new org.apache.hadoop.fs.Path("hdfs:///var/mdp-cloud/" + listOfFiles[i].getName()), false);
