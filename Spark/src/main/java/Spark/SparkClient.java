@@ -30,4 +30,5 @@ public class SparkClient {
         SQLContext sqlContext = new org.apache.spark.sql.SQLContext(sc);
         DataFrame df = sqlContext.read().json("hdfs:///var/mdp-cloup/test1.txt");
         df.show();
+    }
 }
