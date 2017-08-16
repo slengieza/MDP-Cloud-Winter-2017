@@ -21,6 +21,7 @@ import static java.nio.file.StandardOpenOption.*;
 import org.json.JSONObject;
 
 import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.conf.*;
 
 import org.influxdb.dto.QueryResult;
 import org.influxdb.dto.Query;
@@ -217,6 +218,8 @@ public class HadoopWriteClient{
                 System.err.format("IOException: %s%n", x);
             }
         }
+
+
     }
 
   /**
@@ -228,7 +231,7 @@ public class HadoopWriteClient{
    *       be worth it to continue doing it this way, but we can decide on that
    *       later
    **/
-    private void fileToHadoop(){
+    /*private void fileToHadoop(){
         // Creates an File object that points to our temporary files
         File folder = new File(System.getProperty("user.dir") + "/files/");
         // List of temporary files, contains pointers to file with full file path, from root
@@ -285,7 +288,38 @@ public class HadoopWriteClient{
                 e.printStackTrace();
             }
         }
-    }
+    }*/
 
+
+    private void fileToHadoop(){
+        // Creates a File object that points to our temporary files
+        File folder = new File(System.getProperty("user.dir") + "/files/");
+        // List of temporary files, contains pointers to file with full file path, from root
+        File [] listOfFiles = folder.listFiles();
+        // Path in string form for all our temp files
+        ArrayList<String> files = new ArrayList<String>();
+
+        Configuration conf = new Configuration();
+        String uri = "hdfs:///var/mdp-cloud/";
+        FileSystem fs = FileSystem.get( URI.create(uri), conf);
+
+        for(int i = 0; i < listOfFiles.length; ++i){
+            if(fs.isFile(new Path("hdfs:///var/mdp-cloud/" + listOfFiles[i].getName()))){
+                fs.delete(new Path("hdfs:///var/mdp-cloud/" + listOfFiles[i].getName()), false);
+            }
+            //fs.createNewFile(new Path("hdfs:///var/mdp-cloud/" + listOfFiles[i].getName()));
+            fs.moveFromLocalFile(new Path(listOfFiles[i].toString()), new Path("hdfs:///var/mdp-cloud/" + listOfFiles[i].getName()));
+        }
+
+        for(int i = 0; i < files.size(); ++i){
+            String removeLocal = "rm " + files.get(i);
+            try{
+                Process remove = Runtime.getRuntime().exec(removeLocal);
+            }
+            catch (Exception e){ // If we somehow had multiple of the same file, this'll catch that
+                e.printStackTrace();
+            }
+        }
+    }
 
 }

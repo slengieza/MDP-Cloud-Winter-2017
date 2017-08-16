@@ -16,7 +16,7 @@ public class SparkClient {
         String logFile = "hdfs:///var/mdp-cloud/";
         System.out.println("Please Enter Which File To Work On: ");
         try{
-            Process display = Runtime.getRuntime().exec()
+            Process display = Runtime.getRuntime().exec("hdfs dfs -ls ")
         }
         Scanner scans = new Scanner(System.in);
         logFile += scans;
