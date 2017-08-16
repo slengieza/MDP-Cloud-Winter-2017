@@ -242,6 +242,8 @@ public class HadoopWriteClient{
             String touchFile = "hdfs dfs -touchz /var/mdp-cloud/" + listOfFiles[i].getName();
             // Test if a file exists
             String testFile = "hdfs dfs -test -e /var/mdp-cloud/"+ listOfFiles[i].getName();
+            // Remove old file
+            String removeFile = "hdfs dfs -rm -skipTrash /var/mdp-cloud/"+ listOfFiles[i].getName();
             try{
                 // Test if file exists
                 Process testing = Runtime.getRuntime().exec(testFile);
@@ -250,6 +252,14 @@ public class HadoopWriteClient{
                 // Return value = 0 if file exists (unlikely)
                 int returnVal = testing.exitValue();
                 if(returnVal != 0){
+                    // Touch to avoid a NoSuchFileException
+                    Process touch = Runtime.getRuntime().exec(touchFile);
+                    touch.waitFor();
+                }
+                else{
+                    // Remove old file
+                    Process remove = Runtime.getRuntime().exec(removeFile);
+                    remove.waitFor();
                     // Touch to avoid a NoSuchFileException
                     Process touch = Runtime.getRuntime().exec(touchFile);
                     touch.waitFor();
@@ -264,6 +274,7 @@ public class HadoopWriteClient{
             files.add(listOfFiles[i].toString());
         }
         // Removes local files
+        /*
         for(int i = 0; i < files.size(); ++i){
             String removeLocal = "rm " + files.get(i);
             try{
@@ -273,6 +284,7 @@ public class HadoopWriteClient{
                 e.printStackTrace();
             }
         }
+        */
     }
 
 
