@@ -267,6 +267,7 @@ public class HadoopWriteClient{
                 }
                 // Move local data to Hadoop
                 Process moveToHadoop = Runtime.getRuntime().exec(addToHadoop);
+                moveToHadoop.waitFor();
             }
             catch (Exception e){ // Exception
                 e.printStackTrace();
