@@ -4,6 +4,8 @@ import java.io.*;
 import java.lang.*;
 import java.util.*;
 
+import java.util.Date;
+
 import org.influxdb.dto.QueryResult;
 import org.influxdb.dto.Query;
 import org.influxdb.InfluxDB;
@@ -119,7 +121,10 @@ public class HadoopClient{
     *                if read:  To Be Done
     **/
     public static void main(String[] args) {
+        Long timeIn = new Date().getTime();
         HadoopClient writer = new HadoopClient();
         writer.HadoopWriter();
+        Long timeOut = new Date().getTime();
+        System.out.println((timeOut - timeIn).toString());
     }
 }
