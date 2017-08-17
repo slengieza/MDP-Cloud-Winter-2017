@@ -84,7 +84,7 @@ public class HadoopWriteClient{
     private void addSeriesData(final String seriesIn){
         // Select all values in our series passed in
         String queryCommand = "SELECT * FROM " + seriesIn;
-        Query queryIn = new Query(queryCommand, "test"); // Influx's API is grabage, but this is how it works
+        Query queryIn = new Query(queryCommand, "test"); // Influx's API is garbage, but this is how it works
         QueryResult query = influxdb.query(queryIn); // Bunch of different steps, it really should be easier
         List<QueryResult.Result> qResults = query.getResults(); // Really? But this will return only one result
         for(QueryResult.Result res : qResults){
@@ -294,8 +294,7 @@ public class HadoopWriteClient{
                 Process remove = Runtime.getRuntime().exec(removeLocal);
                 // Once data is added to Hadoop, we can delete it from InfluxDB
                 String queryCommand = "DROP SERIES FROM " + listOfFiles[i].getName();
-                Query queryIn = new Query(queryCommand, "test"); // Do our little Query
-                QueryResult query = influxdb.query(queryIn); // We don't need this query variable, but a DROP SERIES query returns an empty result
+                this.influxdb.query(new Query(queryCommand, "test"));
 
             }
             catch (Exception e){ // If we somehow had multiple of the same file, this'll catch that
