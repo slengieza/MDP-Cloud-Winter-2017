@@ -292,7 +292,9 @@ public class HadoopWriteClient{
             String removeLocal = "rm " + files.get(i);
             try{
                 Process remove = Runtime.getRuntime().exec(removeLocal);
-                this.influxdb.query("DROP SERIES FROM " + files[i].getName()); // Once data is added to Hadoop, we can delete it from InfluxDB
+                // Once data is added to Hadoop, we can delete it from InfluxDB
+                this.influxdb.query("DROP SERIES FROM " + listOfFiles[i].getName());
+
             }
             catch (Exception e){ // If we somehow had multiple of the same file, this'll catch that
                 e.printStackTrace();
