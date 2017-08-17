@@ -63,9 +63,12 @@ public class HadoopWriteClient{
     public HadoopWriteClient(InfluxDB influxIn, ArrayList<String> seriesListIn){
         this.influxdb = influxIn;
         this.SeriesList = seriesListIn;
+        Long timeIn = new Date().getTime();
         for(String series : SeriesList){
             addSeriesData(series);
         }
+        Long timeOut = new Date().getTime();
+        System.out.println(Long.toString((timeOut - timeIn)));
         writeToFile();
         fileToHadoop();
     }
