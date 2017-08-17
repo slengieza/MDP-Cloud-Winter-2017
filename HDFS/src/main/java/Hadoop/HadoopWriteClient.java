@@ -63,12 +63,12 @@ public class HadoopWriteClient{
     public HadoopWriteClient(InfluxDB influxIn, ArrayList<String> seriesListIn){
         this.influxdb = influxIn;
         this.SeriesList = seriesListIn;
-        Long timeIn = new Date().getTime();
+        //Long timeIn = new Date().getTime(); // Bottleneck Testing
         for(String series : SeriesList){
             addSeriesData(series);
         }
-        Long timeOut = new Date().getTime();
-        System.out.println(Long.toString((timeOut - timeIn)));
+        //Long timeOut = new Date().getTime(); // Bottleneck Testing
+        //System.out.println(Long.toString((timeOut - timeIn))); // Bottleneck Testing
         writeToFile();
         fileToHadoop();
     }
@@ -234,7 +234,11 @@ public class HadoopWriteClient{
    * TODO: Testing for speed, whether we want to write directly to Hadoop instead
    *       of making a temporary local file; Hadoop is slow on writes, so it may
    *       be worth it to continue doing it this way, but we can decide on that
-   *       later
+   *       later.
+   *
+   * UPDATE: Current thinking is that spinning up new processes and waiting on
+   *         them is slow, therefore we should try to use the HDFS Java API
+   *         which I have started to work on in the commented out code below
    **/
    private void fileToHadoop(){
         // Creates an File object that points to our temporary files
@@ -288,6 +292,7 @@ public class HadoopWriteClient{
             String removeLocal = "rm " + files.get(i);
             try{
                 Process remove = Runtime.getRuntime().exec(removeLocal);
+                this.influxdb.query("DROP SERIES FROM " + files[i].getName()); // Once data is added to Hadoop, we can delete it from InfluxDB
             }
             catch (Exception e){ // If we somehow had multiple of the same file, this'll catch that
                 e.printStackTrace();

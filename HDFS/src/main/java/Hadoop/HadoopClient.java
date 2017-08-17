@@ -121,10 +121,7 @@ public class HadoopClient{
     *                if read:  To Be Done
     **/
     public static void main(String[] args) {
-        Long timeIn = new Date().getTime();
         HadoopClient writer = new HadoopClient();
         writer.HadoopWriter();
-        Long timeOut = new Date().getTime();
-        System.out.println(Long.toString((timeOut - timeIn)));
     }
 }
