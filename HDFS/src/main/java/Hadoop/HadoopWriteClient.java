@@ -293,7 +293,9 @@ public class HadoopWriteClient{
             try{
                 Process remove = Runtime.getRuntime().exec(removeLocal);
                 // Once data is added to Hadoop, we can delete it from InfluxDB
-                this.influxdb.query("DROP SERIES FROM " + listOfFiles[i].getName());
+                String queryCommand = "DROP SERIES FROM " + listOfFiles[i].getName();
+                Query queryIn = new Query(queryCommand, "test"); // Do our little Query
+                QueryResult query = influxdb.query(queryIn); // We don't need this query variable, but a DROP SERIES query returns an empty result
 
             }
             catch (Exception e){ // If we somehow had multiple of the same file, this'll catch that
