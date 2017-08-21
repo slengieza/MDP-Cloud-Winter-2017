@@ -1,4 +1,4 @@
-package com.mdp.spark;
+package com.mdp.sparkbatching;
 
 import java.io.*;
 import java.lang.*;
