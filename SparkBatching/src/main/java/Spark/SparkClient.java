@@ -16,13 +16,13 @@ public class SparkClient {
         String logFile = "hdfs:///var/mdp-cloud/";
         System.out.println("Please Enter Which File To Work On: ");
         try{
-            Process display = Runtime.getRuntime().exec("hdfs dfs -ls ");
+            Process display = Runtime.getRuntime().exec("hdfs dfs -ls /var/mdp-cloud/");
             display.waitFor();
         }
         catch(Exception e){
             e.printStackTrace();
         }
-        SparkConf conf = new SparkConf().setMaster("hdfs:///var/mdp-cloud/").setAppName("Spark Client");
+        SparkConf conf = new SparkConf().setMaster("local").setAppName("Spark Client");
         JavaSparkContext sc = new JavaSparkContext(conf);
         SQLContext sqlContext = new org.apache.spark.sql.SQLContext(sc);
         DataFrame df = sqlContext.read().json("hdfs:///var/mdp-cloup/test1.txt");
