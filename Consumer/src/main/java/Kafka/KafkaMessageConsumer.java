@@ -96,7 +96,7 @@ public class KafkaMessageConsumer implements Runnable{
           System.out.println(value.toString()); // Prints out all of the different series options
       }
       System.out.println("--------------------------------------------------");
-      System.out.print("Please enter the name of which series you'd like to use : ");
+      System.out.print("Please enter the name of which series you'd like to use (if existing series, data will be appended to the end) : ");
       String seriesNameIn = scans.nextLine();
       seriesNameIn = seriesNameIn.replace("\"", "").replace("\'", ""); // Replace any Quotation Marks and Single Quotes
       this.series = seriesNameIn;

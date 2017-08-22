@@ -54,8 +54,11 @@ public class InfluxReader {
                 System.out.println(value.toString());
             }
         }
+        catch(NullPointerException e){
+            System.out.println("No results found!\n");
+        }
         catch(RuntimeException ex){
-            System.out.println("You Have an Error in Your Query");
+            System.out.println("You Have an Error in Your Query\n");
         }
     }
 }

@@ -73,7 +73,7 @@ public class InfluxClient{
             if(query.toLowerCase().equals("quit") || query.toLowerCase().equals("q")){
               break;
             }
-            System.out.println("Executing " + query);
+            System.out.println("Executing " + query + "\n");
             client.reader.execute(query);
         }
     }
