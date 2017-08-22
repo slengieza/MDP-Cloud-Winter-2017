@@ -223,8 +223,6 @@ public class HadoopWriteClient{
                 System.err.format("IOException: %s%n", x);
             }
         }
-
-
     }
 
   /**
@@ -312,7 +310,9 @@ public class HadoopWriteClient{
         File [] listOfFiles = folder.listFiles();
         // Path in string form for all our temp files
         ArrayList<String> files = new ArrayList<String>();
-
+        //TODO: Specifically the following Try/Catch block. It may just be slow
+        //      to write to HDFS from the Data Science cluster (opens a new
+        //      connection for each process)
         try{
             Configuration conf = new Configuration();
             conf.set("fs.defaultFS", "hdfs:///var/mdp-cloud/");

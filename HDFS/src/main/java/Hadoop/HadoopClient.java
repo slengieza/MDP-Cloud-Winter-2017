@@ -30,7 +30,7 @@ public class HadoopClient{
     }
 
    /**
-    * Hadoop Writer, steers our flow between either writing to Hadoopa specific
+    * Hadoop Writer, steers our flow between either writing to Hadoop specific
     * series, or writing entire contents of our InfluxDB database
     **/
     private void HadoopWriter(){
