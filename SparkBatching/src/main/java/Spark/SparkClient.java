@@ -13,7 +13,7 @@ import org.json.JSONObject;
 
 public class SparkClient {
     public static void main(String[] args) {
-        String logFile = "hdfs:///var/mdp-cloud/";
+        /*String logFile = "hdfs:///var/mdp-cloud/";
         System.out.println("Please Enter Which File To Work On: ");
         try{
             Process display = Runtime.getRuntime().exec("hdfs dfs -ls /var/mdp-cloud/");
@@ -21,7 +21,7 @@ public class SparkClient {
         }
         catch(Exception e){
             e.printStackTrace();
-        }
+        }*/
         SparkConf conf = new SparkConf().setAppName("Spark Client");
         JavaSparkContext sc = new JavaSparkContext(conf);
         SQLContext sqlContext = new org.apache.spark.sql.SQLContext(sc);
