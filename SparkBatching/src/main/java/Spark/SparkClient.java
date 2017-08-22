@@ -22,7 +22,7 @@ public class SparkClient {
         catch(Exception e){
             e.printStackTrace();
         }
-        SparkConf conf = new SparkConf().setMaster("local").setAppName("Spark Client");
+        SparkConf conf = new SparkConf().setAppName("Spark Client");
         JavaSparkContext sc = new JavaSparkContext(conf);
         SQLContext sqlContext = new org.apache.spark.sql.SQLContext(sc);
         DataFrame df = sqlContext.read().json("hdfs:///var/mdp-cloup/test1.txt");

@@ -93,9 +93,7 @@ public class JsonToCSV {
 		// Initialize this array to check later
 		//JSONArray array = null;
 		JsonArray array = null;
-
-		int numDataPoints = 6; //TODO must change when we add more data (its number of data points * 2 because we have one for each loop)
-		int total_values = 0;
+		int total_values = 0; // Number of data points in our input
 
 		// Use try-catch to avoid RunTimeError
 		// when the file doesn't exist
