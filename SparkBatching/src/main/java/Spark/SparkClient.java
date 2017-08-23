@@ -13,7 +13,7 @@ import org.json.JSONObject;
 
 public class SparkClient {
     public static void main(String[] args) {
-        System.out.println("Please Enter Which File To Work On: ");
+        System.out.println("Current HDFS directory :");
         try{
             String line;
             Process display = Runtime.getRuntime().exec("hdfs dfs -ls /var/mdp-cloud/");
@@ -26,6 +26,7 @@ public class SparkClient {
         catch(Exception e){
             e.printStackTrace();
         }
+        System.out.println("Please Enter Which File To Work On (file name not path) :");
         Scanner scans = new Scanner(System.in);
         String fileIn;
         fileIn = scans.nextLine();
