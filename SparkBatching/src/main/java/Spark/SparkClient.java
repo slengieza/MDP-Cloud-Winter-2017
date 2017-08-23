@@ -32,7 +32,7 @@ public class SparkClient {
         Scanner scans = new Scanner(System.in);
         String fileIn;
         fileIn = scans.nextLine();
-        SparkConf conf = new SparkConf().setAppName("Spark Client").setMaster("local[8]");
+        SparkConf conf = new SparkConf().setAppName("Spark Client").setMaster("yarn-client");
         JavaSparkContext sc = new JavaSparkContext(conf);
         SQLContext sqlContext = new org.apache.spark.sql.SQLContext(sc);
         DataFrame df = sqlContext.read().json("hdfs:///var/mdp-cloud/" + fileIn);
