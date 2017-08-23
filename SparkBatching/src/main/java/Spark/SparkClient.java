@@ -21,7 +21,7 @@ public class SparkClient {
         catch(Exception e){
             e.printStackTrace();
         }
-        Scanner scans = new Scanner();
+        Scanner scans = new Scanner(System.in);
         String fileIn;
         fileIn = scans.nextLine();
         SparkConf conf = new SparkConf().setAppName("Spark Client");
