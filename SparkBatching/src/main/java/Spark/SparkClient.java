@@ -26,8 +26,6 @@ public class SparkClient {
         catch(Exception e){
             e.printStackTrace();
         }
-        //--class com.mdp.sparkbatching.SparkClient --master local[8] ./build/libs/SparkBatching.jar
-
         System.out.println("Please Enter Which File To Work On (file name not path) :");
         Scanner scans = new Scanner(System.in);
         String fileIn;
@@ -36,6 +34,12 @@ public class SparkClient {
         JavaSparkContext sc = new JavaSparkContext(conf);
         SQLContext sqlContext = new org.apache.spark.sql.SQLContext(sc);
         DataFrame df = sqlContext.read().json("hdfs:///var/mdp-cloud/" + fileIn);
-        df.show();
+        count_over_0(df);
+    }
+
+    private void count_over_0(DataFrame df){
+        JavaRDD<Row> jrdd = df.javaRDD();
+        System.out.println(jrdd.toString());
+
     }
 }
