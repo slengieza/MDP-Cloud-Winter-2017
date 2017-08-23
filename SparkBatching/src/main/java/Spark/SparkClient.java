@@ -18,8 +18,7 @@ public class SparkClient {
             //Process display = Runtime.getRuntime().exec("hdfs dfs -ls /var/mdp-cloud/");
             //display.waitFor();
             ProcessBuilder pb = new ProcessBuilder("hdfs dfs -ls /var/mdp-cloud/");
-            pb.redirectOutput(Redirect.INHERIT);
-            pb.redirectError(Redirect.INHERIT);
+            pb.inheritIO();
             Process p = pb.start();
             p.waitFor();
         }
