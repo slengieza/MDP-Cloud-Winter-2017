@@ -17,7 +17,7 @@ public class SparkClient {
         try{
             String line;
             Process display = Runtime.getRuntime().exec("hdfs dfs -ls /var/mdp-cloud/");
-            BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            BufferedReader input = new BufferedReader(new InputStreamReader(display.getInputStream()));
             while ((line = input.readLine()) != null) {
                 System.out.println(line);
             }
