@@ -15,17 +15,16 @@ public class SparkClient {
     public static void main(String[] args) {
         System.out.println("Please Enter Which File To Work On: ");
         try{
+            String line;
             Process display = Runtime.getRuntime().exec("hdfs dfs -ls /var/mdp-cloud/");
-            display.waitFor();
-            /*ProcessBuilder pb = new ProcessBuilder("hdfs dfs -ls /var/mdp-cloud/");
-            pb.inheritIO();
-            Process p = pb.start();
-            p.waitFor();*/
-            System.out.println("No exception");
+            BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            while ((line = input.readLine()) != null) {
+                System.out.println(line);
+            }
+            input.close();
         }
         catch(Exception e){
             e.printStackTrace();
-            System.out.println("Exception");
         }
         Scanner scans = new Scanner(System.in);
         String fileIn;
