@@ -25,7 +25,7 @@ public class SparkClient {
         SparkConf conf = new SparkConf().setAppName("Spark Client");
         JavaSparkContext sc = new JavaSparkContext(conf);
         SQLContext sqlContext = new org.apache.spark.sql.SQLContext(sc);
-        DataFrame df = sqlContext.read().json("hdfs:///var/mdp-cloup/test1.txt");
+        DataFrame df = sqlContext.read().json("hdfs://var/mdp-cloup/test1.txt");
         df.show();
     }
 }
