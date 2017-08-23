@@ -23,11 +23,11 @@ public class SparkClient {
         }
         Scanner scans = new Scanner();
         String fileIn;
-        fileIn = scans.nextLine()
+        fileIn = scans.nextLine();
         SparkConf conf = new SparkConf().setAppName("Spark Client");
         JavaSparkContext sc = new JavaSparkContext(conf);
         SQLContext sqlContext = new org.apache.spark.sql.SQLContext(sc);
-        DataFrame df = sqlContext.read().json("hdfs:///var/mdp-cloud/" + );
+        DataFrame df = sqlContext.read().json("hdfs:///var/mdp-cloud/" + fileIn);
         df.show();
     }
 }
