@@ -34,7 +34,7 @@ public class SparkClient {
 
     public SparkClient(){
         seriesSelect();
-        SparkConf conf = new SparkConf().setMaster("hdfs:///var/mdp-cloud/").setAppName("Spark Client");
+        SparkConf conf = new SparkConf().setAppName("Spark Client").setMaster("yarn-client");
         JavaSparkContext sc = new JavaSparkContext(conf);
         this.influxDB = InfluxDBFactory.connect(database, username, password);
         try{
