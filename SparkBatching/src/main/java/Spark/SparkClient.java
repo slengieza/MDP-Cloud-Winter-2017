@@ -38,7 +38,8 @@ public class SparkClient {
     }
 
     private static void count_over_0(DataFrame df){
-        JavaRDD<Row> jrdd = df.javaRDD();
+        JavaRDD<Float> jrdd = df.map(new Function<Row, );
         //System.out.println(jrdd.toString());
+
     }
 }

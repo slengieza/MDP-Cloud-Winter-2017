@@ -30,18 +30,24 @@ public class SparkClient {
     private String dbName = "test";
     private String series;
     private InfluxDB influxDB;
-    private Long timestamp = 0;
+    private long timestamp = 0;
 
     public SparkClient(){
+        seriesSelect();
         SparkConf conf = new SparkConf().setMaster("hdfs:///var/mdp-cloud/").setAppName("Spark Client");
         JavaSparkContext sc = new JavaSparkContext(conf);
         this.influxDB = InfluxDBFactory.connect(database, username, password);
         try{
             while(true){
                 addDataPoints();
+                try {
+                    Thread.sleep(1000);                 //1000 milliseconds is one second.
+                } catch(InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
             }
         }
-        catch(KeyboardInterrupt kb){
+        catch(Exception ex){
             System.out.println("Function finished");
         }
     }
@@ -76,8 +82,7 @@ public class SparkClient {
       }
 
       public static void main(String[] args) {
-          seriesSelect();
-          SparkClient();
+          SparkClient sp = new SparkClient();
       }
 
 
