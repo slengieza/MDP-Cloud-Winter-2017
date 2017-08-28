@@ -1,4 +1,4 @@
-package com.mdp.producer;
+/*package com.mdp.producer;
 
 //takes JSON data from input stream and turns data XML for mtconnect
 
@@ -169,4 +169,4 @@ public class JsonToXML {
 		//change place
 		StreamResult result = new StreamResult(new File("C:\\Rockwell Automation\\WorkingDirectory\\MTConnect\\devices.xml"));
    }
-}
+}*/
