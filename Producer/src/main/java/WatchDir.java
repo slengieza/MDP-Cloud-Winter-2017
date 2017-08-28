@@ -49,7 +49,7 @@ public class WatchDir {
     private final Map<WatchKey,Path> keys;
     private boolean trace = false;
 
-    // Kafka 
+    // Kafka
     private Properties props;
     private ProducerConfig config;
     private static KafkaProducer<String, String> producer;
@@ -68,7 +68,7 @@ public class WatchDir {
             Path prev = keys.get(key);
             if (prev == null) {
                 System.out.format("register: %s\n", dir);
-            } 
+            }
             else {
                 if (!dir.equals(prev)) {
                     System.out.format("update: %s -> %s\n", prev, dir);
@@ -87,10 +87,10 @@ public class WatchDir {
         // enable trace after initial registration
         this.trace = true;
 
-        // Kafka 
+        // Kafka
         this.props = new Properties();
 
-        //PRODUCTION 
+        //PRODUCTION
         this.props.put("bootstrap.servers", "migsae-kafka.aura.arc-ts.umich.edu:9092");
         this.props.put("acks", "all");
         this.props.put("metadata.broker.list", "migsae-kafka.aura.arc-ts.umich.edu:9092");
@@ -101,10 +101,10 @@ public class WatchDir {
         //LOCAL
         // this.props.put("bootstrap.servers", "localhost:9092");
         // this.props.put("acks", "all");
-        // this.props.put("metadata.broker.list", "localhost:9092");    
+        // this.props.put("metadata.broker.list", "localhost:9092");
         // this.props.put("serializer.class", "kafka.serializer.StringEncoder");
         // this.props.put("request.required.acks", "1");
-        
+
         // this.config = new ProducerConfig(props);
         this.producer = new KafkaProducer<String, String>(props);
     }
@@ -158,7 +158,7 @@ public class WatchDir {
         }
     }
 
-    // Kafka 
+    // Kafka
     public static void  new_topic(String topic){
         try{
             //used to create topic
@@ -192,7 +192,7 @@ public class WatchDir {
     }
 
     public static void main(String[] args) throws IOException {
-        // Kafka 
+        // Kafka
         String topic = "test1";
         String group_id = "report";
         new_topic(topic);
@@ -203,7 +203,7 @@ public class WatchDir {
         // Path dir = Paths.get("/Users/stevenlengieza/Documents/college/Research/MDP-Cloud-Winter-2017/data");
         WatchDir watchDir = new WatchDir(dir);
         //send files that are already there
-        File folder = new File(dir.toString()); 
+        File folder = new File(dir.toString());
         File[] listOfFiles = folder.listFiles();
         for (File file : listOfFiles) {
             if(file.toString().toLowerCase().endsWith(".dat")){
@@ -226,12 +226,11 @@ public class WatchDir {
 
         public void run(){
             if(file.toString().toLowerCase().endsWith(".dat")){
-                JsonToXml.GetMTCXML(file);
                 sendTestBedData(file);
                 return;
             }
             else if(file.toString().toLowerCase().endsWith(".csv")){
-                
+
                 try{ //TODO move to simulation folder
                     FileInputStream fis = new FileInputStream(file);
                     ExtractCSV eofcsv = new ExtractCSV(fis);
@@ -297,7 +296,7 @@ public class WatchDir {
 
                 file.delete();
                 writer.close();
-            } 
+            }
             catch (IOException e) {
                // do something
             }
