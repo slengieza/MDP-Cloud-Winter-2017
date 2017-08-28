@@ -64,7 +64,7 @@ java -jar ./build/libs/Consumer.jar
 Or, the Consumer can be run concurrently with the Proudcer using the following command:
 
 ```
-start-process "cmd.exe" "/c C:\Rockwell Automation\MDP-Cloud-Winter-2017\run.bat"
+cmd /c run
 ```
 
 ## Data
