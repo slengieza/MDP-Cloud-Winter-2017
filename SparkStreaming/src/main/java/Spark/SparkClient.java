@@ -30,7 +30,7 @@ public class SparkClient {
     private String dbName = "test";
     private String series;
     private InfluxDB influxDB;
-    private String timestamp = "2017-08-28T12:51:25.701Z";
+    private String timestamp = "2017-08-28T12:51:25.701";
 
     public SparkClient(){
         this.influxDB = InfluxDBFactory.connect(database, username, password);
