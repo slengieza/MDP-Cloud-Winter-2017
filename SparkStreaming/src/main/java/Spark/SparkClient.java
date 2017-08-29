@@ -41,7 +41,7 @@ public class SparkClient {
             while(true){
                 addDataPoints();
                 try {
-                    Thread.sleep(6000);                 //6000 milliseconds is six seconds.
+                    Thread.sleep(3000);                 //6000 milliseconds is six seconds.
                 } catch(InterruptedException ex) {
                     Thread.currentThread().interrupt();
                 }
@@ -117,7 +117,7 @@ public class SparkClient {
               String hackString = HackAround.toString();
               int index = hackString.indexOf('Z');
               timestamp = rfc3339ToEpoch(hackString.substring(1,index));
-              //System.out.println(values.get(values.size()-1));
+              System.out.println(HackAround.toString());
           }
           catch(Exception ex){
               System.out.println("No data found");
