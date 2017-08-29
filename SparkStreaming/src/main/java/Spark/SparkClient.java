@@ -31,7 +31,7 @@ public class SparkClient {
     private String series;
     private InfluxDB influxDB;
     private String timestamp = "2017-01-01T12:00:00.001";
-    private ArrayList<JavaRDD<List<List<Object>>>> rdds;
+    private ArrayList<JavaRDD<List<Object>>> rdds;
     private JavaSparkContext sc;
 
     public SparkClient(){
@@ -85,7 +85,7 @@ public class SparkClient {
               Query seriesQuery = new Query("SELECT * FROM " + series + " WHERE time > \'" + timestamp + "Z\'", "test");
               QueryResult seriesResult = this.influxDB.query(seriesQuery);
               List<List<Object>> values = seriesResult.getResults().get(0).getSeries().get(0).getValues();
-              JavaRDD<List<List<Object>>> rdd = sc.parallelize(values);
+              JavaRDD<List<Object>> rdd = sc.parallelize(values);
               rdds.add(rdd);
               Object HackAround = values.get(0).get(0);
               for (Object value : values) {
