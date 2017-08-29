@@ -116,6 +116,7 @@ public class SparkClient {
               }
 
               System.out.println(HackAround.toString());
+              timestamp = rfc3339ToEpoch(HackAround.get(0).toString());
               //System.out.println(values.get(values.size()-1));
           }
           catch(Exception ex){
