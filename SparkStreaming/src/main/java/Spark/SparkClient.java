@@ -111,7 +111,7 @@ public class SparkClient {
               List<List<Object>> values = seriesResult.getResults().get(0).getSeries().get(0).getValues();
               Object HackAround = values.get(0).get(0);
               for (Object value : values) {
-                  System.out.println(value.toString()); // Prints out all of the different series options
+                  //System.out.println(value.toString()); // Prints out all of the different series options
                   HackAround = value;
               }
 
