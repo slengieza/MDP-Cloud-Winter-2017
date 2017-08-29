@@ -114,7 +114,9 @@ public class SparkClient {
                   //System.out.println(value.toString()); // Prints out all of the different series options
                   HackAround = value;
               }
-              timestamp = rfc3339ToEpoch(HackAround.get(0).toString());
+              String hackString = HackAround.toString();
+              int index = hackString.indexOf('Z');
+              timestamp = rfc3339ToEpoch(hackString.substring(1,index));
               //System.out.println(values.get(values.size()-1));
           }
           catch(Exception ex){
