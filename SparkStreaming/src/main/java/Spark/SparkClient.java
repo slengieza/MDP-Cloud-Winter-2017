@@ -78,6 +78,32 @@ public class SparkClient {
         }
       }
 
+      private Long rfc3339ToEpoch(String lineIn){
+          String[] splits = lineIn.replaceAll("-|T|Z|:|\\.", " ").split(" "); // Regex for removing unnecessary characters
+          Calendar calends = Calendar.getInstance(); // Java Interface for time
+          // Splits[0] -> Year; Splits[1] -> Month; Splits[2] -> Day; Splits[3] -> Hours (24 Hour Format); Splits[4] -> Minutes; Splits[5] -> Seconds; Splits[6] -> milliseconds
+          calends.set(Integer.parseInt(splits[0]), Integer.parseInt(splits[1]), Integer.parseInt(splits[2]), Integer.parseInt(splits[3]), Integer.parseInt(splits[4]), Integer.parseInt(splits[5]));
+          Date dat = calends.getTime(); // Conform to interface
+          // Milliseconds are important for our tests, so we must account for them accurately
+          int milliseconds = 0;
+          if(splits.length == 6){} // Don't need to add milliseconds
+          else{ // Fix magnitude of value of milliseconds (i.e. if milliseconds is 100, the value of splits[6] is 1; if milliseconds is 10 then splits[6] is 01)
+              if(splits[6].length() == 1){
+                  milliseconds = Integer.parseInt(splits[6]) * 100;
+              }
+              else{
+                  if(splits[6].length() == 2){
+                      milliseconds = Integer.parseInt(splits[6]) * 10;
+                  }
+                  else{
+                      milliseconds = Integer.parseInt(splits[6]);
+                  }
+              }
+          }
+          Long epochTime = ((Long)dat.getTime() - ((Long)dat.getTime() % 1000) /* Subtract off error*/ ) + milliseconds;
+          return epochTime;
+      }
+
       public void addDataPoints(){
           try{
               Query seriesQuery = new Query("SELECT * FROM " + series + " WHERE time > " + Long.toString(timestamp), "test");
@@ -86,6 +112,8 @@ public class SparkClient {
               for (Object value : values) {
                   System.out.println(value.toString()); // Prints out all of the different series options
               }
+              Object last = values.get(values.size()-1).get((values.get(values.size()-1)).size());
+              System.out.println(last.toString());
               //System.out.println(values.get(values.size()-1));
           }
           catch(Exception ex){
