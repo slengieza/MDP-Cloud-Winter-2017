@@ -88,12 +88,17 @@ public class KafkaMessageConsumer implements Runnable{
    **/
     private void seriesSelect(){
       Scanner scans = new Scanner(System.in);
-      System.out.println("Current Series :");
-      Query seriesQuery = new Query("SHOW SERIES", "test");
-      QueryResult seriesResult = this.influxDB.query(seriesQuery);
-      List<List<Object>> values = seriesResult.getResults().get(0).getSeries().get(0).getValues();
-      for (Object value : values) {
-          System.out.println(value.toString()); // Prints out all of the different series options
+      try{
+          Query seriesQuery = new Query("SHOW SERIES", "test");
+          QueryResult seriesResult = this.influxDB.query(seriesQuery);
+          List<List<Object>> values = seriesResult.getResults().get(0).getSeries().get(0).getValues();
+          System.out.println("Current Series :");
+          for (Object value : values) {
+              System.out.println(value.toString()); // Prints out all of the different series options
+          }
+      }
+      catch(Exception ex){
+          System.out.println("No current Series!");
       }
       System.out.println("--------------------------------------------------");
       System.out.print("Please enter the name of which series you'd like to use (if existing series, data will be appended to the end) : ");
