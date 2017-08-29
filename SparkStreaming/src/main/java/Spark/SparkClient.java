@@ -41,7 +41,7 @@ public class SparkClient {
             while(true){
                 addDataPoints();
                 try {
-                    Thread.sleep(3000);                 //6000 milliseconds is six seconds.
+                    Thread.sleep(6000);                 //6000 milliseconds is six seconds.
                 } catch(InterruptedException ex) {
                     Thread.currentThread().interrupt();
                 }
@@ -93,7 +93,8 @@ public class SparkClient {
               System.out.println(HackAround.toString());
           }
           catch(Exception ex){
-              System.out.println("No data found");
+              System.out.println(timestamp);
+              ex.printStackTrace();
           }
       }
 
