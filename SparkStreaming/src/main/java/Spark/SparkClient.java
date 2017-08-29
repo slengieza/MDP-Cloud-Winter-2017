@@ -33,15 +33,15 @@ public class SparkClient {
     private long timestamp = 0;
 
     public SparkClient(){
+        this.influxDB = InfluxDBFactory.connect(database, username, password);
         seriesSelect();
         SparkConf conf = new SparkConf().setAppName("Spark Client").setMaster("yarn-client");
         JavaSparkContext sc = new JavaSparkContext(conf);
-        this.influxDB = InfluxDBFactory.connect(database, username, password);
         try{
             while(true){
                 addDataPoints();
                 try {
-                    Thread.sleep(1000);                 //1000 milliseconds is one second.
+                    Thread.sleep(6000);                 //6000 milliseconds is six seconds.
                 } catch(InterruptedException ex) {
                     Thread.currentThread().interrupt();
                 }
@@ -58,26 +58,38 @@ public class SparkClient {
      **/
       private void seriesSelect(){
         Scanner scans = new Scanner(System.in);
-        System.out.println("Current Series :");
-        Query seriesQuery = new Query("SHOW SERIES", "test");
-        QueryResult seriesResult = this.influxDB.query(seriesQuery);
-        List<List<Object>> values = seriesResult.getResults().get(0).getSeries().get(0).getValues();
-        for (Object value : values) {
-            System.out.println(value.toString()); // Prints out all of the different series options
+        try{
+            System.out.println("Current Series :");
+            Query seriesQuery = new Query("SHOW SERIES", "test");
+            QueryResult seriesResult = this.influxDB.query(seriesQuery);
+            List<List<Object>> values = seriesResult.getResults().get(0).getSeries().get(0).getValues();
+            for (Object value : values) {
+                System.out.println(value.toString()); // Prints out all of the different series options
+            }
+            System.out.println("--------------------------------------------------");
+            System.out.print("Please enter the name of which series you'd like to use (if existing series, data will be appended to the end) : ");
+            String seriesNameIn = scans.nextLine();
+            seriesNameIn = seriesNameIn.replace("\"", "").replace("\'", ""); // Replace any Quotation Marks and Single Quotes
+            this.series = seriesNameIn;
         }
-        System.out.println("--------------------------------------------------");
-        System.out.print("Please enter the name of which series you'd like to use (if existing series, data will be appended to the end) : ");
-        String seriesNameIn = scans.nextLine();
-        seriesNameIn = seriesNameIn.replace("\"", "").replace("\'", ""); // Replace any Quotation Marks and Single Quotes
-        this.series = seriesNameIn;
+        catch(Exception ex){
+            ex.printStackTrace();
+            System.exit(9);
+        }
       }
 
       public void addDataPoints(){
-          Query seriesQuery = new Query("SELECT * FROM " + series + " WHERE time > " + Long.toString(timestamp), "test");
-          QueryResult seriesResult = this.influxDB.query(seriesQuery);
-          List<List<Object>> values = seriesResult.getResults().get(0).getSeries().get(0).getValues();
-          for (Object value : values) {
-              System.out.println(value.toString()); // Prints out all of the different series options
+          try{
+              Query seriesQuery = new Query("SELECT * FROM " + series + " WHERE time > " + Long.toString(timestamp), "test");
+              QueryResult seriesResult = this.influxDB.query(seriesQuery);
+              List<List<Object>> values = seriesResult.getResults().get(0).getSeries().get(0).getValues();
+              for (Object value : values) {
+                  System.out.println(value.toString()); // Prints out all of the different series options
+              }
+              //System.out.println(values.get(values.size()-1));
+          }
+          catch(Exception ex){
+              System.out.println("No data found");
           }
       }
 
