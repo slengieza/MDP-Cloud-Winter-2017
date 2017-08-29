@@ -80,7 +80,7 @@ public class SparkClient {
 
       public void addDataPoints(){
           try{
-              Query seriesQuery = new Query("SELECT * FROM " + series + " WHERE time > \'" + Long.toString(timestamp) + "\'", "test");
+              Query seriesQuery = new Query("SELECT * FROM " + series + " WHERE time > \'" + timestamp + "\'", "test");
               QueryResult seriesResult = this.influxDB.query(seriesQuery);
               List<List<Object>> values = seriesResult.getResults().get(0).getSeries().get(0).getValues();
               Object HackAround = values.get(0).get(0);
