@@ -109,11 +109,13 @@ public class SparkClient {
               Query seriesQuery = new Query("SELECT * FROM " + series + " WHERE time > " + Long.toString(timestamp), "test");
               QueryResult seriesResult = this.influxDB.query(seriesQuery);
               List<List<Object>> values = seriesResult.getResults().get(0).getSeries().get(0).getValues();
+              Object HackAround = values.get(0).get(0);
               for (Object value : values) {
                   System.out.println(value.toString()); // Prints out all of the different series options
+                  HackAround = value;
               }
-              Object last = values.get(values.size()-1).get((values.get(values.size()-1)).size());
-              System.out.println(last.toString());
+
+              System.out.println(HackAround.toString());
               //System.out.println(values.get(values.size()-1));
           }
           catch(Exception ex){
