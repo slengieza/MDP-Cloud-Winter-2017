@@ -30,7 +30,7 @@ public class SparkClient {
     private String dbName = "test";
     private String series;
     private InfluxDB influxDB;
-    private String timestamp = "2017-08-28T12:51:25.701";
+    private String timestamp = "2017-01-01T12:00:00.001";
 
     public SparkClient(){
         this.influxDB = InfluxDBFactory.connect(database, username, password);
@@ -41,7 +41,7 @@ public class SparkClient {
             while(true){
                 addDataPoints();
                 try {
-                    Thread.sleep(6000);                 //6000 milliseconds is six seconds.
+                    Thread.sleep(2000);                 //6000 milliseconds is six seconds.
                 } catch(InterruptedException ex) {
                     Thread.currentThread().interrupt();
                 }
