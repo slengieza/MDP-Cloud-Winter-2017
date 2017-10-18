@@ -129,19 +129,24 @@ public class HadoopWriteClient{
     *                specific point
     **/
     private void pointToJSON(List<String> keys, List<Object> values, String seriesIn){
-        JSONObject point = new JSONObject(); // JSONObject to be added to; in the form
-                                            // {"Timestamp":timestamp,
-                                            //  "Values": ["Measuremnt":measurement value, ...]}
-        point.put("Timestamp", rfc3339ToEpoch(values.get(0).toString())); // Add Timestamp
-        point.put("Series", seriesIn); // Add Series Information
-        int i = 1; // Start at measurement after timestamp for second JSONObject
-        JSONObject vals = new JSONObject(); // Make a second JSONObject, associated with Values
-        while(i < values.size()){
-            vals = vals.put(keys.get(i).toString(), (double)values.get(i)); // Add all measurements and values
-            i++;
+        try{
+            JSONObject point = new JSONObject(); // JSONObject to be added to; in the form
+                                                // {"Timestamp":timestamp,
+                                                //  "Values": ["Measuremnt":measurement value, ...]}
+            point.put("Timestamp", rfc3339ToEpoch(values.get(0).toString())); // Add Timestamp
+            point.put("Series", seriesIn); // Add Series Information
+            int i = 1; // Start at measurement after timestamp for second JSONObject
+            JSONObject vals = new JSONObject(); // Make a second JSONObject, associated with Values
+            while(i < values.size()){
+                vals = vals.put(keys.get(i).toString(), (double)values.get(i)); // Add all measurements and values
+                i++;
+            }
+            point = point.put("Values", vals); // Add all measurements to this JSONObject
+            WriteData.add(point);
         }
-        point = point.put("Values", vals); // Add all measurements to this JSONObject
-        WriteData.add(point);
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
     }
 
    /**
@@ -290,9 +295,9 @@ public class HadoopWriteClient{
             try{
                 Process remove = Runtime.getRuntime().exec(removeLocal);
                 // Once data is added to Hadoop, we can delete it from InfluxDB
-                String queryCommand = "DROP SERIES FROM " + "\"" + listOfFiles[i].getName().substring(0, listOfFiles[i].getName().lastIndexOf(".")) +"\"";
-                this.influxdb.query(new Query(queryCommand, "test"));
-                System.out.println("Dropped " + listOfFiles[i].getName().substring(0, listOfFiles[i].getName().lastIndexOf(".")) + " from InfluxDB");
+                //String queryCommand = "DROP SERIES FROM " + "\"" + listOfFiles[i].getName().substring(0, listOfFiles[i].getName().lastIndexOf(".")) +"\"";
+                //this.influxdb.query(new Query(queryCommand, "test"));
+                //System.out.println("Dropped " + listOfFiles[i].getName().substring(0, listOfFiles[i].getName().lastIndexOf(".")) + " from InfluxDB");
             }
             catch (Exception e){ // If we somehow had multiple of the same file, this'll catch that
                 e.printStackTrace();
