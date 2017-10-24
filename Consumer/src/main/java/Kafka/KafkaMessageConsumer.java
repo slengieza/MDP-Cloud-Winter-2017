@@ -41,12 +41,12 @@ public class KafkaMessageConsumer implements Runnable{
     private KafkaConsumer<String, String> consumer;
     private List<ConsumerListener> listeners;
     private int id;
-    private String zookeeper = "migsae-kafka.aura.arc-ts.umich.edu:2181/kafka";
+    private String zookeeper = "kafka.migsae.engin.blue.ybrc.arc-ts.umich.edu:2181/kafka";
     private String groupId = "1";
     private List<String> topics = Arrays.asList("test1");
     private String username = "hkardos";
     private String password = "Migffn##567";
-    private String database = "https://migsae-influx.arc-ts.umich.edu:8086";
+    private String database = "https://migsae-influx.blue.ybrc.arc-ts.umich.edu:8086";
     private String dbName = "test";
     private String series;
     private InfluxDB influxDB;
@@ -65,8 +65,8 @@ public class KafkaMessageConsumer implements Runnable{
         props.put("zookeeper.connect", this.zookeeper);
         props.put("group.id", this.groupId);
         props.put("zookeeper.session.timeout.ms", "400");//400
-        props.put("metadata.broker.list", "migsae-kafka.aura.arc-ts.umich.edu:9092");
-        props.put("bootstrap.servers", "migsae-kafka.aura.arc-ts.umich.edu:9092");
+        props.put("metadata.broker.list", "kafka.migsae.engin.blue.ybrc.arc-ts.umich.edu:9092");
+        props.put("bootstrap.servers", "kafka.migsae.engin.blue.ybrc.arc-ts.umich.edu:9092");
         props.put("zookeeper.sync.time.ms", "200");//200
         props.put("auto.commit.interval.ms", "1000");
         props.put("key.deserializer", StringDeserializer.class.getName());
