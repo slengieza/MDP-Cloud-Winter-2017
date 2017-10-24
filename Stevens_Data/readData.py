@@ -43,7 +43,7 @@ def readInFiles(host, port):
 				for key in dataPoints:
 					json_body.append({"measurement" : "test",
 									  "tags": { "timeStamp": timeStamp},
-									  "time": datetime.datetime.now(),
+									  "time": datetime.datetime.now() + datetime.timedelta(hours=4),
 									  "fields": dataPoints[key]
 									  })
 				# print(json_body)
