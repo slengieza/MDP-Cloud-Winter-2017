@@ -74,6 +74,7 @@ public class InfluxConsumer implements ConsumerListener {
 	 *							Or many parts
 	 **/
 	public void onReceiveMessage(String message){
+		System.out.println("Received Message");
 		String parts[] = message.split("\t");
 		if (parts[0].equals("TestBed")) {
 			addTestBedData(parts);

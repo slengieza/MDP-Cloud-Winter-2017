@@ -1,0 +1,42 @@
+Error handling event ZkEvent[Children of /consumers/1/ids changed sent to kafka.consumer.ZookeeperConsumerConnector$ZKRebalancerListener@1629454]
+java.lang.NullPointerException
+	at org.I0Itec.zkclient.ZkConnection.exists(ZkConnection.java:95)
+	at org.I0Itec.zkclient.ZkClient$3.call(ZkClient.java:439)
+	at org.I0Itec.zkclient.ZkClient$3.call(ZkClient.java:436)
+	at org.I0Itec.zkclient.ZkClient.retryUntilConnected(ZkClient.java:675)
+	at org.I0Itec.zkclient.ZkClient.exists(ZkClient.java:436)
+	at org.I0Itec.zkclient.ZkClient.exists(ZkClient.java:445)
+	at org.I0Itec.zkclient.ZkClient$7.run(ZkClient.java:566)
+	at org.I0Itec.zkclient.ZkEventThread.run(ZkEventThread.java:71)
+Error while calling watcher 
+java.lang.RuntimeException: Exception while restarting zk client
+	at org.I0Itec.zkclient.ZkClient.processStateChanged(ZkClient.java:462)
+	at org.I0Itec.zkclient.ZkClient.process(ZkClient.java:368)
+	at org.apache.zookeeper.ClientCnxn$EventThread.processEvent(ClientCnxn.java:522)
+	at org.apache.zookeeper.ClientCnxn$EventThread.run(ClientCnxn.java:498)
+Caused by: org.I0Itec.zkclient.exception.ZkException: Unable to connect to migsae-kafka.aura.arc-ts.umich.edu:2181/kafka
+	at org.I0Itec.zkclient.ZkConnection.connect(ZkConnection.java:66)
+	at org.I0Itec.zkclient.ZkClient.reconnect(ZkClient.java:939)
+	at org.I0Itec.zkclient.ZkClient.processStateChanged(ZkClient.java:458)
+	... 3 more
+Caused by: java.net.UnknownHostException: migsae-kafka.aura.arc-ts.umich.edu
+	at java.net.Inet6AddressImpl.lookupAllHostAddr(Native Method)
+	at java.net.InetAddress$2.lookupAllHostAddr(Unknown Source)
+	at java.net.InetAddress.getAddressesFromNameService(Unknown Source)
+	at java.net.InetAddress.getAllByName0(Unknown Source)
+	at java.net.InetAddress.getAllByName(Unknown Source)
+	at java.net.InetAddress.getAllByName(Unknown Source)
+	at org.apache.zookeeper.client.StaticHostProvider.<init>(StaticHostProvider.java:61)
+	at org.apache.zookeeper.ZooKeeper.<init>(ZooKeeper.java:445)
+	at org.apache.zookeeper.ZooKeeper.<init>(ZooKeeper.java:380)
+	at org.I0Itec.zkclient.ZkConnection.connect(ZkConnection.java:64)
+	... 5 more
+Error handling event ZkEvent[Data of /brokers/topics/test1 changed sent to kafka.consumer.ZookeeperConsumerConnector$ZKTopicPartitionChangeListener@15d0460]
+java.lang.NullPointerException
+	at org.I0Itec.zkclient.ZkConnection.exists(ZkConnection.java:95)
+	at org.I0Itec.zkclient.ZkClient$3.call(ZkClient.java:439)
+	at org.I0Itec.zkclient.ZkClient$3.call(ZkClient.java:436)
+	at org.I0Itec.zkclient.ZkClient.retryUntilConnected(ZkClient.java:675)
+	at org.I0Itec.zkclient.ZkClient.exists(ZkClient.java:436)
+	at org.I0Itec.zkclient.ZkClient$6.run(ZkClient.java:544)
+	at org.I0Itec.zkclient.ZkEventThread.run(ZkEventThread.java:71)

@@ -91,9 +91,9 @@ public class WatchDir {
         this.props = new Properties();
 
         //PRODUCTION
-        this.props.put("bootstrap.servers", "migsae-kafka.aura.arc-ts.umich.edu:9092");
+        this.props.put("bootstrap.servers", "kafka.migsae.engin.blue.ybrc.arc-ts.umich.edu:9092");
         this.props.put("acks", "all");
-        this.props.put("metadata.broker.list", "migsae-kafka.aura.arc-ts.umich.edu:9092");
+        this.props.put("metadata.broker.list", "kafka.migsae.engin.blue.ybrc.arc-ts.umich.edu:9092");
         this.props.put("serializer.class", "kafka.serializer.StringEncoder");
         this.props.put("request.required.acks", "1");
         this.props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,StringSerializer.class.getName());
@@ -169,7 +169,7 @@ public class WatchDir {
             //LOCAL
             // ZkClient zkClient = new ZkClient("localhost:2181", 10000, 10000, ZKStringSerializer$.MODULE$);
 
-            String zookeeperConnect = "migsae-kafka.aura.arc-ts.umich.edu:2181/kafka";
+            String zookeeperConnect = "kafka.migsae.engin.blue.ybrc.arc-ts.umich.edu:2181/kafka";
             int sessionTimeoutMs = 10000;
             int connectionTimeoutMs = 10000;
 
@@ -187,14 +187,15 @@ public class WatchDir {
             AdminUtils.createTopic(zkUtils, topic, partitions, replication, topicConfig);
         }
         catch (Exception e){
-            System.out.println("Topic: " + topic + " exists");
+            System.out.println("Getting kafkaMessage failed with error message: " + e.getMessage());
+            e.printStackTrace(System.out);
         }
     }
 
     public static void main(String[] args) throws IOException {
         // Kafka
-        String topic = "test1";
-        String group_id = "report";
+        String topic = "newTest";
+        String group_id = "1";
         new_topic(topic);
         //PRODUCTION
         String path = "C:\\Rockwell Automation\\WorkingDirectory";
@@ -242,7 +243,7 @@ public class WatchDir {
                         }
                         ProducerRecord<String, String> message = new ProducerRecord<String, String>("test1", message_data);
                         System.out.println(message_data);
-                        //producer.send(message);
+                        // producer.send(message);
                     }
                     file.delete();
                 }
@@ -285,8 +286,10 @@ public class WatchDir {
 
                 ProducerRecord<String, String> data = new ProducerRecord<String, String>("test1", dataList);
                 try {
-                    System.out.println("Sending Message: " + dataList);
+                    System.out.println("Sending Message");
                     producer.send(data);
+                    System.out.println("Message sent");
+
                 }
                 catch (Exception e){
                     System.out.println("Sending message failed with error message: " + e.getMessage());
@@ -320,7 +323,7 @@ public class WatchDir {
                 }
                 ProducerRecord<String, String> message = new ProducerRecord<String, String>("test1", message_data);
                 System.out.println(message_data);
-                //producer.send(message);
+                // producer.send(message);
             }
             file.delete();
         }
