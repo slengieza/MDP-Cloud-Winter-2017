@@ -43,7 +43,7 @@ public class KafkaMessageConsumer implements Runnable{
     private int id;
     private String zookeeper = "kafka.migsae.engin.blue.ybrc.arc-ts.umich.edu:2181/kafka";
     private String groupId = "1";
-    private List<String> topics = Arrays.asList("newTest");
+    private List<String> topics = Arrays.asList("steven_test");
     private String username = "hkardos";
     private String password = "Migffn##567";
     private String database = "https://migsae-influx.blue.ybrc.arc-ts.umich.edu:8086";
@@ -114,12 +114,9 @@ public class KafkaMessageConsumer implements Runnable{
             System.out.println("subscribing to " + this.topics);
             consumer.subscribe(this.topics);
             while (true) {
-                System.out.println("before poll");
                 ConsumerRecords<String, String> records = consumer.poll(1000);
-                System.out.println("after poll");
                 for (ConsumerRecord<String, String> record : records) {
                     for (ConsumerListener listener : this.listeners) {
-                        System.out.println("onReceiveMessage");
                         listener.onReceiveMessage(record.value());
                     }
                 }

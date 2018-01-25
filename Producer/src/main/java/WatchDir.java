@@ -194,7 +194,7 @@ public class WatchDir {
 
     public static void main(String[] args) throws IOException {
         // Kafka
-        String topic = "newTest";
+        String topic = "steven_test"; //NEED to change in send test bed data too
         String group_id = "1";
         new_topic(topic);
         //PRODUCTION
@@ -208,6 +208,7 @@ public class WatchDir {
         File[] listOfFiles = folder.listFiles();
         for (File file : listOfFiles) {
             if(file.toString().toLowerCase().endsWith(".dat")){
+                System.out.println("sending file");
                 sendTestBedData(file);
             }
             else if (file.toString().toLowerCase().endsWith(".csv")){
@@ -241,7 +242,7 @@ public class WatchDir {
                         for(int j = 0; j < data[0].length; ++j){
                             message_data += data[i][j] + "\t";
                         }
-                        ProducerRecord<String, String> message = new ProducerRecord<String, String>("test1", message_data);
+                        ProducerRecord<String, String> message = new ProducerRecord<String, String>("steven_test", message_data);
                         System.out.println(message_data);
                         // producer.send(message);
                     }
@@ -263,46 +264,46 @@ public class WatchDir {
         try{
             HashMap<Long, List<String>> kafkaMessages = JsonToString.GetKafkaMessage(file);
 
-            try{
-                String path1 = "C:\\Rockwell Automation\\WorkingDirectory\\SimulationData\\test.csv";
-                path1 = path1.replace("\\", "/");
-                PrintWriter writer = new PrintWriter(path1, "UTF-8");
-                writer.println("TimeStamp,  Fanuc1, Fanuc2, Fanuc3, ABB1, ABB2, ABB3, RFID56, RFID57, RFID54, RFID55, RFID1, RFID2, RFID3, RFID4, RFID5, RFID6");
+            // String path1 = "C:\\Rockwell Automation\\WorkingDirectory\\SimulationData\\test.csv";
+            // path1 = path1.replace("\\", "/");
+            // PrintWriter writer = new PrintWriter(path1, "UTF-8");
+            // writer.println("TimeStamp,  Fanuc1, Fanuc2, Fanuc3, ABB1, ABB2, ABB3, RFID56, RFID57, RFID54, RFID55, RFID1, RFID2, RFID3, RFID4, RFID5, RFID6");
 
-                Iterator it = kafkaMessages.entrySet().iterator();
-                String dataList = "TestBed\t";
-                while (it.hasNext()) {
-                    Map.Entry pair = (Map.Entry)it.next();
-                    List<String> values = (List)pair.getValue();
-                    String v = "";
-                    for(String val : values){
-                        v += val + ",";
-                        dataList += val + "\t";
+            Iterator it = kafkaMessages.entrySet().iterator();
+            String dataList = "TestBed\t";
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry)it.next();
+                List<String> values = (List)pair.getValue();
+                String v = "";
+                for(String val : values){
+                    v += val + ",";
+                    if (val.equals("True")) {
+                        val = "1";
+                    } else {
+                        val = "0";
                     }
-                    v = v.substring(0, v.length()-1);
-                    writer.println(v);
-                    it.remove();
+                    dataList += val + "\t";
                 }
-
-                ProducerRecord<String, String> data = new ProducerRecord<String, String>("test1", dataList);
-                try {
-                    System.out.println("Sending Message");
-                    producer.send(data);
-                    System.out.println("Message sent");
-
-                }
-                catch (Exception e){
-                    System.out.println("Sending message failed with error message: " + e.getMessage());
-                    e.printStackTrace(System.out);
-                    return;
-                }
-
-                file.delete();
-                writer.close();
+                v = v.substring(0, v.length()-1);
+                // writer.println(v);
+                it.remove();
             }
-            catch (IOException e) {
-               // do something
+
+            ProducerRecord<String, String> data = new ProducerRecord<String, String>("steven_test", dataList);
+            try {
+                System.out.println("Sending Message");
+                producer.send(data);
+                System.out.println("Message sent");
+
             }
+            catch (Exception e){
+                System.out.println("Sending message failed with error message: " + e.getMessage());
+                e.printStackTrace(System.out);
+                return;
+            }
+
+            file.delete();
+            // writer.close();
        }
         catch (Exception e){
             System.out.println("Getting kafkaMessage failed with error message: " + e.getMessage());
